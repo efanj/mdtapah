@@ -138,13 +138,13 @@ class Vendor extends Model
 
     $database = Database::openConnection();
 
-    $query = "INSERT INTO data.submission (reference, submition_date, workerid, items)";
-    $query .= "VALUES(:reference, :submition_date, :workerid, :items)";
+    $query = "INSERT INTO data.submission (reference, submition_date, vendorid, submition_items)";
+    $query .= "VALUES(:reference, :submition_date, :vendorid, :items)";
 
     $database->prepare($query);
     $database->bindValue(":reference", $rujukan);
     $database->bindValue(":submition_date", $tarikh);
-    $database->bindValue(":workerid", $workerId);
+    $database->bindValue(":vendorid", $workerId);
     $database->bindValue(":items", $dataInts);
     $result = $database->execute();
 
@@ -162,6 +162,47 @@ class Vendor extends Model
 
     if ($result) {
       $activity = "Penyerahan Nilaian Semula : Rujukan - " . $rujukan . " Tarikh - " . $tarikh;
+      $database->logActivity($userId, $activity);
+    }
+    return ["success" => true];
+  }
+
+  public function submitsitereviews($userId, $workerId, $tarikh, $data)
+  {
+
+    $tarikh = empty($tarikh) ? null : $tarikh;
+
+    $result = $data ? explode(',', $data) : array();
+    $integers = array_map('intval', $result);
+    $dataInts = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($integers)));
+
+    $database = Database::openConnection();
+    foreach ($integers as $id) {
+
+      $database->getByNoAcct("smktpk", "id", $id);
+      $row = $database->fetchAssociative();
+
+      $query = "UPDATE data.submission SET accepted_date = :accepted_date, workerid = :workerid, accepted_items = :accepted_items ";
+      $query .= "WHERE id = :sid";
+
+      $database->prepare($query);
+      $database->bindValue(":sid", $row['smk_submit_id']);
+      $database->bindValue(":accepted_date", $tarikh);
+      $database->bindValue(":workerid", $workerId);
+      $database->bindValue(":accepted_items", $dataInts);
+      $result = $database->execute();
+
+      $qry = "UPDATE data.smktpk SET smk_stspn = 3 WHERE id = " . $id;
+      $database->prepare($qry);
+      $database->execute();
+    }
+
+    if ($database->countRows() !== 1) {
+      throw new Exception("Gagal untuk masukkan data Terima Nilaian Semula.");
+    }
+
+    if ($result) {
+      $activity = "Terima Nilaian Semula : Tarikh - " . $tarikh;
       $database->logActivity($userId, $activity);
     }
     return ["success" => true];
@@ -679,7 +720,7 @@ class Vendor extends Model
     return $response;
   }
 
-  public function submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $submitId)
+  public function submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
     $dbOracle = new Oracle();
@@ -699,11 +740,8 @@ class Vendor extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
     if ($searchValue != "") {
-      $sql .= "WHERE s.smk_submit_id = " . $submitId . " AND " . $searchQuery;
-    } else {
-      $sql .= "WHERE s.smk_submit_id = " . $submitId;
+      $sql .= "WHERE " . $searchQuery;
     }
     $sel = $database->prepare($sql);
     $database->execute($sel);
@@ -712,14 +750,14 @@ class Vendor extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT s.*, c.siri_no, f.file, d.doc FROM data.v_semak_raw s ";
+    $query = "SELECT s.*, c.siri_no, f.*, d.*, cf.file, cd.doc FROM data.v_semak_raw s ";
     $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
-    $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) f ON s.smk_akaun = f.no_akaun ";
-    $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) d ON s.smk_akaun = d.no_akaun ";
+    $query .= "LEFT JOIN (select no_akaun, filename from data.files) f ON s.smk_akaun = f.no_akaun ";
+    $query .= "LEFT JOIN (select no_akaun, filename, extension from data.fdocs) d ON s.smk_akaun = d.no_akaun ";
+    $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
+    $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     if ($searchValue != "") {
-      $query .= "WHERE s.smk_submit_id = " . $submitId . " AND " . $searchQuery;
-    } else {
-      $query .= "WHERE s.smk_submit_id = " . $submitId;
+      $query .= "WHERE " . $searchQuery;
     }
 
     if ($columnName != "") {
@@ -751,8 +789,8 @@ class Vendor extends Model
         }
       }
 
-      $rowOutput["id"] = Encryption::encryptId($val["id"]);
-      $rowOutput["sid"] = $val["id"];
+      $rowOutput["id"] = $val["id"];
+      $rowOutput["sid"] = $val["smk_submit_id"];
       $rowOutput["akaun"] = Encryption::encryptId($val["smk_akaun"]);
       $rowOutput["sirino"] = $this->checkSiriNo($val["siri_no"]);
       $rowOutput["pmk_nmbil"] = $info["pmk_nmbil"];

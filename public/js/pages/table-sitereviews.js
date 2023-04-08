@@ -219,8 +219,10 @@ var table = $("#sitereviews").DataTable({
           } else if (row.smk_stspn == "2") {
             data = "Serah"
           } else if (row.smk_stspn == "3") {
-            data = "Semak Semula"
+            data = "Diterima"
           } else if (row.smk_stspn == "4") {
+            data = "Semak Semula"
+          } else if (row.smk_stspn == "5") {
             data = "Serah Kembali"
           }
         }

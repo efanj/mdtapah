@@ -153,15 +153,15 @@
               <div class="form-group">
                 <label for="rujukan" class="col-sm-4 control-label">No. Rujukan</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control input-sm" id="rujukan" name="rujukan">
+                  <input type="text" class="form-control input-sm" id="rujukan" name="rujukan" required>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="inputEmail6" class="col-sm-4 control-label">Tarikh</label>
+                <label for="inputEmail6" class="col-sm-4 control-label">Tarikh Serah</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control input-sm" id="tarikh" name="tarikh">
+                  <input type="text" class="form-control input-sm" id="tarikh" name="tarikh" required>
                 </div>
               </div>
             </div>

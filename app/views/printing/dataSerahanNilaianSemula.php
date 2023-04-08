@@ -7,7 +7,7 @@ $options = new Options();
 $options->set('isPhpEnabled', true);
 $dompdf = new Dompdf($options);
 
-$rows = $this->controller->printing->datanilaiansemula();
+$rows = $this->controller->printing->dataserahannilaiansemula();
 
 $gt = 0;
 $i = 1;
@@ -51,7 +51,7 @@ $html = '
 
 $html .= '<table class="title">';
 $html .= '<tr><td style="width:20%; text-align:left"> </td><td style="width:60%;font-size: 14px;font-weight:bold;">MAJLIS DAERAH TAPAH</td><td style="width:20%;text-align:right"></td></tr>';
-$html .= '<tr><td style="width:20%; text-align:left">Tarikh : </td><td>Pegangan Yang Dipinda N. Tahunan - Jadual B (CTA)</td><td style="width:20%;text-align:right">Tarikh : ' . $newdate . '</td></tr>';
+$html .= '<tr><td style="width:20%; text-align:left">Tarikh : </td><td>Pegangan Yang Dipinda N. Tahunan - Jadual B (CTA)</td><td style="width:20%;text-align:right">Tarikh : </td></tr>';
 $html .= '</table>';
 $html .= '<table class="print-table">
     <thead>
@@ -80,11 +80,11 @@ $html .= '<table class="print-table">
 foreach ($rows as $row) {
   $html .= '<tr>
         <td rowspan="3" height="95px">' . $i . '</td>
-        <td rowspan="2">' . $row['no_akaun'] . '</br>' . $row['no_siri'] . '</td>
-        <td rowspan="2">' . $row['pmk_nmbil'] . '</br>' . $row['adpg1'] . '</br>' . $row['adpg2'] . '</br>' . $row['adpg3'] . '</br>' . $row['adpg4'] . '</td>
-        <td rowspan="2">' . $row['peg_nolot'] . '</br>' . $row['peg_nompt'] . '</br>' . $row['pmk_hkmlk'] . '</td>
-        <td rowspan="2">' . $row['peg_lsbgn'] . '</td>
-        <td rowspan="2">' . $row['peg_lstnh'] . '</td>
+        <td rowspan="2">' . $row['no_akaun'] . '</br>' . $row['sirino'] . '</td>
+        <td rowspan="2">' . $row['pmk_nmbil'] . '</br>' . $row['smk_adpg1'] . '</br>' . $row['smk_adpg2'] . '</br>' . $row['smk_adpg3'] . '</br>' . $row['smk_adpg4'] . '</td>
+        <td rowspan="2">' . $row['smk_nolot'] . '</br>' . $row['smk_nompt'] . '</br>' . $row['pmk_hkmlk'] . '</td>
+        <td rowspan="2">' . $row['smk_lsbgn'] . '</td>
+        <td rowspan="2">' . $row['smk_lstnh'] . '</td>
         <td>' . number_format($row['peg_nilth'], 2) . '</td>
         <td>' . number_format($row['nilth_baru'], 2) . '</td>
         <td>' . number_format($row['peg_tksir'], 2) . '</td>

@@ -20,6 +20,9 @@ class VendorController extends Controller
       case "submitreviews":
         $this->Security->config("validateForm", false);
         break;
+      case "submitsitereviews":
+        $this->Security->config("validateForm", false);
+        break;
       case "submitiondatareviews":
         $this->Security->config("validateForm", false);
         break;
@@ -232,6 +235,20 @@ class VendorController extends Controller
     }
   }
 
+  public function submitsitereviews()
+  {
+    $tarikh = $this->request->data("tarikh");
+    $submitid = $this->request->data("submitid");
+    $data = $this->request->data("data");
+
+    $result = $this->vendor->submitsitereviews(Session::getUserId(), Session::getUserWorkerId(), $tarikh, $data);
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function submitiondatareviews()
   {
     $draw = $this->request->data("draw");
@@ -369,8 +386,7 @@ class VendorController extends Controller
     $columnSortOrder = $column[0]["dir"];
     $search = $this->request->data("search");
     $searchValue = $search["value"];
-    $submitId = $this->request->data("date");
-    $result = $this->vendor->submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $submitId);
+    $result = $this->vendor->submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
     } else {

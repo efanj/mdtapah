@@ -1,297 +1,342 @@
 $(document).ready(function () {
-  fill_datatable()
+  $("#tarikh").datepicker()
 
-  function fill_datatable(area = "", street = "") {
-    function format(d) {
-      // `d` is the original data object for the row
-      return (
-        '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;width:100%;">' +
-        "<tr>" +
-        "<td width='10%' style='background-color: #f4f5f5;'><b>Nama Bil:</b></td>" +
-        "<td width='15%'>" +
-        d.pmk_nmbil +
-        "</td>" +
-        "<td width='10%' style='background-color: #f4f5f5;'><b>ID/No. Syarikat:</b></td>" +
-        "<td width='15%'>" +
-        d.pmk_plgid +
-        "</td>" +
-        "<td width='10%' style='background-color: #f4f5f5;'><b>No. Hakmilik:</b></td>" +
-        "<td width='15%'>" +
-        d.pmk_hkmlk +
-        "</td>" +
-        "<td width='10%' style='background-color: #f4f5f5;'><b>No. PT:</b></td>" +
-        "<td width='15%'>" +
-        d.smk_nompt +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
-        "<td>" +
-        d.smk_adpg1 +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
-        "<td>" +
-        d.smk_adpg2 +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
-        "<td>" +
-        d.smk_adpg3 +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
-        "<td>" +
-        d.smk_adpg4 +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td style='background-color: #f4f5f5;'><b>Jalan:</b></td>" +
-        "<td>" +
-        d.jln_jnama +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Kawasan:</b></td>" +
-        "<td>" +
-        d.jln_kname +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>No. Pelan:</b></td>" +
-        "<td>" +
-        d.peg_pelan +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Rujukan MMK:</b></td>" +
-        "<td>" +
-        d.peg_rjmmk +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td style='background-color: #f4f5f5;'><b>Kegunaan Tanah:</b></td>" +
-        "<td>" +
-        d.tnh_tnama +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Jenis Bangunan:</b></td>" +
-        "<td>" +
-        d.bgn_bnama +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Kegunaan Hartanah:</b></td>" +
-        "<td>" +
-        d.hrt_hnama +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Struktur Bangunan:</b></td>" +
-        "<td>" +
-        d.stb_snama +
-        "</td>" +
-        "</tr>" +
-        "<tr>" +
-        "<td style='background-color: #f4f5f5;'><b>Nilai Tahunan:</b></td>" +
-        "<td>RM " +
-        d.peg_nilth +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Kadar:</b></td>" +
-        "<td>" +
-        d.kaw_kadar +
-        "%</td>" +
-        "<td style='background-color: #f4f5f5;'><b>Cukai Tahunan:</b></td>" +
-        "<td>RM " +
-        d.peg_tksir +
-        "</td>" +
-        "<td style='background-color: #f4f5f5;'></td>" +
-        "<td>" +
-        "</td>" +
-        "</tr>" +
-        "</table>"
-      )
-    }
+  $("#print_submit").click(function () {
+    var url = config.root + "Printing/dataserahannilaiansemula/"
+    window.open(url, "_blank")
+  })
 
-    var table = $("#submitsitereview").DataTable({
-      scrollY: "50vh",
-      scrollCollapse: true,
-      pageLength: 10,
-      lengthMenu: [
-        [10, 20, 50, 100],
-        [10, 20, 50, 100]
-      ],
-      processing: true,
-      serverSide: true,
-      searching: true,
-      order: [],
-      serverMethod: "post",
-      ajax: "submitsitereviewtable",
-      columnDefs: [
-        {
-          targets: 0,
-          data: "sid",
-          checkboxes: {
-            selectRow: true
-          }
-        },
-        {
-          width: "3%",
-          targets: 1,
-          className: "details-control",
-          orderable: false,
-          data: null,
-          defaultContent: ""
-        },
-        {
-          targets: 2,
-          orderable: false,
-          data: null,
-          render: function (data, type, row, meta) {
-            // console.log(row);
-            if (type === "display") {
-              data = row.smk_akaun + "<br>" + row.smk_nolot + "<br>"
-            }
-            return data
-          }
-        },
-        {
-          targets: 3,
-          orderable: false,
-          data: null
-        },
-        {
-          targets: 4,
-          orderable: false,
-          data: null
-        },
-        {
-          targets: 5,
-          orderable: false,
-          data: null,
-          render: function (data, type, row, meta) {
-            if (type === "display") {
-              data = row.smk_lsbgn + " m&sup2; <br>" + row.smk_lstnh + " m&sup2; <br>" + row.smk_lsans + " m&sup2;"
-            }
-            return data
-          }
-        },
-        {
-          targets: 6,
-          orderable: false,
-          data: null,
-          render: function (data, type, row, meta) {
-            if (type === "display") {
-              data = row.smk_lsbgn_tmbh + " m&sup2; <br>" + row.smk_lsans_tmbh + " m&sup2;"
-            }
-            return data
-          }
-        },
-        {
-          targets: 7,
-          orderable: false,
-          data: null,
-          render: function (data, type, row, meta) {
-            if (type === "display") {
-              data = row.hadapan + "<br>" + row.belakang
-            }
-            return data
-          }
-        },
-        {
-          targets: 8,
-          orderable: false,
-          data: null,
-          render: function (data, type, row, meta) {
-            if (type === "display") {
-              data = row.smk_datevisit + "</br>" + row.smk_timevisit
-            }
-            return data
-          }
-        },
-        {
-          targets: 9,
-          orderable: false,
-          className: "dt-body-center",
-          data: null,
-          render: function (data, type, row, meta) {
-            if (type === "display") {
-              data = '<div class="btn-group btn-group-xs" role="group">'
-              if (row.sirino != "-") {
-                data += '<a href="' + row.calctype + "/" + row.sirino + '" class="btn btn-success btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
-              } else {
-                data += '<a href="' + row.calctype + "/" + row.akaun + '" class="btn btn-default btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
-              }
-              data += '<a href="viewimages/' + row.id + '" class="btn '
-              if (row.file != null) {
-                data += "btn-success"
-              } else {
-                data += "btn-default"
-              }
-              data += ' btn-xs" title="Gambar"><i class="fa fa-file-photo-o"></i></a>'
-              data += '<a href="viewdocuments/' + row.id + '" class="btn '
-              if (row.doc != null) {
-                data += "btn-success"
-              } else {
-                data += "btn-default"
-              }
-              data += ' btn-xs" title="Dokumen"><i class="fa fa-file-pdf-o"></i></a>'
-              data += "</div>"
-            }
-            return data
-          }
-        }
-      ],
-      select: {
-        style: "multi"
-      },
-      order: [[6, "asc"]],
-      language: {
-        search: "Saring : ",
-        lengthMenu: "Paparkan _MENU_ rekod",
-        zeroRecords: "Tiada maklumat yang dijumpai",
-        info: "Memaparkan _START_ sehingga _END_ rekod daripada _TOTAL_ rekod",
-        infoEmpty: "Tiada rekod",
-        infoFiltered: "(Ditapis daripada _MAX_ rekod)",
-        paginate: {
-          first: "Pertama",
-          last: "Terakhir",
-          next: "Seterus",
-          previous: "Sebelum"
-        }
-      }
-    })
-
-    // Add event listener for opening and closing details
-    $("#submitsitereview tbody").on("click", "td.details-control", function () {
-      var tr = $(this).closest("tr")
-      var row = table.row(tr)
-
-      if (row.child.isShown()) {
-        // This row is already open - close it
-        row.child.hide()
-        tr.removeClass("shown")
-      } else {
-        // Open this row
-        row.child(format(row.data())).show()
-        tr.addClass("shown")
-      }
-    })
-
-    $("#form-verifylists").on("submit", function (e) {
-      $("#submit_popup").modal("show")
-      var form = this
-      var rows_selected = table.column(0).checkboxes.selected()
-      console.log(rows_selected)
-      // $.each(rows_selected, function (index, rowId) {
-      //   data += rowId
-      // })
-      var data = rows_selected.join(",")
-      $("#id").val(data)
-
-      // Prevent actual form submission
-      e.preventDefault()
-    })
-
-    $("body").on("click", ".edit-area", function () {
-      $("#luas_popup").modal("show")
-      var row = $(this).parents("tr")[0]
-      var rowindex = $(this).closest("tr").index()
-      var rowval = table.row(row).data()
-
-      $("#index").val(rowindex)
-      $("#id").val(rowval.id)
-      $("#akaun").val(rowval.akaun)
-      console.log(rowindex)
-      // console.log(table.row(row).data())
-    })
+  function format(d) {
+    // `d` is the original data object for the row
+    return (
+      '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;width:100%;">' +
+      "<tr>" +
+      "<td width='10%' style='background-color: #f4f5f5;'><b>Nama Bil:</b></td>" +
+      "<td width='15%'>" +
+      d.pmk_nmbil +
+      "</td>" +
+      "<td width='10%' style='background-color: #f4f5f5;'><b>ID/No. Syarikat:</b></td>" +
+      "<td width='15%'>" +
+      d.pmk_plgid +
+      "</td>" +
+      "<td width='10%' style='background-color: #f4f5f5;'><b>No. Hakmilik:</b></td>" +
+      "<td width='15%'>" +
+      d.pmk_hkmlk +
+      "</td>" +
+      "<td width='10%' style='background-color: #f4f5f5;'><b>No. PT:</b></td>" +
+      "<td width='15%'>" +
+      d.smk_nompt +
+      "</td>" +
+      "</tr>" +
+      "<tr>" +
+      "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
+      "<td>" +
+      d.smk_adpg1 +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
+      "<td>" +
+      d.smk_adpg2 +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
+      "<td>" +
+      d.smk_adpg3 +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Alamat:</b></td>" +
+      "<td>" +
+      d.smk_adpg4 +
+      "</td>" +
+      "</tr>" +
+      "<tr>" +
+      "<td style='background-color: #f4f5f5;'><b>Jalan:</b></td>" +
+      "<td>" +
+      d.jln_jnama +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Kawasan:</b></td>" +
+      "<td>" +
+      d.jln_kname +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>No. Pelan:</b></td>" +
+      "<td>" +
+      d.peg_pelan +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Rujukan MMK:</b></td>" +
+      "<td>" +
+      d.peg_rjmmk +
+      "</td>" +
+      "</tr>" +
+      "<tr>" +
+      "<td style='background-color: #f4f5f5;'><b>Kegunaan Tanah:</b></td>" +
+      "<td>" +
+      d.tnh_tnama +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Jenis Bangunan:</b></td>" +
+      "<td>" +
+      d.bgn_bnama +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Kegunaan Hartanah:</b></td>" +
+      "<td>" +
+      d.hrt_hnama +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Struktur Bangunan:</b></td>" +
+      "<td>" +
+      d.stb_snama +
+      "</td>" +
+      "</tr>" +
+      "<tr>" +
+      "<td style='background-color: #f4f5f5;'><b>Nilai Tahunan:</b></td>" +
+      "<td>RM " +
+      d.peg_nilth +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Kadar:</b></td>" +
+      "<td>" +
+      d.kaw_kadar +
+      "%</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Cukai Tahunan:</b></td>" +
+      "<td>RM " +
+      d.peg_tksir +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'></td>" +
+      "<td>" +
+      "</td>" +
+      "</tr>" +
+      "</table>"
+    )
   }
+
+  var table = $("#submitsitereview").DataTable({
+    scrollY: "50vh",
+    scrollCollapse: true,
+    pageLength: 50,
+    lengthMenu: [
+      [50, 100, 500, 1000],
+      [50, 100, 500, 1000]
+    ],
+    processing: true,
+    serverSide: true,
+    searching: true,
+    order: [],
+    serverMethod: "post",
+    ajax: "submitsitereviewtable",
+    columnDefs: [
+      {
+        targets: 0,
+        data: "id",
+        checkboxes: {
+          selectRow: true
+        }
+      },
+      {
+        width: "3%",
+        targets: 1,
+        className: "details-control",
+        orderable: false,
+        data: null,
+        defaultContent: ""
+      },
+      {
+        targets: 2,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          // console.log(row);
+          if (type === "display") {
+            data = row.smk_akaun + "<br>" + row.smk_nolot + "<br>"
+          }
+          return data
+        }
+      },
+      {
+        targets: 3,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            data = row.pmk_nmbil + "<br/>"
+            data += row.smk_adpg1 + "<br/>"
+            if (row.smk_adpg2 != null) {
+              data += row.smk_adpg2 + "<br/>"
+            }
+            if (row.smk_adpg3 != null) {
+              data += row.smk_adpg3 + "<br/>"
+            }
+            if (row.smk_adpg4 != null) {
+              data += row.smk_adpg4 + "<br/>"
+            }
+          }
+
+          return data
+        }
+      },
+      {
+        targets: 4,
+        orderable: false,
+        data: "tnh_tnama"
+      },
+      {
+        targets: 5,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            data = row.smk_lsbgn + " m&sup2; <br>" + row.smk_lstnh + " m&sup2; <br>" + row.smk_lsans + " m&sup2;"
+          }
+          return data
+        }
+      },
+      {
+        targets: 6,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            data = row.smk_lsbgn_tmbh + " m&sup2; <br>" + row.smk_lsans_tmbh + " m&sup2;"
+          }
+          return data
+        }
+      },
+      {
+        targets: 7,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            data = row.hadapan + "<br>" + row.belakang
+          }
+          return data
+        }
+      },
+      {
+        targets: 8,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            if (row.sirino == "-") {
+              data = "Tiada"
+            } else if (row.sirino != "-") {
+              data = "Ada"
+            }
+          }
+          return data
+        }
+      },
+      {
+        targets: 9,
+        orderable: false,
+        className: "dt-body-center",
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            if (row.file > "0") {
+              data = "Ada (" + row.file + ")"
+            } else if (row.file < "1") {
+              data = "Tiada"
+            }
+          }
+          return data
+        }
+      },
+      {
+        targets: 10,
+        orderable: false,
+        className: "dt-body-center",
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            if (row.doc > "0") {
+              data = "Ada (" + row.doc + ")"
+            } else if (row.doc < "1") {
+              data = "Tiada"
+            }
+          }
+          return data
+        }
+      },
+      {
+        targets: 11,
+        orderable: false,
+        className: "dt-body-center",
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            if (row.smk_stspn == "0") {
+              data = "Baru"
+            } else if (row.smk_stspn == "1") {
+              data = "Baca"
+            } else if (row.smk_stspn == "2") {
+              data = "<span class='label label-primary'>Serah</span>"
+            } else if (row.smk_stspn == "3") {
+              data = "<span class='label label-success'>Diterima</span>"
+            } else if (row.smk_stspn == "4") {
+              data = "<span class='label label-warning'>Semak Semula</span>"
+            } else if (row.smk_stspn == "5") {
+              data = "<span class='label label-success'>Serah Kembali</span>"
+            }
+          }
+          return data
+        }
+      }
+    ],
+    select: {
+      style: "multi"
+    },
+    order: [[3, "asc"]],
+    language: {
+      search: "Saring : ",
+      lengthMenu: "Paparkan _MENU_ rekod",
+      zeroRecords: "Tiada maklumat yang dijumpai",
+      info: "Memaparkan _START_ sehingga _END_ rekod daripada _TOTAL_ rekod",
+      infoEmpty: "Tiada rekod",
+      infoFiltered: "(Ditapis daripada _MAX_ rekod)",
+      paginate: {
+        first: "Pertama",
+        last: "Terakhir",
+        next: "Seterus",
+        previous: "Sebelum"
+      }
+    }
+  })
+
+  // Add event listener for opening and closing details
+  $("#submitsitereview tbody").on("click", "td.details-control", function () {
+    var tr = $(this).closest("tr")
+    var row = table.row(tr)
+
+    if (row.child.isShown()) {
+      // This row is already open - close it
+      row.child.hide()
+      tr.removeClass("shown")
+    } else {
+      // Open this row
+      row.child(format(row.data())).show()
+      tr.addClass("shown")
+    }
+  })
+
+  $("#form-verifylists").on("submit", function (e) {
+    $("#submit_popup").modal("show")
+    var form = this
+    var rows_selected = table.column(0).checkboxes.selected()
+    // console.log(rows_selected)
+    var data = rows_selected.join(",")
+    $("#id").val(data)
+
+    // Prevent actual form submission
+    e.preventDefault()
+  })
+
+  $("body").on("click", ".edit-area", function () {
+    $("#luas_popup").modal("show")
+    var row = $(this).parents("tr")[0]
+    var rowindex = $(this).closest("tr").index()
+    var rowval = table.row(row).data()
+
+    $("#index").val(rowindex)
+    $("#id").val(rowval.id)
+    $("#akaun").val(rowval.akaun)
+    console.log(rowindex)
+    // console.log(table.row(row).data())
+  })
 
   $("#submitsitereview").css("font-size", 13)
 

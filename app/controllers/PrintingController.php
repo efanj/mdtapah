@@ -30,6 +30,11 @@ class PrintingController extends Controller
     $this->view->render(Config::get('VIEWS_PATH') . 'printing/dataNilaianSemula.php');
   }
 
+  public function dataserahannilaiansemula()
+  {
+    $this->view->render(Config::get('VIEWS_PATH') . 'printing/dataSerahanNilaianSemula.php');
+  }
+
 
   public function isAuthorized()
   {

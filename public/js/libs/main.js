@@ -713,6 +713,7 @@ var events = {
     init: function () {
       events.vendor.desktopreview()
       events.vendor.submitreview()
+      events.vendor.submitsitereview()
       events.vendor.uploadbenchmarkdocs()
       events.vendor.uploadimages()
       events.vendor.uploaddocuments()
@@ -762,6 +763,22 @@ var events = {
 
       function submitreviewsCallBack(result) {
         if (result.success === true) {
+          $("#submit_popup").modal("hide")
+          swal("Berjaya!", "Serahan, Telah berjaya direkodkan.", "success")
+        } else {
+          swal("Oops...!", "Serahan tidak berjaya.", "info")
+        }
+      }
+    },
+    submitsitereview: function () {
+      $("#form-submit-sitereview").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Vendor/submitsitereviews", helpers.serialize(this), submitsitereviewsCallBack)
+      })
+
+      function submitsitereviewsCallBack(result) {
+        if (result.success === true) {
+          $("#submitsitereview").DataTable().ajax.reload()
           $("#submit_popup").modal("hide")
           swal("Berjaya!", "Serahan, Telah berjaya direkodkan.", "success")
         } else {
