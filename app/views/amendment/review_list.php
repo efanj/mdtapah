@@ -3,41 +3,24 @@
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
-      <?php $kws = $this->controller->elements->area(); ?>
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-md-12">
-          <div class="panel panel-mdpt">
+          <div class="panel panel-primary">
             <div class="panel-heading">
-              <h4>SENARAI NILAIAN SEMULA</h4>
+              <div class="row align-items-center">
+                <div class="col">
+                  <h4 class="ml15">SENARAI NILAIAN SEMULA</h4>
+                </div>
+                <!--end col-->
+                <div class="col-auto">
+                  <button class="btn btn-default btn-sm mt5 mr15" id="print"><i class="glyphicon glyphicon-print"></i></button>
+                </div>
+                <!--end col-->
+              </div>
             </div>
             <div class="panel-body">
-              <div class="row mb10">
-                <div class="col-lg-6 col-sm-6 col-md-6 tal pl15">
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 tar pr15">
-                  <form class="form-inline" role="form">
-                    <button type="button" class="btn btn-info btn-sm btn-alt ml30" id="print"><i class="fa fa-print"></i>
-                      Cetak</button> |
-                    <div class="form-group">
-                      <select class="form-control input-sm" name="area" id="area">
-                        <option selected value="">Sila Pilih Kawasan</option>
-                        <?php foreach ($kws as $row) { ?>
-                          <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <select class="form-control input-sm" name="street" id="street" style="width:100%">
-                        <option selected value="">Sila Pilih Jalan</option>
-                      </select>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="filter"><i class="fa  fa-search"></i>
-                      Saring</button>
-                  </form>
-                </div>
-              </div>
               <div class="table-responsive">
-                <table id="reviewlists" class="table table-bordered">
+                <table id="reviewlists" class="table table-bordered display">
                   <thead>
                     <tr>
                       <th>Jadual</th>

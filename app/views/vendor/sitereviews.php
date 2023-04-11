@@ -39,7 +39,7 @@
               </div>
               <div class="table-responsive">
                 <form role="form" id="form-verifylists">
-                  <table id="sitereviews" class="table table-bordered" style="width:100%;">
+                  <table id="sitereviews" class="display" style="width:100%;">
                     <thead>
                       <tr>
                         <th></th>
@@ -48,8 +48,10 @@
                           No. Akaun <br />
                           No. Lot
                         </th>
-                        <th>Nama Jalan</th>
-                        <th>Jenis Hartanah</th>
+                        <th>
+                          Nama Jalan<br />
+                          Jenis Hartanah
+                        </th>
                         <th>
                           Luas Bangunan(mp) <br />
                           Luas Tanah(mp) <br />

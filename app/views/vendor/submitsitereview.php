@@ -14,8 +14,7 @@
                 </div>
                 <!--end col-->
                 <div class="col-auto">
-                  <button class="btn btn-default btn-sm mt5 mr15" id="print_submit"><i
-                      class="glyphicon glyphicon-print"></i></button>
+                  <button class="btn btn-default btn-sm mt5 mr15" id="print_submit"><i class="glyphicon glyphicon-print"></i></button>
                 </div>
                 <!--end col-->
               </div>
@@ -23,7 +22,7 @@
             <div class="panel-body">
               <div class="table-responsive">
                 <form role="form" id="form-verifylists">
-                  <table id="submitsitereview" class="table table-bordered" style="width:100%;">
+                  <table id="submitsitereview" class="display" style="width:100%;">
                     <thead>
                       <tr>
                         <th></th>
@@ -51,6 +50,7 @@
                         <th>Gambar</th>
                         <th>Dokumen</th>
                         <th>Status</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -58,8 +58,7 @@
                   </table>
                   <div class="row mb15">
                     <div class="col-lg-12 col-sm-12 col-md-12">
-                      <button type="submit" class="btn btn-success btn-sm" id="accepted"><i
-                          class="glyphicon glyphicon-ok"></i>
+                      <button type="submit" class="btn btn-success btn-sm" id="accepted"><i class="glyphicon glyphicon-ok"></i>
                         Serahan diterima</button>
                     </div>
                   </div>
@@ -112,6 +111,38 @@
           <button type="submit" class="btn btn-primary">Serah</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="image" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="imageModalLabel">New message</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row gallery sortable-layout"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="document" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="documentModalLabel">New message</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row gallery sortable-layout"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
     </div>
   </div>
 </div>

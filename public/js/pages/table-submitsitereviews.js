@@ -6,6 +6,11 @@ $(document).ready(function () {
     window.open(url, "_blank")
   })
 
+  $(document).delegate('*[data-toggle="lightbox"]', "click", function (event) {
+    event.preventDefault()
+    $(this).ekkoLightbox()
+  })
+
   function format(d) {
     // `d` is the original data object for the row
     return (
@@ -226,9 +231,13 @@ $(document).ready(function () {
         className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
+          console.log(row.files)
           if (type === "display") {
             if (row.file > "0") {
-              data = "Ada (" + row.file + ")"
+              data = "Ada (" + row.file + ")</br>"
+              for (let i = 0; i < row.files.length; i++) {
+                data += '<a href="../img/big-lightgallry/' + row.files[i]["hashed_filename"] + '" data-toggle="lightbox" data-gallery="gallerymode" data-title="' + row.files[i]["filename"] + '" data-parrent>' + row.files[i]["filename"] + "</a></br>"
+              }
             } else if (row.file < "1") {
               data = "Tiada"
             }
@@ -242,9 +251,14 @@ $(document).ready(function () {
         className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
+          console.log(row.docs)
           if (type === "display") {
             if (row.doc > "0") {
-              data = "Ada (" + row.doc + ")"
+              data = "Ada (" + row.doc + ")</br>"
+              for (let i = 0; i < row.docs.length; i++) {
+                data += '<a href="../downloads/download/' + row.docs[i]["hashed_filename"] + '">' + row.docs[i]["doc_name"] + "</a></br>"
+              }
+              data += ""
             } else if (row.doc < "1") {
               data = "Tiada"
             }
@@ -273,6 +287,21 @@ $(document).ready(function () {
               data = "<span class='label label-success'>Serah Kembali</span>"
             }
           }
+          return data
+        }
+      },
+      {
+        targets: 12,
+        orderable: false,
+        data: null,
+        render: function (data, type, row, meta) {
+          // console.log(data);
+          if (type === "display") {
+            data = '<div class="btn-group btn-group-xs" role="group">'
+            data += '<a href="viewdetails/' + row.akaun + '" class="btn btn-warning btn-xs color-dark">Papar</a>'
+            data += "</div>"
+          }
+
           return data
         }
       }

@@ -304,7 +304,7 @@ class Vendor extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT id, reference, submition_date, workerid, items FROM data.submission s ";
+    $query = "SELECT id, reference, submition_date, workerid, submition_items FROM data.submission s ";
     if ($searchValue != "") {
       $query .= "WHERE " . $searchQuery;
     }
@@ -322,7 +322,7 @@ class Vendor extends Model
       $rowOutput["id"] = $val["id"];
       $rowOutput["reference"] = $val["reference"];
       $rowOutput["submition_date"] = date("d/m/Y", strtotime($val["submition_date"]));
-      $rowOutput["items"] = $val["items"];
+      $rowOutput["items"] = $val["submition_items"];
       array_push($output, $rowOutput);
     }
 
@@ -844,6 +844,9 @@ class Vendor extends Model
       $rowOutput["calctype"] = $calcType;
       $rowOutput["file"] = $val["file"];
       $rowOutput["doc"] = $val["doc"];
+
+      $rowOutput["files"] = $this->getAllImgs($val["smk_akaun"]);
+      $rowOutput["docs"] = $this->getAllDocs($val["smk_akaun"]);
       $rowOutput["role"] = Session::getUserRole();
       array_push($output, $rowOutput);
     }
@@ -1403,7 +1406,7 @@ class Vendor extends Model
     $database = Database::openConnection();
     $dbOracle = new Oracle();
 
-    $query = "SELECT id, bgside, nilai, nota FROM data.benchmark ";
+    $query = "SELECT * FROM data.benchmark ";
     $query .= "WHERE parent = :id ";
 
     $database->prepare($query);

@@ -9,7 +9,7 @@
             <div class="panel-heading">
               <div class="row align-items-center">
                 <div class="col">
-                  <h4 class="ml15">SENARAI PENGESAHAN (Jadual A, Jadual B Dan Jadual C)</h4>
+                  <h4 class="ml15">SENARAI PENGESAHAN NILAIAN SEMULA</h4>
                 </div>
                 <!--end col-->
                 <div class="col-auto">
@@ -22,11 +22,10 @@
             <div class="panel-body">
               <div class="table-responsive">
                 <form role="form" id="form-verifylists">
-                  <table id="verifylists" class="table table-bordered" style="width:100%;">
+                  <table id="verifypslists" class="table table-bordered" style="width:100%;">
                     <thead>
                       <tr>
                         <th></th>
-                        <th>Jadual</th>
                         <th>
                           No. Akaun<br />
                           No. Siri

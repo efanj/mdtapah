@@ -15,7 +15,7 @@
               </div>
             </div>
             <div class="panel-body">
-              <div class="row">
+              <div class="row mb10">
                 <div class="col-lg-6 col-sm-6 col-md-6">
                 </div>
                 <div class="col-lg-6 col-sm-6 col-md-6 tar pr15">
@@ -59,7 +59,7 @@
                         Luas Bgn Tamb.(mp) <br />
                         Luas Ans Tamb.(mp)
                       </th>
-                      <th>
+                      <th width="10%">
                         Catatan Hadapan <br />
                         Catatan Belakang
                       </th>

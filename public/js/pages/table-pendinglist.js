@@ -213,7 +213,13 @@ var table = $("#pending").DataTable({
     {
       target: 9,
       orderable: false,
-      data: "smk_nota"
+      data: null,
+      render: function (data, type, row, meta) {
+        if (type === "display") {
+          data = row.smk_nota
+        }
+        return data
+      }
     },
     {
       targets: 10,
@@ -289,7 +295,7 @@ $("#pending tbody").on("click", "td.details-control", function () {
 $("#pending").css("font-size", 13)
 
 $(document).ready(function () {
-  table.draw()
+  // table.draw()
 
   $("#filter").bind("click", function () {
     var area = $("#area").val()
@@ -304,10 +310,10 @@ $(document).ready(function () {
   })
 
   $("#form-verifylists").on("submit", function (e) {
-    $("#submit_popup").modal("show")
     var form = this
     var rows_selected = table.column(0).checkboxes.selected()
     console.log(rows_selected)
+    $("#submit_popup").modal("show")
     // $.each(rows_selected, function (index, rowId) {
     //   data += rowId
     // })

@@ -47,6 +47,16 @@ function format(d) {
     "<td>" +
     d.jln_kname +
     "</td>" +
+    "<td style='background-color: #f4f5f5;'><b>Koordinat X:</b></td>" +
+    "<td>" +
+    d.smk_codex +
+    "</td>" +
+    "<td style='background-color: #f4f5f5;'><b>Koordinat Y:</b></td>" +
+    "<td>" +
+    d.smk_codey +
+    "</td>" +
+    "</tr>" +
+    "<tr>" +
     "<td style='background-color: #f4f5f5;'><b>No. Pelan:</b></td>" +
     "<td>" +
     d.peg_pelan +
@@ -55,6 +65,10 @@ function format(d) {
     "<td>" +
     d.peg_rjmmk +
     "</td>" +
+    "<td style='background-color: #f4f5f5;'></td>" +
+    "<td></td>" +
+    "<td style='background-color: #f4f5f5;'></td>" +
+    "<td></td>" +
     "</tr>" +
     "<tr>" +
     "<td style='background-color: #f4f5f5;'><b>Kegunaan Tanah:</b></td>" +
@@ -146,15 +160,17 @@ var table = $("#sitereviews").DataTable({
     {
       targets: 3,
       orderable: false,
-      data: "jln_jnama"
+      data: null,
+      render: function (data, type, row, meta) {
+        // console.log(row);
+        if (type === "display") {
+          data = row.jln_jnama + "<br>" + row.hrt_hnama
+        }
+        return data
+      }
     },
     {
       targets: 4,
-      orderable: false,
-      data: "hrt_hnama"
-    },
-    {
-      targets: 5,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -165,7 +181,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 6,
+      targets: 5,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -176,7 +192,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 7,
+      targets: 6,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -187,7 +203,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 8,
+      targets: 7,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -207,7 +223,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 9,
+      targets: 8,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -230,7 +246,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 10,
+      targets: 9,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -241,7 +257,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 11,
+      targets: 10,
       orderable: true,
       data: null,
       render: function (data, type, row, meta) {
@@ -252,7 +268,7 @@ var table = $("#sitereviews").DataTable({
       }
     },
     {
-      targets: 12,
+      targets: 11,
       orderable: false,
       className: "dt-body-center",
       data: null,
@@ -289,7 +305,7 @@ var table = $("#sitereviews").DataTable({
   select: {
     style: "multi"
   },
-  order: [[9, "asc"]],
+  order: [[8, "asc"]],
   language: {
     search: "Saring : ",
     lengthMenu: "Paparkan _MENU_ rekod",

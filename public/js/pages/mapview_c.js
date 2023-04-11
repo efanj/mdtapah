@@ -19,8 +19,22 @@ $(document).ready(function () {
   //   transparent: true,
   //   maxZoom: 25,
   // })
-  var kadlotwmsLayer = L.tileLayer.betterWms(api_url, {
-    layers: "	mdt:lot",
+  var lotndcdbwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "mdt:lot_ndcdb",
+    format: "image/png",
+    transparent: true,
+    maxZoom: 25
+  })
+
+  var lotkomitedwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "mdt:lot_komited",
+    format: "image/png",
+    transparent: true,
+    maxZoom: 25
+  })
+
+  var lotperancangwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "mdt:lot_perancang",
     format: "image/png",
     transparent: true,
     maxZoom: 25
@@ -65,7 +79,9 @@ $(document).ready(function () {
       expanded: true,
       layers: {
         Sempadan: sempadanwmsLayer,
-        Kadlot: kadlotwmsLayer
+        "Lot NDCDB": lotndcdbwmsLayer,
+        "Lot komited": lotkomitedwmsLayer,
+        "Lot Perancang": lotperancangwmsLayer
         // Dilawati: visitwmsLayer
       }
     }
@@ -82,7 +98,9 @@ $(document).ready(function () {
   map.addControl(control)
   control.selectLayer(g_roadmap)
   control.selectLayer(sempadanwmsLayer)
-  control.selectLayer(kadlotwmsLayer)
+  control.selectLayer(lotndcdbwmsLayer)
+  control.selectLayer(lotkomitedwmsLayer)
+  control.selectLayer(lotperancangwmsLayer)
 
   // var input = document.getElementById("google_term")
   // var mdptBounds = new google.maps.LatLngBounds(

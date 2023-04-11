@@ -128,6 +128,11 @@ class VendorController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/submitsitereview/", Config::get("VIEWS_PATH") . "vendor/submitsitereview.php");
   }
 
+  public function viewdetails()
+  {
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/viewdetails/", Config::get("VIEWS_PATH") . "vendor/viewdetails.php");
+  }
+
   public function evaluationlist()
   {
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/evaluationlist/", Config::get("VIEWS_PATH") . "vendor/evaluationlist.php");

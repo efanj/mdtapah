@@ -3,7 +3,7 @@ $(document).ready(function () {
     pageLength: 5,
     lengthMenu: [
       [5, 10, 15, 20],
-      [5, 10, 15, 20],
+      [5, 10, 15, 20]
     ],
     processing: true,
     serverSide: true,
@@ -20,7 +20,7 @@ $(document).ready(function () {
             data = row.peg_akaun + "<br/>" + row.peg_nompt
           }
           return data
-        },
+        }
       },
       {
         targets: 1,
@@ -46,7 +46,7 @@ $(document).ready(function () {
             }
           }
           return data
-        },
+        }
       },
       {
         targets: 2,
@@ -66,7 +66,7 @@ $(document).ready(function () {
             }
           }
           return data
-        },
+        }
       },
       {
         targets: 3,
@@ -77,7 +77,7 @@ $(document).ready(function () {
             data = row.jln_knama + "<br/>" + row.jln_jnama
           }
           return data
-        },
+        }
       },
       {
         targets: 4,
@@ -88,7 +88,7 @@ $(document).ready(function () {
             data = row.jpk_jnama + "<br/>" + row.hrt_hnama
           }
           return data
-        },
+        }
       },
       {
         targets: 5,
@@ -96,13 +96,13 @@ $(document).ready(function () {
         className: "text-center",
         data: null,
         render: function (data, type, row, meta) {
-          console.log(data)
+          // console.log(data)
           if (type === "display") {
             data = '<a href="macthaccount/' + row.id + '" class="btn btn-primary btn-sm mr5 mb10">Padan</a>'
           }
           return data
-        },
-      },
+        }
+      }
     ],
     order: [[1, "asc"]],
     language: {
@@ -115,9 +115,9 @@ $(document).ready(function () {
         first: "Pertama",
         last: "Terakhir",
         next: "Seterusnya",
-        previous: "Sebelumnya",
-      },
-    },
+        previous: "Sebelumnya"
+      }
+    }
   })
   $("#macthing tbody").css("font-size", 13)
 })

@@ -139,17 +139,20 @@ $info = $this->controller->user->getProfileInfo(Session::getUserId()); ?>
                   </ul>
                 </li>
                 <li>
-                  <a href="#"><span class="txt">Pindaan</span></a>
+                  <a href="#"><span class="txt">Nilaian Semasa</span></a>
                   <ul class="sub">
-                    <li><a href="<?= PUBLIC_ROOT ?>amendment/amendlists"><span class="txt">Nilaian Semasa</span></a>
+                    <li><a href="<?= PUBLIC_ROOT ?>amendment/amendlists"><span class="txt">Senarai</span></a>
                     </li>
-                    <li><a href="<?= PUBLIC_ROOT ?>amendment/reviewlist"><span class="txt">Nilaian Semula</span></a>
+                    <li><a href="<?= PUBLIC_ROOT ?>amendment/verifylists"><span class="txt">Pengesahan</span></a>
                     </li>
-                    <li><a href="<?= PUBLIC_ROOT ?>amendment/verifylists"><span class="txt">Pengesahan N.
-                          Semasa</span></a>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#"><span class="txt">Nilaian Semula</span></a>
+                  <ul class="sub">
+                    <li><a href="<?= PUBLIC_ROOT ?>amendment/reviewlist"><span class="txt">Senarai</span></a>
                     </li>
-                    <li><a href="<?= PUBLIC_ROOT ?>amendment/verifylists"><span class="txt">Pengesahan N.
-                          Semula</span></a>
+                    <li><a href="<?= PUBLIC_ROOT ?>amendment/verifypslists"><span class="txt">Pengesahan</span></a>
                     </li>
                   </ul>
                 </li>

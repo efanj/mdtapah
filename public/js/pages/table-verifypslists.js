@@ -3,7 +3,8 @@ $(document).ready(function () {
     var url = config.root + "Printing/dataserahannilaiansemula/"
     window.open(url, "_blank")
   })
-  var table = $("#verifylists").DataTable({
+
+  var table = $("#verifypslists").DataTable({
     pageLength: 5,
     lengthMenu: [
       [5, 15, 25, 50],
@@ -14,7 +15,7 @@ $(document).ready(function () {
     searching: true,
     order: [],
     serverMethod: "post",
-    ajax: "getVerifyTable",
+    ajax: "getVerifyPsTable",
     columnDefs: [
       {
         targets: 0,
@@ -26,11 +27,6 @@ $(document).ready(function () {
       {
         targets: 1,
         orderable: false,
-        data: "form"
-      },
-      {
-        targets: 2,
-        orderable: false,
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
@@ -41,7 +37,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 3,
+        targets: 2,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -53,7 +49,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 4,
+        targets: 3,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -67,7 +63,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 5,
+        targets: 4,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -80,7 +76,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 6,
+        targets: 5,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -93,7 +89,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 7,
+        targets: 6,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -104,7 +100,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 8,
+        targets: 7,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -116,7 +112,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 9,
+        targets: 8,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -127,7 +123,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 10,
+        targets: 9,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -139,7 +135,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 11,
+        targets: 10,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -185,9 +181,9 @@ $(document).ready(function () {
     }
   })
 
-  $("#verifylists").css("font-size", 13)
+  $("#verifypslists").css("font-size", 13)
 
-  $("#form-verifylists").submit(function (e) {
+  $("#form-verifypslists").submit(function (e) {
     var form = this
     var rows_selected = table.column(0).checkboxes.selected()
     $.each(rows_selected, function (index, rowId) {
@@ -200,11 +196,11 @@ $(document).ready(function () {
   //   var area = $("#area").val()
   //   var street = $("#street").val()
   //   if (area != "" && street != "") {
-  //     $("#verifylists").DataTable().destroy()
+  //     $("#verifypslists").DataTable().destroy()
   //     table.draw()
   //   } else {
   //     alert("Select Both filter option")
-  //     $("#verifylists").DataTable().destroy()
+  //     $("#verifypslists").DataTable().destroy()
   //     table.draw()
   //   }
   // })

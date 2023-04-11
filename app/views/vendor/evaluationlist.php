@@ -13,7 +13,8 @@
                 </div>
                 <!--end col-->
                 <div class="col-auto">
-                  <button class="btn btn-default btn-sm mt5 mr15" id="print_submit"><i class="glyphicon glyphicon-print"></i></button>
+                  <button class="btn btn-default btn-sm mt5 mr15" id="print_submit"><i
+                      class="glyphicon glyphicon-print"></i></button>
                 </div>
                 <!--end col-->
               </div>
@@ -21,7 +22,7 @@
             <div class="panel-body">
               <div class="table-responsive">
                 <form role="form" id="form-verifylists">
-                  <table id="evaluationlist" class="print-table" style="width:100%;">
+                  <table id="evaluationlist" class="print-table display" style="width:100%;">
                     <thead>
                       <tr>
                         <th rowspan="2"></th>

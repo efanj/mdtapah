@@ -6,36 +6,23 @@
       <?php $kws = $this->controller->elements->area(); ?>
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-md-12">
-          <div class="panel panel-mdpt">
+          <div class="panel panel-primary">
             <div class="panel-heading">
-              <h4>SENARAI JADUAL (Jadual A, Jadual B Dan Jadual C)</h4>
+              <div class="row align-items-center">
+                <div class="col">
+                  <h4 class="ml15">SENARAI JADUAL (Jadual A, Jadual B Dan Jadual C)</h4>
+                </div>
+                <!--end col-->
+                <div class="col-auto">
+                  <button class="btn btn-default btn-sm mt5 mr15" id="print"><i
+                      class="glyphicon glyphicon-print"></i></button>
+                </div>
+                <!--end col-->
+              </div>
             </div>
             <div class="panel-body">
-              <div class="row">
-                <div class="col-lg-6 col-sm-6 col-md-6">
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 tar pr15">
-                  <form class="form-inline" role="form">
-                    <div class="form-group">
-                      <select class="form-control input-sm" name="area" id="area">
-                        <option selected value="">Sila Pilih Kawasan</option>
-                        <?php foreach ($kws as $row) { ?>
-                        <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <select class="form-control input-sm" name="street" id="street" style="width:100%">
-                        <option selected value="">Sila Pilih Jalan</option>
-                      </select>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="filter"><i class="fa  fa-search"></i>
-                      Saring</button>
-                  </form>
-                </div>
-              </div>
               <div class="table-responsive">
-                <table id="amendlists" class="table table-bordered" style="width:100%">
+                <table id="amendlists" class="table table-bordered display" style="width:100%">
                   <thead>
                     <tr>
                       <th>Jadual</th>

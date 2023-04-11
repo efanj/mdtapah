@@ -167,9 +167,21 @@ class Informations extends Model
       $rowOutput["smk_adpg3"] = $val["smk_adpg3"];
       $rowOutput["smk_adpg4"] = $val["smk_adpg4"];
       $rowOutput["jln_kname"] = $dbOracle->getElementById("SPMC.V_MKWJLN", "kws_knama", "jln_jlkod", $info["jln_jlkod"]);
-      $rowOutput["tnh_tnama"] = $dbOracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["smk_jstnh"]);
-      $rowOutput["bgn_bnama"] = $dbOracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["smk_jsbgn"]);
-      $rowOutput["stb_snama"] = $dbOracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $val["smk_stbgn"]);
+      if ($val["smk_jstnh"] != null) {
+        $rowOutput["tnh_tnama"] = $dbOracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["smk_jstnh"]);
+      } else {
+        $rowOutput["tnh_tnama"] = $this->checkNull($val["smk_jstnh"]);
+      }
+      if ($val["smk_jsbgn"] != null) {
+        $rowOutput["bgn_bnama"] = $dbOracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["smk_jsbgn"]);
+      } else {
+        $rowOutput["bgn_bnama"] = $this->checkNull($val["smk_jsbgn"]);
+      }
+      if ($val["smk_stbgn"] != null) {
+        $rowOutput["stb_snama"] = $dbOracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $val["smk_stbgn"]);
+      } else {
+        $rowOutput["stb_snama"] = $this->checkNull($val["smk_stbgn"]);
+      }
       $rowOutput["smk_lsbgn"] = $val["smk_lsbgn"];
       $rowOutput["smk_lstnh"] = $val["smk_lstnh"];
       $rowOutput["smk_lsans"] = $val["smk_lsans"];
@@ -183,7 +195,8 @@ class Informations extends Model
       $rowOutput["belakang"] = $val["belakang"];
       $rowOutput["hrt_hnama"] = $info["hrt_hnama"];
       $rowOutput["jln_jnama"] = $info["jln_jnama"];
-      $rowOutput["smk_datevisit"] = date("d/m/Y H:i:s", strtotime($val["smk_datevisit"]));
+      $rowOutput["smk_datevisit"] = date("d/m/Y", strtotime($val["smk_datevisit"]));
+      $rowOutput["smk_timevisit"] = date("H:i:s", strtotime($val["smk_datevisit"]));
       $rowOutput["workerid"] = $val["workerid"];
       $rowOutput["name"] = $val["name"];
       $rowOutput["calctype"] = $calcType;
@@ -196,9 +209,9 @@ class Informations extends Model
     ## Response
     $response = [
       "draw" => intval($draw),
-      "iTotalRecords" => $totalRecords,
-      "iTotalDisplayRecords" => $totalRecordwithFilter,
-      "aaData" => $output,
+      "recordsTotal" => $totalRecords,
+      "recordsFiltered" => $totalRecordwithFilter,
+      "data" => $output,
     ];
 
     return $response;

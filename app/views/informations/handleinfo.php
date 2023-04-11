@@ -39,7 +39,7 @@
                 </div>
               </div>
               <div class="table-responsive">
-                <table id="handleinfo" class="table table-bordered"
+                <table id="handleinfo" class="table table-bordered display"
                   style="border-collapse: collapse; border-spacing: 0;">
                   <thead>
                     <tr>

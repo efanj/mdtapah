@@ -7,14 +7,14 @@
         <div class="col-lg-12 col-sm-12 col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <div class="row">
+              <div class="row align-items-center">
                 <div class="col">
                   <h4 class="ml15"><i class="fa fa-users"></i> Pengguna</h4>
                 </div>
                 <!--end col-->
                 <div class="col-auto">
                   <a href="<?php echo PUBLIC_ROOT; ?>Admin/register" id="link-register"
-                    class="btn btn-primary btn-xs mt5 mr5">Daftar Pengguna</a>
+                    class="btn btn-primary btn-sm mt5 mr5">Daftar Pengguna</a>
                 </div>
                 <!--end col-->
               </div>

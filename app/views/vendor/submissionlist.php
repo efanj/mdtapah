@@ -21,7 +21,7 @@
               </div>
             </div>
             <div class="panel-body">
-              <table id="submitdatereview" class="table table-bordered" style="width:100%;">
+              <table id="submitdatereview" class="display" style="width:100%;">
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -42,7 +42,7 @@
             <div class="panel-body">
               <div class="table-responsive">
                 <form role="form" id="form-verifylists">
-                  <table id="submitsitereview" class="table table-bordered" style="width:100%;">
+                  <table id="submitsitereview" class="display" style="width:100%;">
                     <thead>
                       <tr>
                         <th></th>
@@ -87,7 +87,7 @@
 <div class="modal fade" id="submit_popup" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form method="post" id="submitionreview">
+      <form method="post" id="form-submit-review">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
@@ -98,35 +98,17 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="inputEmail6" class="col-sm-4 control-label">Jalan / Taman</label>
+                <label for="rujukan" class="col-sm-4 control-label">No. Rujukan</label>
                 <div class="col-sm-8">
-                  <input type="email" class="form-control input-sm" id="inputEmail6">
+                  <input type="text" class="form-control input-sm" id="rujukan" name="rujukan" required>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="inputEmail6" class="col-sm-4 control-label">Tarikh</label>
+                <label for="inputEmail6" class="col-sm-4 control-label">Tarikh Serah</label>
                 <div class="col-sm-8">
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mt5">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="inputEmail6" class="col-sm-4 control-label">Kegunaan</label>
-                <div class="col-sm-8">
-                  <input type="email" class="form-control input-sm" id="inputEmail6">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="inputEmail6" class="col-sm-4 control-label">Kaedah</label>
-                <div class="col-sm-8">
-                  <input type="email" class="form-control input-sm" id="inputEmail6">
+                  <input type="text" class="form-control input-sm" id="tarikh" name="tarikh" required>
                 </div>
               </div>
             </div>
@@ -136,14 +118,14 @@
               <div class="form-group">
                 <label for="inputPassword5" class="col-sm-12 control-label">Pilihan Data</label>
                 <div class="col-sm-12">
-                  <textarea class="form-control" rows="3" id="id" readonly></textarea>
+                  <textarea class="form-control" rows="3" id="id" name="data" readonly></textarea>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Simpan</button>
+          <button type="submit" class="btn btn-primary">Serah</button>
         </div>
       </form>
     </div>

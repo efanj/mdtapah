@@ -213,15 +213,27 @@ $(document).ready(function () {
               } else if (row.smk_stspn == "2") {
                 data = "Serah"
               } else if (row.smk_stspn == "3") {
-                data = "Semak Semula"
+                data = "Diterima"
               } else if (row.smk_stspn == "4") {
+                data = "Semak Semula"
+              } else if (row.smk_stspn == "5") {
                 data = "Serah Kembali"
               }
             }
             return data
           }
         },
-        { targets: 9, orderable: false, data: "smk_datevisit" },
+        {
+          targets: 9,
+          orderable: false,
+          data: null,
+          render: function (data, type, row, meta) {
+            if (type === "display") {
+              data = row.smk_datevisit + "</br>" + row.smk_timevisit
+            }
+            return data
+          }
+        },
         {
           targets: 10,
           orderable: true,
@@ -240,16 +252,16 @@ $(document).ready(function () {
           render: function (data, type, row, meta) {
             // console.log(data);
             if (type === "display") {
-              data = '<a class="btn btn-danger btn-sm remove" title="Delete" id="remove" data-id="' + row.id + '"><i class="fa fa-trash"></i></a> '
-              data += '<div class="btn-group" role="group">'
+              data = '<a class="btn btn-danger btn-xs remove" title="Delete" id="remove" data-id="' + row.id + '"><i class="fa fa-trash"></i></a> '
+              data += '<div class="btn-group btn-group-xs" role="group">'
               if (row.smk_type === 1) {
-                data += '<a href="JadualcSemak/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">Jadual C</a>'
+                data += '<a href="JadualcSemak/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">Jadual C</a>'
               }
               if (row.smk_type === 2) {
-                data += '<a href="JadualbSemak/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">Jadual B</a>' + '<a href="../Evaluate/jadualbSemak/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">Jadual B(PS)</a>'
+                data += '<a href="JadualbSemak/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">Jadual B</a>' + '<a href="../Evaluate/jadualbSemak/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">Jadual B(PS)</a>'
               }
               if (row.smk_type === 3) {
-                data += '<a href="kemaskini/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">KemasKini Data</a>'
+                data += '<a href="kemaskini/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">KemasKini Data</a>'
               }
               data += "</div>"
             }

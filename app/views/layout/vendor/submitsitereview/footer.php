@@ -21,7 +21,7 @@
 <!-- Handle responsive view functions -->
 <script src="<?= PUBLIC_ROOT ?>js/jRespond.min.js"></script>
 <!-- Datatables -->
-<script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables_1.13/DataTables-1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables/dataTables.bootstrap.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables/dataTables.checkboxes.min.js"></script>
 <!-- Custom scroll for sidebars,tables and etc. -->
@@ -35,6 +35,7 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/core/velocity/jquery.velocity.min.js"></script>
 <!-- Bootbox fast bootstrap modals -->
 <script src="<?= PUBLIC_ROOT ?>plugins/ui/bootbox/bootbox.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/lightbox/ekko-lightbox.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/main.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/jquery.Dynamic.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>

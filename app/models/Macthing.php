@@ -22,7 +22,7 @@ class Macthing extends Model
 
   public function macthingtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -53,40 +53,44 @@ class Macthing extends Model
     }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM data.hvnduk h";
-    $sel = $database->prepare($sql);
-    $database->execute($sel);
-    $records = $database->fetchAssociative();
+    $sel = "SELECT count(*) AS allcount FROM SPMC.V_HVNDUK h";
+    $dbOracle->prepare($sel);
+    $dbOracle->execute();
+    $records = $dbOracle->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM data.hvnduk h ";
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HVNDUK h ";
     if ($searchValue != "") {
-      $sql .= " WHERE " . $searchQuery . " AND peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
+      $sql .= "WHERE " . $searchQuery . " AND peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
     } else {
-      $sql .= " WHERE peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
+      $sql .= "WHERE peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
     }
-    $sel = $database->prepare($sql);
-    $database->execute($sel);
+    $dbOracle->prepare($sql);
+    $dbOracle->execute();
 
-    $records = $database->fetchAssociative();
+    $records = $dbOracle->fetchAssociative();
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT * FROM data.hvnduk h ";
+    $query = "SELECT h.* ";
+    $query .= "FROM ( SELECT tmp.*, rownum rn ";
+    $query .= "FROM( SELECT peg_akaun, peg_nompt, pmk_nmbil, jln_jnama, jln_knama, jpk_jnama, hrt_hnama, adpg1, adpg2, adpg3, adpg4, pvd_almt1, pvd_almt2, pvd_almt3, pvd_almt4, pvd_almt5 FROM SPMC.V_HVNDUK ";
     if ($searchValue != "") {
-      $query .= " WHERE " . $searchQuery . " AND peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
+      $query .= "WHERE " . $searchQuery . " AND peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
     } else {
-      $query .= " WHERE peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
+      $query .= "WHERE peg_codex is null AND peg_codey is null AND peg_statf != 'H'";
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
     }
-    $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
-    $database->prepare($query);
-    $database->execute();
+    $query .= ") tmp ";
+    $query .= "WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
+    $query .= "WHERE rn > " . (int) $row;
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $row = $database->fetchAllAssociative();
+    $row = $dbOracle->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
@@ -125,7 +129,7 @@ class Macthing extends Model
 
   public function remacthingtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -156,40 +160,44 @@ class Macthing extends Model
     }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM data.hvnduk h";
-    $sel = $database->prepare($sql);
-    $database->execute($sel);
-    $records = $database->fetchAssociative();
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HVNDUK h";
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+    $records = $dbOracle->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM data.hvnduk h ";
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HVNDUK h ";
     if ($searchValue != "") {
       $sql .= " WHERE " . $searchQuery . " AND peg_codex is not null AND peg_codey is not null";
     } else {
       $sql .= " WHERE peg_codex is not null AND peg_codey is not null";
     }
-    $sel = $database->prepare($sql);
-    $database->execute($sel);
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
 
-    $records = $database->fetchAssociative();
+    $records = $dbOracle->fetchAssociative();
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT * FROM data.hvnduk h ";
+    $query = "SELECT h.* ";
+    $query .= "FROM ( SELECT tmp.*, rownum rn ";
+    $query .= "FROM( SELECT peg_akaun, peg_nompt, pmk_nmbil, jln_jnama, jln_knama, jpk_jnama, hrt_hnama, adpg1, adpg2, adpg3, adpg4, pvd_almt1, pvd_almt2, pvd_almt3, pvd_almt4, pvd_almt5 FROM SPMC.V_HVNDUK ";
     if ($searchValue != "") {
-      $sql .= " WHERE " . $searchQuery . " AND peg_codex is not null AND peg_codey is not null";
+      $query .= "WHERE " . $searchQuery . " AND peg_codex is not null AND peg_codey is not null AND peg_statf != 'H'";
     } else {
-      $sql .= " WHERE peg_codex is not null AND peg_codey is not null";
+      $query .= "WHERE peg_codex is not null AND peg_codey is not null AND peg_statf != 'H'";
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
     }
-    $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
-    $database->prepare($query);
-    $database->execute();
+    $query .= ") tmp ";
+    $query .= "WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
+    $query .= "WHERE rn > " . (int) $row;
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $row = $database->fetchAllAssociative();
+    $row = $dbOracle->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
@@ -242,5 +250,3 @@ class Macthing extends Model
     return $info;
   }
 }
-
-?>
