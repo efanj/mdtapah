@@ -26,6 +26,7 @@
   <link href="<?= PUBLIC_ROOT; ?>css/main.css" rel="stylesheet" />
   <!-- Custom stylesheets ( Put your own changes here ) -->
   <link href="<?= PUBLIC_ROOT; ?>css/custom.css" rel="stylesheet" />
+  <link href="<?= PUBLIC_ROOT; ?>plugins/tables/datatables_1.13/DataTables-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
 
   <link rel="icon" href="<?= PUBLIC_ROOT; ?>img/icons/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="<?= PUBLIC_ROOT; ?>img/icons/favicon.ico" type="image/x-icon">

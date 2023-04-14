@@ -72,6 +72,7 @@ class Vendor extends Model
     $type = 1;
 
     $database = Database::openConnection();
+    $dboracle = new Oracle();
 
     $query = "INSERT INTO data.smktpk(smk_akaun, smk_nolot, smk_nompt, smk_adpg1, smk_adpg2, smk_adpg3, smk_adpg4, smk_jalan, smk_kodkws, smk_jstnh, smk_jsbgn, ";
     $query .= "smk_kgtnh, smk_stbgn, smk_lsbgn, smk_lstnh, smk_lsans, smk_lsbgn_tmbh, smk_lsans_tmbh, smk_codex, smk_codey, smk_onama, smk_type) ";
@@ -115,10 +116,15 @@ class Vendor extends Model
       $database->execute($alter);
 
       if ($codex != null && $codey != null) {
-        $qry = "INSERT INTO data.coordinates (akaun, plgid, nama, codex, codey, nolot, geom) ";
-        $qry .= "VALUES($noAkaun, '" . $plgid . "', '" . $nmbil . "', $codex, $codey, '" . $noLot . "', ST_SetSRID(ST_MakePoint($codex, $codey), 4326))";
+        $qry = "INSERT INTO data.coordinates (akaun, plgid, nama, codex, codey, nolot) ";
+        $qry .= "VALUES($noAkaun, '" . $plgid . "', '" . $nmbil . "', $codex, $codey, '" . $noLot . "')";
         $database->prepare($qry);
         $database->execute();
+
+        $stmt = "INSERT INTO SPMC.KOORDINAT (AKAUN, PLGID, NAMA, CODEX, CODEY, NOLOT) ";
+        $stmt .= "VALUES($noAkaun, '" . $plgid . "', '" . $nmbil . "', $codex, $codey, '" . $noLot . "')";
+        $dboracle->prepare($stmt);
+        $dboracle->execute();
       }
 
       $activity = "Semakan Nilaian Semula : No akaun - " . $noAkaun;
@@ -1632,6 +1638,66 @@ class Vendor extends Model
     $database->commit();
 
     // $log = $this->logActivity($userId, "delete image");
+  }
+
+  public function editareasitereview($userId, $pid, $sid, $lsbgn, $lsans)
+  {
+    $database = Database::openConnection();
+
+    $query = "UPDATE data.pindaan_raw SET luas_bangunan=:lsbgn, luas_ansolari=:lsans WHERE id=:id ";
+
+    $database->prepare($query);
+    $database->bindValue(":lsbgn", $lsbgn);
+    $database->bindValue(":lsans", $lsans);
+    $database->bindValue(":id", $pid);
+    $database->execute();
+
+    return ["success" => true];
+  }
+
+  public function editnotesitereview($userId, $pid, $sid, $catatan)
+  {
+    $database = Database::openConnection();
+
+    $query = "UPDATE data.pindaan_raw SET catatan_hadapan=:catatan WHERE id=:id ";
+
+    $database->prepare($query);
+    $database->bindValue(":catatan", $catatan);
+    $database->bindValue(":id", $pid);
+    $database->execute();
+
+    return ["success" => true];
+  }
+
+  public function editcoordssitereview($userId, $sid, $no_akaun, $codex, $codey)
+  {
+    $database = Database::openConnection();
+    $dbOracle = new Oracle();
+
+    $query = "UPDATE data.smktpk SET smk_codex=:codex, smk_codey=:codey WHERE id=:id ";
+
+    $database->prepare($query);
+    $database->bindValue(":codex", $codex);
+    $database->bindValue(":codey", $codey);
+    $database->bindValue(":id", $sid);
+    $result = $database->execute();
+
+    if ($result) {
+      $dbOracle->getByNoAcct("V_HVNDUK", "peg_akaun", $no_akaun);
+      $info = $dbOracle->fetchAssociative();
+
+      $qry = "INSERT INTO data.coordinates (akaun, plgid, nama, codex, codey, nolot) ";
+      $qry .= "VALUES($no_akaun, '" . $info['pmk_plgid'] . "', '" . $info['pmk_nmbil'] . "', $codex, $codey, '" . $info['peg_nolot'] . "')";
+      $database->prepare($qry);
+      $database->execute();
+
+      $stmt = "INSERT INTO SPMC.KOORDINAT (AKAUN, PLGID, NAMA, CODEX, CODEY, NOLOT) ";
+      $stmt .= "VALUES(VALUES($no_akaun, '" . $info['pmk_plgid'] . "', '" . $info['pmk_nmbil'] . "', $codex, $codey, '" . $info['peg_nolot'] . "')";
+      $dbOracle->prepare($stmt);
+      $dbOracle->execute();
+    }
+
+    return ["success" => true];
   }
 
   public function checkEmptyLand($id)

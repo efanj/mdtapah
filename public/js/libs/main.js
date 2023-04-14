@@ -714,6 +714,9 @@ var events = {
       events.vendor.desktopreview()
       events.vendor.submitreview()
       events.vendor.submitsitereview()
+      events.vendor.editareasitereview()
+      events.vendor.editnotesitereview()
+      events.vendor.editcoordssitereview()
       events.vendor.uploadbenchmarkdocs()
       events.vendor.uploadimages()
       events.vendor.uploaddocuments()
@@ -783,6 +786,51 @@ var events = {
           swal("Berjaya!", "Serahan, Telah berjaya direkodkan.", "success")
         } else {
           swal("Oops...!", "Serahan tidak berjaya.", "info")
+        }
+      }
+    },
+    editareasitereview: function () {
+      $("#form-edit-area").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Vendor/editareasitereview", helpers.serialize(this), editareasitereviewCallBack)
+      })
+
+      function editareasitereviewCallBack(result) {
+        if (result.success === true) {
+          $("#sitereviews").DataTable().ajax.reload()
+          swal("Berjaya!", "Kemas kini keluasan, Telah berjaya direkodkan.", "success")
+        } else {
+          swal("Oops...!", "Kemas kini keluasan tidak berjaya.", "info")
+        }
+      }
+    },
+    editnotesitereview: function () {
+      $("#form-edit-note").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Vendor/editnotesitereview", helpers.serialize(this), editnotesitereviewCallBack)
+      })
+
+      function editnotesitereviewCallBack(result) {
+        if (result.success === true) {
+          $("#sitereviews").DataTable().ajax.reload()
+          swal("Berjaya!", "Kemas kini catatan, Telah berjaya direkodkan.", "success")
+        } else {
+          swal("Oops...!", "Kemas kini catatan tidak berjaya.", "info")
+        }
+      }
+    },
+    editcoordssitereview: function () {
+      $("#form-edit-coordinate").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Vendor/editcoordssitereview", helpers.serialize(this), editcoordssitereviewCallBack)
+      })
+
+      function editcoordssitereviewCallBack(result) {
+        if (result.success === true) {
+          $("#sitereviews").DataTable().ajax.reload()
+          swal("Berjaya!", "Kemas kini koordinat, Telah berjaya direkodkan.", "success")
+        } else {
+          swal("Oops...!", "Kemas kini koordinat tidak berjaya.", "info")
         }
       }
     },

@@ -39,12 +39,6 @@ $(document).ready(function () {
     transparent: true,
     maxZoom: 25
   })
-  // var mukimwmsLayer = L.tileLayer.wms(api_url, {
-  //   layers: "mdt:mukim",
-  //   format: "image/png",
-  //   transparent: true,
-  //   maxZoom: 25,
-  // })
   var sempadanwmsLayer = L.tileLayer.wms(api_url, {
     layers: "mdt:daerah",
     format: "image/png",
@@ -121,7 +115,7 @@ $(document).ready(function () {
   function addMarker() {
     var lat, lng
     if ($("#codex").html() === "") {
-      map.setView(new L.LatLng(4.0500455, 101.3585305), 10)
+      map.setView(new L.LatLng(4.0943935, 101.2823129), 10)
     } else {
       lat = $("#codex").html()
       lng = $("#codey").html()

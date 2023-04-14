@@ -71,6 +71,9 @@ class VendorController extends Controller
       case "buildingEdit":
         $this->Security->config("validateForm", false);
         break;
+      case "editsitereview":
+        $this->Security->config("validateForm", false);
+        break;
       case "updatebreadth":
         $this->Security->config("validateForm", false);
         break;
@@ -91,6 +94,15 @@ class VendorController extends Controller
         break;
       case "deletedocument":
         $this->Security->config("form", ["fields" => ["doc_id"]]);
+        break;
+      case "editareasitereview":
+        $this->Security->config("validateForm", false);
+        break;
+      case "editnotesitereview":
+        $this->Security->config("validateForm", false);
+        break;
+      case "editcoordssitereview":
+        $this->Security->config("validateForm", false);
         break;
     }
   }
@@ -189,6 +201,12 @@ class VendorController extends Controller
   {
     Config::setJsConfig("curPage", "vendor");
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/viewdocuments/", Config::get("VIEWS_PATH") . "vendor/viewdocuments.php", ["reviewId" => $reviewId]);
+  }
+
+  public function editsitereview($reviewId)
+  {
+    Config::setJsConfig("curPage", "vendor");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editsitereview/", Config::get("VIEWS_PATH") . "vendor/editsitereview.php", ["reviewId" => $reviewId]);
   }
 
   public function createReviewDesktop()
@@ -644,6 +662,53 @@ class VendorController extends Controller
     $this->vendor->deletedocument(Session::getUserId(), $docId);
 
     $this->view->renderJson(["success" => true]);
+  }
+
+  public function editareasitereview()
+  {
+    $pid = $this->request->data("pindaan_id");
+    $sid = $this->request->data("smk_id");
+    $lsbgn = $this->request->data("lsbgn_tamb");
+    $lsans = $this->request->data("lsans_tamb");
+
+    $result = $this->vendor->editareasitereview(Session::getUserId(), $pid, $sid, $lsbgn, $lsans);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function editnotesitereview()
+  {
+    $pid = $this->request->data("pindaan_id");
+    $sid = $this->request->data("smk_id");
+    $catatan = $this->request->data("catatan");
+
+    $result = $this->vendor->editnotesitereview(Session::getUserId(), $pid, $sid, $catatan);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function editcoordssitereview()
+  {
+    $sid = $this->request->data("smk_id");
+    $no_akaun = $this->request->data("no_akaun");
+    $codex = $this->request->data("codex");
+    $codey = $this->request->data("codey");
+
+    $result = $this->vendor->editcoordssitereview(Session::getUserId(), $sid, $no_akaun, $codex, $codey);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
   }
 
   public function isAuthorized()

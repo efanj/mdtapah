@@ -281,10 +281,20 @@ div.checkbox-custom.checkbox-inline {
   margin-top: 2px;
 }
 
-.google {
+/* .google {
   z-index: 1000;
   position: absolute;
   top: 10px;
   left: 10px;
   width: 70%;
+} */
+
+.google {
+  z-index: 100;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  width: 70%;
+  max-width: 90%;
+  min-width: 50%;
 }

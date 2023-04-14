@@ -331,10 +331,10 @@ class Database
     }
   }
 
-  public function getByNoAcct($table, $columnName, $noAcct)
+  public function getByNoAcct($table, $columnName, $id)
   {
-    if ($this->countByNoAcct($table, $columnName, $noAcct) > 0) {
-      $this->statement = $this->connection->prepare("SELECT * FROM data." . $table . " WHERE " . $columnName . " = " . $noAcct . " LIMIT 1");
+    if ($this->countByNoAcct($table, $columnName, $id) > 0) {
+      $this->statement = $this->connection->prepare("SELECT * FROM data." . $table . " WHERE " . $columnName . " = " . $id . " LIMIT 1");
       $this->execute();
     }
   }

@@ -12,15 +12,13 @@
             </div>
             <div class="panel-body">
               <div class="row mb10">
-                <div class="col-lg-6 col-sm-6 col-md-6">
-                </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 tar pr15">
+                <div class="col-lg-12 col-sm-12 col-md-12 tar pr15">
                   <form class="form-inline" role="form">
                     <div class="form-group">
                       <select class="form-control input-sm" name="area" id="area">
                         <option selected value="">Sila Pilih Kawasan</option>
                         <?php foreach ($kws as $row) { ?>
-                        <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
+                          <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -35,14 +33,17 @@
                 </div>
               </div>
               <div class="table-responsive">
-                <table id="handleinfops" class="table table-bordered display"
-                  style="border-collapse: collapse; border-spacing: 0;">
+                <table id="handleinfops" class="display" style="border-collapse: collapse; border-spacing: 0;">
                   <thead>
                     <tr>
                       <th></th>
                       <th>No. Akaun</th>
                       <th>No. Lot</th>
                       <th>Nama Pemilik</th>
+                      <th>
+                        Nama Jalan<br />
+                        Jenis Hartanah
+                      </th>
                       <th>Alamat Harta</th>
                       <th>Alamat Surat Menyurat</th>
                       <th>Jenis Pemilik</th>

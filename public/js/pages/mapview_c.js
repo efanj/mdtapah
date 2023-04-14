@@ -39,12 +39,7 @@ $(document).ready(function () {
     transparent: true,
     maxZoom: 25
   })
-  // var mukimwmsLayer = L.tileLayer.wms(api_url, {
-  //   layers: "mdt:mukim",
-  //   format: "image/png",
-  //   transparent: true,
-  //   maxZoom: 25,
-  // })
+
   var sempadanwmsLayer = L.tileLayer.wms(api_url, {
     layers: "mdt:daerah",
     format: "image/png",
@@ -102,42 +97,40 @@ $(document).ready(function () {
   control.selectLayer(lotkomitedwmsLayer)
   control.selectLayer(lotperancangwmsLayer)
 
-  // var input = document.getElementById("google_term")
-  // var mdptBounds = new google.maps.LatLngBounds(
-  //   new google.maps.LatLng(4.584785, 100.699578)
-  // )
-  // var options = {
-  //   bounds: mdptBounds,
-  //   // location: new google.maps.LatLng(4.265604, 100.9320657),
-  //   // radius: 15000, // (in meters; this is 15Km)
-  //   types: ["establishment"],
-  //   strictBounds: true,
-  //   componentRestrictions: {
-  //     country: ["my"],
-  //   },
-  // }
-  // var autocomplete = new google.maps.places.Autocomplete(input, options)
-  // autocomplete.addListener("place_changed", function () {
-  //   // clearOverlayVector();
-  //   var places = autocomplete.getPlace()
+  var bounds = map.getBounds()
+  var southWest = bounds.getSouthWest()
+  var northEast = bounds.getNorthEast()
+  var input = document.getElementById("google_term")
+  var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(southWest), new google.maps.LatLng(northEast))
+  var options = {
+    bounds: bounds,
+    // location: new google.maps.LatLng(4.265604, 100.9320657),
+    radius: 15000, // (in meters; this is 15Km)
+    types: ["establishment"],
+    strictBounds: true,
+    componentRestrictions: {
+      country: ["my"]
+    }
+  }
+  var autocomplete = new google.maps.places.Autocomplete(input, options)
+  autocomplete.addListener("place_changed", function () {
+    // clearOverlayVector();
+    var places = autocomplete.getPlace()
 
-  //   if (!places.geometry) {
-  //     window.alert("No details available for input: '" + places.name + "'")
-  //     return
-  //   }
+    if (!places.geometry) {
+      window.alert("No details available for input: '" + places.name + "'")
+      return
+    }
 
-  //   var group = L.featureGroup()
+    var group = L.featureGroup()
 
-  //   // Create a marker for each place.
-  //   var marker = L.marker([
-  //     places.geometry.location.lat(),
-  //     places.geometry.location.lng(),
-  //   ])
-  //   group.addLayer(marker)
+    // Create a marker for each place.
+    var marker = L.marker([places.geometry.location.lat(), places.geometry.location.lng()])
+    group.addLayer(marker)
 
-  //   group.addTo(map)
-  //   map.fitBounds(group.getBounds())
-  // })
+    group.addTo(map)
+    map.fitBounds(group.getBounds())
+  })
 
   map.on("overlayadd", function (eventLayer) {
     if (eventLayer.name === "Bayaran") {

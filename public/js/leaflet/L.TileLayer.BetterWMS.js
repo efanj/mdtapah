@@ -20,11 +20,16 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        var lot = data.features[0].properties.nlot
-        var pa = data.features[0].properties.pa
-        var luas = data.features[0].properties.m_area
-        var lotdata = [lot, pa, luas]
-        showResults(evt.latlng, lotdata)
+        // console.log(data.features.length)
+        if (data.features.length > 0) {
+          var lot = data.features[0].properties.nlot
+          var pa = data.features[0].properties.pa
+          var luas = data.features[0].properties.m_area
+          var lotdata = [lot, pa, luas]
+          showResults(evt.latlng, lotdata)
+        } else {
+          showResults(evt.latlng, "")
+        }
       })
   },
 
@@ -57,13 +62,20 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
   },
 
   showGetFeatureInfo: function (latlng, lotdata) {
-    var properties = "<table class='table-info' style='font-size:12px;' width='150px'>"
+    var lot = lotdata[0]
+    var pa = lotdata[1]
+    var luas = lotdata[2]
+    var lat = latlng.lat
+    var lng = latlng.lng
+    var properties = "<table class='table-info' style='font-size:12px; width:250px'>"
     properties += "<tbody>"
-    properties += "<tr><td width='40%'><b>No.Lot : </b></td><td width='60%'>" + lotdata[0] + "</td></tr>"
-    properties += "<tr><td width='40%'><b>No.PA : </b></td><td width='60%'>" + lotdata[1] + "</td></tr>"
-    properties += "<tr><td width='40%'><b>Keluasan : </b></td><td width='60%'>" + lotdata[2] + "</td></tr>"
+    properties += "<tr><td width='40%'><b>No.Lot : </b></td><td width='60%'>" + lot + "</td></tr>"
+    properties += "<tr><td width='40%'><b>No.PA : </b></td><td width='60%'>" + pa + "</td></tr>"
+    properties += "<tr><td width='40%'><b>Keluasan : </b></td><td width='60%'>" + luas + "</td></tr>"
+    properties += "<tr><td width='40%'><b>Koordinat X : </b></td><td width='60%'>" + lat.toString().substr(0, 15) + "</td></tr>"
+    properties += "<tr><td width='40%'><b>Koordinat Y : </b></td><td width='60%'>" + lng.toString().substr(0, 15) + "</td></tr>"
     properties += "<tr><td colspan='2'></td></tr>"
-    properties += "<tr><td colspan='2' class='tac'>"
+    properties += "<tr><td colspan='2' style='text-align:center; padding-top:10px;'>"
     properties += "<button id='copy' class='btn btn-success btn-xs' data-lot='" + lotdata[0] + "' data-pa='" + lotdata[1] + "' data-luasan='" + lotdata[2] + "'>Salinan</button>"
     properties += "</td></tr>"
     properties += "</tbody></table>"

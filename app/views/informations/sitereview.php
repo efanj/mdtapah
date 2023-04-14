@@ -6,7 +6,7 @@
       <?php $kws = $this->controller->elements->area(); ?>
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-md-12">
-          <div class="panel panel-default">
+          <div class="panel panel-primary">
             <div class="panel-heading">
               <div class="row align-items-center">
                 <div class="col">
@@ -24,7 +24,7 @@
                       <select class="form-control input-sm" name="area" id="area">
                         <option selected value="">Sila Pilih Kawasan</option>
                         <?php foreach ($kws as $row) { ?>
-                        <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
+                          <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -39,8 +39,7 @@
                 </div>
               </div>
               <div class="table-responsive">
-                <table id="sitereview" class="table table-bordered"
-                  style="border-collapse: collapse; border-spacing: 0;">
+                <table id="sitereview" class="display">
                   <thead>
                     <tr>
                       <th></th>
@@ -48,8 +47,10 @@
                         No. Akaun <br />
                         No. Lot
                       </th>
-                      <th>Nama Jalan</th>
-                      <th>Jenis Hartanah</th>
+                      <th>
+                        Nama Jalan<br />
+                        Jenis Hartanah
+                      </th>
                       <th>
                         Luas Bangunan(mp) <br />
                         Luas Tanah(mp) <br />

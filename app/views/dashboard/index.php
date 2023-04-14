@@ -6,6 +6,9 @@
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
           <div id="mapView" class="mapView"></div>
+          <div class="google" width="50%">
+            <input type="text" class="form-control input-sm" id="google_term">
+          </div>
         </div>
         <div class="col-lg-4 col-sm-4 col-md-4">
           <div class="panel">

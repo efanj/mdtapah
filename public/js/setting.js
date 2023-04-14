@@ -8,12 +8,17 @@
     windowHeight = window.innerHeight
     windowWidth = $(window).width()
     mapmobileheight = windowHeight - 140
+    mapmobileheighthalf = windowHeight - 400
     mapmobileheightSmall = windowHeight - 500
     mapmobilewidth = (windowWidth / 5) * 3
 
     $("#mapView").css({
       width: "100%",
       height: mapmobileheight
+    })
+    $(".mapViewEdit").css({
+      width: "100%",
+      height: mapmobileheighthalf
     })
     $("#mapViewSmall").css({
       height: mapmobileheightSmall

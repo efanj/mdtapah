@@ -14,8 +14,7 @@
             </div>
             <div class="panel-body">
               <div class="table-responsive">
-                <table id="rent-benchmark" class="table table-bordered"
-                  style="border-collapse: collapse; border-spacing: 0;">
+                <table id="rent-benchmark" class="display">
                   <thead>
                     <tr>
                       <th width="5%"></th>
@@ -56,7 +55,7 @@
                             <select class="form-control input-sm" name="kwkod" id="area">
                               <option selected value="">Sila Pilih Kawasan</option>
                               <?php foreach ($kws as $row) { ?>
-                              <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
+                                <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -80,8 +79,7 @@
                               <input type="hidden" class="form-control input-sm" id="akaun" name="akaun">
                               <input type="text" class="form-control input-sm" id="dummy_akaun">
                               <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-toggle="modal"
-                                  data-target="#akaun_popup"><i class="fa fa-book"></i></button>
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#akaun_popup"><i class="fa fa-book"></i></button>
                               </span>
                             </div>
                           </div>
@@ -145,7 +143,7 @@
                             <select class="form-control input-sm" name="items_rent[0][bgtype]" id="bgtype" required>
                               <option value="0" selected>Sila Pilih</option>
                               <?php foreach ($hbangn as $row) { ?>
-                              <option value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
+                                <option value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                               <?php } ?>
                             </select>
                           </td>
@@ -157,8 +155,7 @@
                             </select>
                           </td>
                           <td>
-                            <input type="number" class="form-control input-sm" name="items_rent[0][rentprice]" value="0"
-                              min="0.00" max="10000.00" step="0.01">
+                            <input type="number" class="form-control input-sm" name="items_rent[0][rentprice]" value="0" min="0.00" max="10000.00" step="0.01">
                           </td>
                           <td>
                             <input type="text" class="form-control input-sm" name="items_rent[0][rentnote]">
@@ -185,8 +182,7 @@
                   <h4>MUATNAIK DOKUMEN</h4>
                 </div>
                 <div class="panel-body">
-                  <form class="form-horizontal" id="form-upload-docs" role="form" method="post"
-                    enctype="multipart/form-data" style="font-size:13px;">
+                  <form class="form-horizontal" id="form-upload-docs" role="form" method="post" enctype="multipart/form-data" style="font-size:13px;">
                     <input type="hidden" name="id" value="">
                     <div class="row mb5">
                       <div class="col-md-8">
@@ -199,7 +195,7 @@
                         <select class="form-control input-sm" name="file_type" required>
                           <option value="0" selected>Sila Pilih</option>
                           <?php foreach ($dtype as $row) { ?>
-                          <option value="<?= $row["id"] ?>"><?= $row["document"] ?></option>
+                            <option value="<?= $row["id"] ?>"><?= $row["document"] ?></option>
                           <?php } ?>
                         </select>
                       </div>

@@ -13,12 +13,6 @@ $(document).ready(function () {
     transparent: true,
     maxZoom: 25
   })
-  // var paymentwmsLayer = L.tileLayer.betterWms(api_url, {
-  //   layers: "mdt:v_payment_all",
-  //   format: "image/png",
-  //   transparent: true,
-  //   maxZoom: 25,
-  // })
   var lotndcdbwmsLayer = L.tileLayer.betterWms(api_url, {
     layers: "mdt:lot_ndcdb",
     format: "image/png",
@@ -39,12 +33,6 @@ $(document).ready(function () {
     transparent: true,
     maxZoom: 25
   })
-  // var mukimwmsLayer = L.tileLayer.wms(api_url, {
-  //   layers: "mdt:mukim",
-  //   format: "image/png",
-  //   transparent: true,
-  //   maxZoom: 25,
-  // })
   var sempadanwmsLayer = L.tileLayer.wms(api_url, {
     layers: "mdt:daerah",
     format: "image/png",
@@ -149,17 +137,17 @@ $(document).ready(function () {
 
   map.on("click", function (e) {
     lat = e.latlng.lat
-    lon = e.latlng.lng
+    lng = e.latlng.lng
 
     $("#codex").val(lat)
-    $("#codey").val(lon)
+    $("#codey").val(lng)
 
     if (theMarker != undefined) {
       map.removeLayer(theMarker)
     }
 
     //Add a marker to show where you clicked.
-    theMarker = L.marker([lat, lon]).addTo(map)
-    map.setView([lat, lon], 16)
+    theMarker = L.marker([lat, lng]).addTo(map)
+    map.setView([lat, lng], 16)
   })
 })
