@@ -41,6 +41,9 @@ class InformationsController extends Controller
       case "comparison":
         $this->Security->config("validateForm", false);
         break;
+      case "createnewaccount":
+        $this->Security->config("validateForm", false);
+        break;
     }
   }
 
@@ -67,6 +70,12 @@ class InformationsController extends Controller
   public function vendorinfo()
   {
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/informations/vendorinfo/", Config::get("VIEWS_PATH") . "informations/vendorinfo.php");
+  }
+
+  public function newaccount()
+  {
+    Config::setJsConfig("curPage", "informations");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/informations/newaccount/", Config::get("VIEWS_PATH") . "informations/newaccount.php");
   }
 
   public function sitereviewtable()
@@ -221,6 +230,36 @@ class InformationsController extends Controller
     }
   }
 
+  public function createnewaccount()
+  {
+    $plgid = $this->request->data("plgid");
+    $nmbil = $this->request->data("nmbil");
+    $noAkaun = $this->request->data("noAkaun");
+    $noLot = $this->request->data("noLot");
+    $noPT = $this->request->data("noPT");
+    $adpg1 = $this->request->data("adpg1");
+    $adpg2 = $this->request->data("adpg2");
+    $jlkod = $this->request->data("jlkod");
+    $kwkod = $this->request->data("kwkod");
+    $thkod = $this->request->data("thkod");
+    $bgkod = $this->request->data("bgkod");
+    $htkod = $this->request->data("htkod");
+    $stkod = $this->request->data("stkod");
+    $lstnh = $this->request->data("lstnh");
+    $lsbgn = $this->request->data("lsbgn");
+    $lsans = $this->request->data("lsans");
+    $codex = $this->request->data("codex");
+    $codey = $this->request->data("codey");
+    $catatan = $this->request->data("catatan");
+
+    $result = $this->informations->createnewaccount(Session::getUserId(), Session::getUserWorkerId(), $plgid, $nmbil, $noAkaun, $noLot, $noPT, $adpg1, $adpg2, $jlkod, $kwkod, $thkod, $bgkod, $htkod, $stkod, $lstnh, $lsbgn, $lsans, $codex, $codey, $catatan);
+    if (!$result) {
+      $this->view->renderErrors($this->informations->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function isAuthorized()
   {
     $action = $this->request->param("action");
@@ -234,7 +273,8 @@ class InformationsController extends Controller
     Permission::allow("user", $resource, "*");
 
     //only for vendor
-    Permission::allow("vendor", $resource, ["handleinfops", "handleinfotable", "submissiontable", "submissionlist", 'comparisontable', 'investigation', "comparison"]);
+    Permission::allow("vendor", $resource, ["handleinfops", "handleinfotable", "submissiontable", "submissionlist", 'comparisontable']);
+    Permission::allow("vendor", $resource, ['investigation', "comparison", "newaccount", "createnewaccount"]);
 
     return Permission::check($role, $resource, $action);
   }

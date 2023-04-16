@@ -72,6 +72,73 @@ class Informations extends Model
     }
   }
 
+  public function createnewaccount($userId, $workerId, $plgid, $nmbil, $noAkaun, $noLot, $noPT, $adpg1, $adpg2, $jlkod, $kwkod, $thkod, $bgkod, $htkod, $stkod, $lstnh, $lsbgn, $lsans, $codex, $codey, $catatan)
+  {
+
+    $plgid = empty($plgid) ? null : $plgid;
+    $nmbil = empty($nmbil) ? null : $nmbil;
+    $noAkaun = empty($noAkaun) ? null : $noAkaun;
+    $noLot = empty($noLot) ? null : $noLot;
+    $noPT = empty($noPT) ? null : $noPT;
+    $adpg1 = empty($adpg1) ? null : $adpg1;
+    $adpg2 = empty($adpg2) ? null : $adpg2;
+    $adpg3 = null;
+    $adpg4 = null;
+    $jlkod = empty($jlkod) ? "0" : $jlkod;
+    $kwkod = empty($kwkod) ? "0" : $kwkod;
+    $thkod = empty($thkod) ? "0" : $thkod;
+    $bgkod = empty($bgkod) ? "0" : $bgkod;
+    $htkod = empty($htkod) ? "0" : $htkod;
+    $stkod = empty($stkod) ? "0" : $stkod;
+    $lstnh = empty($lstnh) ? "0" : $lstnh;
+    $lsbgn = empty($lsbgn) ? "0" : $lsbgn;
+    $lsans = empty($lsans) ? "0" : $lsans;
+    $codex = empty($codex) ? null : substr($codex, 0, 15);
+    $codey = empty($codey) ? null : substr($codey, 0, 15);
+    $catatan = empty($catatan) ? null : $catatan;
+
+    $database = Database::openConnection();
+
+    $query = "INSERT INTO data.smktpk(smk_akaun, smk_nolot, smk_nompt, smk_adpg1, smk_adpg2, smk_adpg3, smk_adpg4, smk_jalan, smk_kodkws, smk_jstnh, smk_jsbgn, ";
+    $query .= "smk_kgtnh, smk_stbgn, smk_lsbgn, smk_lstnh, smk_lsans, smk_codex, smk_codey, smk_onama, smk_type) ";
+    $query .= "VALUES(:smk_akaun, :smk_nolot, :smk_nompt, :smk_adpg1, :smk_adpg2, :smk_adpg3, :smk_adpg4, :smk_jalan, :smk_kodkws, :smk_jstnh, :smk_jsbgn, ";
+    $query .= ":smk_kgtnh, :smk_stbgn, :smk_lsbgn, :smk_lstnh, :smk_lsans, :smk_codex, :smk_codey, :smk_onama, :smk_type)";
+
+    $database->prepare($query);
+    $database->bindValue(":smk_akaun", $noAkaun);
+    $database->bindValue(":smk_nolot", $noLot);
+    $database->bindValue(":smk_nompt", $noPT);
+    $database->bindValue(":smk_adpg1", $adpg1);
+    $database->bindValue(":smk_adpg2", $adpg2);
+    $database->bindValue(":smk_adpg3", $adpg3);
+    $database->bindValue(":smk_adpg4", $adpg4);
+    $database->bindValue(":smk_jalan", $jlkod);
+    $database->bindValue(":smk_kodkws", $kwkod);
+    $database->bindValue(":smk_jstnh", $thkod);
+    $database->bindValue(":smk_jsbgn", $bgkod);
+    $database->bindValue(":smk_kgtnh", $htkod);
+    $database->bindValue(":smk_stbgn", $stkod);
+    $database->bindValue(":smk_lsbgn", $lsbgn);
+    $database->bindValue(":smk_lstnh", $lstnh);
+    $database->bindValue(":smk_lsans", $lsans);
+    $database->bindValue(":smk_codex", $codex);
+    $database->bindValue(":smk_codey", $codey);
+    $database->bindValue(":smk_onama", $workerId);
+    $database->bindValue(":smk_type", "1");
+    $result = $database->execute();
+    $smkId = $database->lastInsertedId();
+
+    if ($database->countRows() !== 1) {
+      throw new Exception("Gagal untuk masukkan data Akaun Baru.");
+    }
+
+    if ($result) {
+      $activity = "Kemasukkan Akaun Baru";
+      $database->logActivity($userId, $activity);
+    }
+    return true;
+  }
+
   public function sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area = "", $street = "")
   {
     $database = Database::openConnection();

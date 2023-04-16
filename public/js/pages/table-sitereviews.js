@@ -307,7 +307,7 @@ var table = $("#sitereviews").DataTable({
   select: {
     style: "multi"
   },
-  order: [[8, "asc"]],
+  order: [[7, "asc"]],
   language: {
     search: "Saring : ",
     lengthMenu: "Paparkan _MENU_ rekod",

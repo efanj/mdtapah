@@ -103,7 +103,7 @@ img.logolg {
   background-color: #e8e8e8;
 }
 
-/* .dataTables_wrapper table.dataTable tbody td,
+.dataTables_wrapper table.dataTable tbody td,
 .dataTables_wrapper table.dataTable tbody th {
   background-color: #fff;
   border: 1px solid #e6edef;
@@ -113,7 +113,7 @@ img.logolg {
 .dataTables_wrapper table.dataTable td {
   padding: 0.5rem;
   border-color: #e6edef;
-} */
+}
 
 table.info thead,
 table.info tbody,

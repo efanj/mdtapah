@@ -8,7 +8,16 @@
         <div class="col-lg-12 col-sm-12 col-md-12">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h4 class="ml5">MAKLUMAT PEGANGAN</h4>
+              <div class="row align-items-center">
+                <div class="col">
+                  <h4 class="ml15">MAKLUMAT PEGANGAN</h4>
+                </div>
+                <!--end col-->
+                <div class="col-auto">
+                  <a href="<?= PUBLIC_ROOT ?>informations/newaccount" class="btn btn-warning btn-sm color-dark mt5 mr15" id="print_submit"><i class="glyphicon glyphicon-plus-sign"></i> Akaun Baru</a>
+                </div>
+                <!--end col-->
+              </div>
             </div>
             <div class="panel-body">
               <div class="row mb10">

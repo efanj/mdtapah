@@ -120,15 +120,15 @@
                   <div class="row">
                     <div class="col-md-4">
                       <label>Luas Tanah :</label>
-                      <input class="form-control input-sm" type="number" value="<?= $info["peg_lstnh"] ?>" name="lstnh" min="0" value="0" step="any">
+                      <input class="form-control input-sm" type="number" value="<?= $info["peg_lstnh"] ?>" name="lstnh" min="0" step="any">
                     </div>
                     <div class="col-md-4">
                       <label>Luas Bangunan :</label>
-                      <input class="form-control input-sm" type="number" value="<?= $info["peg_lsbgn"] ?>" name="lsbgn" min="0" value="0" step="any">
+                      <input class="form-control input-sm" type="number" value="<?= $info["peg_lsbgn"] ?>" name="lsbgn" min="0" step="any">
                     </div>
                     <div class="col-md-4">
                       <label>Luas Ansolari :</label>
-                      <input class="form-control input-sm" type="number" value="<?= $info["peg_lsans"] ?>" name="lsans" min="0" value="0" step="any">
+                      <input class="form-control input-sm" type="number" value="<?= $info["peg_lsans"] ?>" name="lsans" min="0" step="any">
                     </div>
                   </div>
                 </div>
@@ -136,11 +136,11 @@
                   <div class="row">
                     <div class="col-md-4">
                       <label>Luas Bangunan Tamb. :</label>
-                      <input class="form-control input-sm" type="number" value="" name="lsbgn_tamb" min="0" value="0" step="any">
+                      <input class="form-control input-sm" type="number" name="lsbgn_tamb" min="0" value="0" step="any">
                     </div>
                     <div class="col-md-4">
                       <label>Luas Ansolari Tamb. :</label>
-                      <input class="form-control input-sm" type="number" value="" name="lsans_tamb" min="0" value="0" step="any">
+                      <input class="form-control input-sm" type="number" name="lsans_tamb" min="0" value="0" step="any">
                     </div>
                   </div>
                 </div>

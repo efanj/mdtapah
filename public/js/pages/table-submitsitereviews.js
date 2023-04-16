@@ -60,6 +60,16 @@ $(document).ready(function () {
       "<td>" +
       d.jln_kname +
       "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Koordinat X:</b></td>" +
+      "<td>" +
+      d.smk_codex +
+      "</td>" +
+      "<td style='background-color: #f4f5f5;'><b>Koordinat Y:</b></td>" +
+      "<td>" +
+      d.smk_codey +
+      "</td>" +
+      "</tr>" +
+      "<tr>" +
       "<td style='background-color: #f4f5f5;'><b>No. Pelan:</b></td>" +
       "<td>" +
       d.peg_pelan +
@@ -68,6 +78,10 @@ $(document).ready(function () {
       "<td>" +
       d.peg_rjmmk +
       "</td>" +
+      "<td style='background-color: #f4f5f5;'></td>" +
+      "<td></td>" +
+      "<td style='background-color: #f4f5f5;'></td>" +
+      "<td></td>" +
       "</tr>" +
       "<tr>" +
       "<td style='background-color: #f4f5f5;'><b>Kegunaan Tanah:</b></td>" +
@@ -298,7 +312,7 @@ $(document).ready(function () {
           // console.log(data);
           if (type === "display") {
             data = '<div class="btn-group btn-group-xs" role="group">'
-            data += '<a href="viewdetails/' + row.akaun + '" class="btn btn-warning btn-xs color-dark">Papar</a>'
+            data += '<a href="viewdetails/' + row.akaun + '" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Papar</a>'
             data += "</div>"
           }
 
