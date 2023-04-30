@@ -115,7 +115,7 @@ class CalculatorController extends Controller
     $breadth_land = $this->request->data("breadth_land");
     $price_land = $this->request->data("price_land");
     $section_one = $this->request->data("section_one");
-    $section_two = $this->request->data("section_two");
+    // $section_two = $this->request->data("section_two");
     $discount = $this->request->data("discount");
     $rental = $this->request->data("rental");
     $corner = $this->request->data("corner");
@@ -124,7 +124,7 @@ class CalculatorController extends Controller
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->calculator->buildingSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $corner, $rental, $even, $yearly, $rate, $tax);
+    $result = $this->calculator->buildingSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one,  $discount, $corner, $rental, $even, $yearly, $rate, $tax);
 
     if (!$result) {
       $this->view->renderErrors($this->calculator->errors());
@@ -135,21 +135,37 @@ class CalculatorController extends Controller
 
   public function buildingVendorSubmit()
   {
-    $siriNo = $this->request->data("siri_no");
+    // $siriNo = $this->request->data("siri_no");
     $akaun = $this->request->data("akaun");
     $comparison = $this->request->data("comparison");
     $breadth_land = $this->request->data("breadth_land");
     $price_land = $this->request->data("price_land");
     $section_one = $this->request->data("section_one");
-    $section_two = $this->request->data("section_two");
+    // $section_two = $this->request->data("section_two");
     $discount = $this->request->data("discount");
     $rental = $this->request->data("rental");
+    $corner = $this->request->data("corner");
     $even = $this->request->data("even");
     $yearly = $this->request->data("yearly");
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->calculator->buildingVendorSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+    $result = $this->calculator->buildingVendorSubmit(
+      Session::getUserId(),
+      Session::getUserWorkerId(),
+      $akaun,
+      $comparison,
+      $breadth_land,
+      $price_land,
+      $section_one,
+      $discount,
+      $corner,
+      $rental,
+      $even,
+      $yearly,
+      $rate,
+      $tax
+    );
 
     if (!$result) {
       $this->view->renderErrors($this->calculator->errors());

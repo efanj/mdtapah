@@ -626,7 +626,7 @@ class Account extends Model
   public function viewamendPSdetail($siriNo)
   {
     $database = Database::openConnection();
-    $query = "SELECT ps.*, s.*, v.smk_lsbgn_tmbh, v.smk_lsans_tmbh, h.tnh_tnama, b.bgn_bnama, st.stb_snama FROM data.ps_hacmjb ps ";
+    $query = "SELECT ps.*, s.*, v.smk_lsbgn_tmbh, v.smk_lsans_tmbh, h.tnh_tnama, b.bgn_bnama, st.stb_snama FROM data.v_hacmjb ps ";
     $query .= "LEFT JOIN data.v_semak v ON ps.mjb_akaun = v.smk_akaun ";
     $query .= "LEFT JOIN data.hvnduk s ON ps.mjb_akaun = s.peg_akaun ";
     $query .= "LEFT JOIN data.htanah h ON s.peg_thkod = h.tnh_thkod ";

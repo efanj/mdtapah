@@ -1,9 +1,9 @@
 $(document).ready(function () {
-  var lsans = $("#luas_ansolari").val()
-  var lsbgnt = $("#tamb_bangunan").val()
-  var lsanst = $("#tamb_ansolari").val()
-  //console.log(lsans, lsbgnt, lsanst)
-  addRowBuilding(lsans, lsbgnt, lsanst)
+  // var lsans = $("#luas_ansolari").val()
+  // var lsbgnt = $("#tamb_bangunan").val()
+  // var lsanst = $("#tamb_ansolari").val()
+  // console.log(lsans, lsbgnt, lsanst)
+  // addRowBuilding(lsans, lsbgnt, lsanst)
 
   var popup_comparison = $("#popup_comparison").DataTable({
     processing: true,
@@ -237,7 +237,7 @@ $(document).ready(function () {
       .find("table")
       .attr("id")
     var added = document.querySelectorAll("tbody#" + tableId + " tr").length
-    //console.log(tableId)
+    console.log(tableId)
     for (var i = 0; i < rowAmmount; i++) {
       var rowId = i + added
       var row_one = '<tr id="' + rowId + '"><td><input type="text" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][title_one]"></td>'
@@ -269,9 +269,8 @@ $(document).ready(function () {
     var tableId = "zero"
     var added = document.querySelectorAll("tbody#" + tableId + " tr").length
     var rowId = added + 1
-    //console.log(tableId)
+    console.log(tableId)
     if (lsbgnt != "" || lsbgnt > 0) {
-      //console.log(lsbgnt)
       var row_one = '<tr id="' + rowId + '"><td><input type="text" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][title_one]" value="MFA - Tambahan"></td>'
       row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadth_one]" id="breadth_one" min="0" value="' + lsbgnt + '"></td>'
       row_one += '<td><select class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadthtype_one]">'
@@ -292,7 +291,6 @@ $(document).ready(function () {
       row_one += '<td><a href="javascript:void(0);" class="btn btn-danger btn-xs" id="delete_one" type="button"><i class="fa fa-trash"></i></a></td></tr>'
     }
     if (lsans != "" || lsans > 0) {
-      //console.log(lsans)
       var row_one = '<tr id="' + rowId + '"><td><input type="text" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][title_one]" value="AFA"></td>'
       row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadth_one]" id="breadth_one" min="0" value="' + lsans + '"></td>'
       row_one += '<td><select class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadthtype_one]">'
@@ -313,7 +311,6 @@ $(document).ready(function () {
       row_one += '<td><a href="javascript:void(0);" class="btn btn-danger btn-xs" id="delete_one" type="button"><i class="fa fa-trash"></i></a></td></tr>'
     }
     if (lsanst != "" || lsanst > 0) {
-      //console.log(lsanst)
       var row_one = '<tr id="' + rowId + '"><td><input type="text" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][title_one]" value="AFA - Tambahan"></td>'
       row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadth_one]" id="breadth_one" min="0" value="' + lsanst + '"></td>'
       row_one += '<td><select class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadthtype_one]">'
@@ -485,7 +482,7 @@ $("body").on("change", "#dummy_corner", function () {
     corner = parseFloat(rental)
     $("#corner").val("false")
   }
-  //console.log(corner)
+  console.log(corner)
   $("#value_corner").html(corner.toFixed(2))
   $("#even").val(corner.toFixed(2))
   generateTax()
@@ -517,30 +514,33 @@ function overall_one() {
   sumOneTwo()
 }
 
-// function overall_two() {
-//   var overall_two = 0
-//   $(".two").each(function () {
-//     $(this)
-//       .find("tr")
-//       .each(function () {
-//         $(this)
-//           .find("#total_two")
-//           .each(function () {
-//             var val_two = parseFloat($(this).val())
-//             if (!isNaN(val_two)) overall_two += val_two
-//           })
-//       })
-//   })
-//   $("#overall_two").val(overall_two.toFixed(2))
-//   sumOneTwo()
-// }
+function overall_two() {
+  var overall_two = 0
+  $(".two").each(function () {
+    $(this)
+      .find("tr")
+      .each(function () {
+        $(this)
+          .find("#total_two")
+          .each(function () {
+            var val_two = parseFloat($(this).val())
+            if (!isNaN(val_two)) overall_two += val_two
+          })
+      })
+  })
+  $("#overall_two").val(overall_two.toFixed(2))
+  sumOneTwo()
+}
 
 function sumOneTwo() {
-  var rental_value = $("#overall_one").val()
-  $("#rental").val(rental_value)
-  $("#dummy_rental").html(rental_value)
-  $("#value_corner").html(rental_value)
-  $("#even").val(rental_value)
+  var rental_value = 0
+  $(".ttl_partly").each(function () {
+    rental_value += +$(this).val()
+  })
+  $("#rental").val(rental_value.toFixed(2))
+  $("#dummy_rental").html(rental_value.toFixed(2))
+  $("#value_corner").html(rental_value.toFixed(2))
+  $("#even").val(rental_value.toFixed(2))
   generateTax()
 }
 

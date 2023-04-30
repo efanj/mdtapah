@@ -22,15 +22,14 @@
                     <td width="17%"><strong>ID Pemilik :</strong></td>
                     <td width="17%"><?= $info["pmk_plgid"] ?></td>
                     <td width="17%"><strong>Nama Dibil :</strong></td>
-                    <td width="17%"><?= $info["pmk_nmbil"] ?></td>
-                    <td width="17%" colspan="2"></td>
+                    <td width="17%" colspan="3"><?= $info["pmk_nmbil"] ?></td>
                   </tr>
                   <tr>
                     <td><strong>No. Akaun :</strong></td>
                     <td><?= $info["smk_akaun"] ?></td>
                     <td><strong>No. Lot :</strong></td>
                     <td><?= $info["peg_nolot"] ?></td>
-                    <td><strong>No. PT :</strong></td>
+                    <td width="17%"><strong>No. PT :</strong></td>
                     <td width="17%"><?= $info["peg_nompt"] ?></td>
                   </tr>
                   <tr>
@@ -54,17 +53,15 @@
                   </tr>
                   <tr>
                     <td><strong>Kegunaan Tanah :</strong></td>
-                    <td><?= $info["tnh_tnama"] ?></td>
+                    <td colspan="2"><?= $info["tnh_tnama"] ?></td>
                     <td><strong>Jenis Bangunan :</strong></td>
-                    <td><?= $info["bgn_bnama"] ?></td>
-                    <td colspan="2"></td>
+                    <td colspan="2"><?= $info["bgn_bnama"] ?></td>
                   </tr>
                   <tr>
                     <td><strong>Kegunaan Hartanah :</strong></td>
-                    <td><?= $info["hrt_hnama"] ?></td>
+                    <td colspan="2"><?= $info["hrt_hnama"] ?></td>
                     <td><strong>Struktur Bangunan :</strong></td>
-                    <td><?= $info["stb_snama"] ?></td>
-                    <td colspan="2"></td>
+                    <td colspan="2"><?= $info["stb_snama"] ?></td>
                   </tr>
                   <tr>
                     <td><strong>Nilai Tahunan :</strong></td>
@@ -76,81 +73,96 @@
                   </tr>
                   <tr>
                     <td><strong>Luas Tanah :</strong></td>
-                    <td><?= $info["peg_lstnh"] ?></td>
+                    <td><?= $info["peg_lstnh"] . "" ?></td>
                     <td><strong>Luas Bangunan :</strong></td>
-                    <td><?= $info["peg_lsbgn"] ?></td>
+                    <td><?= $info["peg_lsbgn"] . "" ?></td>
                     <td><strong>Luas Ansolari :</strong></td>
-                    <td><?= $info["peg_lsans"] ?></td>
+                    <td><?= $info["peg_lsans"] . "" ?></td>
                   </tr>
                 </tbody>
               </table>
-              <form method="post" id="form-edit-area">
-                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                  <thead>
-                    <tr>
-                      <th colspan="5">KEMAS KINI KELUASAN</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Luas Bangunan Tamb. :</strong></td>
-                      <td>
-                        <input class="form-control input-sm" type="number" name="lsbgn_tamb" min="0" value="<?= $info["lsbgnt"] ?>" step="any">
-                        <input type="hidden" value="<?= $info["pid"] ?>" name="pindaan_id">
-                        <input type="hidden" value="<?= $info["sid"] ?>" name="smk_id">
-                      </td>
-                      <td><strong>Luas Ansolari Tamb. :</strong></td>
-                      <td><input class="form-control input-sm" type="number" name="lsans_tamb" min="0" value="<?= $info["lsanst"] ?>" step="any"></td>
-                      <td width="50px"><button type="submit" class="btn btn-square btn-primary btn-sm"><i class="icon-save"></i>
-                          Simpan Rekod</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
-              <form method="post" id="form-edit-note">
-                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                  <thead>
-                    <tr>
-                      <th colspan="3">KEMAS KINI CATATAN</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td width="100px"><strong>Catatan :</strong></td>
-                      <td>
-                        <textarea class="form-control limitTextarea" maxlength="250" rows="3" name="catatan" id="catatan"><?= $info['catatan'] ?></textarea>
-                        <input type="hidden" value="<?= $info["pid"] ?>" name="pindaan_id">
-                        <input type="hidden" value="<?= $info["sid"] ?>" name="smk_id">
-                      </td>
-                      <td width="50px"><button type="submit" class="btn btn-square btn-primary btn-sm"><i class="icon-save"></i>
-                          Simpan Rekod</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
-              <form method="post" id="form-edit-coordinate">
-                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                  <thead>
-                    <tr>
-                      <th colspan="5">KEMAS KINI KOORDINAT</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>koordinat X :</strong></td>
-                      <td>
-                        <input class="form-control input-sm" type="text" value="<?= $info["codex"] ?>" name="codex" id="codex" required>
-                        <input type="hidden" value="<?= $info["sid"] ?>" name="smk_id">
-                        <input type="hidden" value="<?= $info["smk_akaun"] ?>" name="no_akaun">
-                      </td>
-                      <td><strong>koordinat Y :</strong></td>
-                      <td><input class="form-control input-sm" type="text" value="<?= $info["codey"] ?>" name="codey" id="codey" required></td>
-                      <td width="50px"><button type="submit" class="btn btn-square btn-primary btn-sm"><i class="icon-save"></i>
-                          Simpan Rekod</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
+              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                <thead>
+                  <tr>
+                    <th colspan="5">KEMAS KINI KELUASAN</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <form class="form-inline" method="post" id="form-edit-area" role="form">
+                        <div class="form-group">
+                          <label for="lsbgn_tamb">Luas Bangunan Tamb. :</label>
+                          <input class="form-control input-sm" type="number" name="lsbgn_tamb" id="lsbgn_tamb" min="0"
+                            value="<?= $info["lsbgnt"] ?>" step="any" style="width: 195px;">
+                          <input type="hidden" value="<?= $info["pid"] ?>" name="pindaan_id">
+                          <input type="hidden" value="<?= $info["sid"] ?>" name="smk_id">
+                        </div>
+                        <div class="form-group ml20">
+                          <label for="lsans_tamb">Luas Ansolari Tamb. :</label>
+                          <input class="form-control input-sm" type="number" name="lsans_tamb" id="lsans_tamb" min="0"
+                            value="<?= $info["lsanst"] ?>" step="any" style="width: 195px;">
+                        </div>
+                        <button type="submit" class="btn btn-square btn-primary btn-sm ml20"><i class="icon-save"></i>
+                          Simpan Rekod</button>
+                      </form>
+                    </td>
+                  <tr>
+                </tbody>
+              </table>
+              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                <thead>
+                  <tr>
+                    <th colspan="3">KEMAS KINI CATATAN</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <form class="form-inline" method="post" id="form-edit-note" role="form">
+                        <div class="form-group">
+                          <label for="catatan">Catatan :</label>
+                          <textarea class="form-control limitTextarea" maxlength="250" rows="3" name="catatan"
+                            id="catatan" style="width: 620px; height: 60px;"><?= $info['catatan'] ?></textarea>
+                          <input type="hidden" value="<?= $info["pid"] ?>" name="pindaan_id">
+                          <input type="hidden" value="<?= $info["sid"] ?>" name="smk_id">
+                        </div>
+                        <button type="submit" class="btn btn-square btn-primary btn-sm ml20"><i class="icon-save"></i>
+                          Simpan Rekod</button>
+                      </form>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                <thead>
+                  <tr>
+                    <th colspan="5">KEMAS KINI KOORDINAT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <form class="form-inline" method="post" id="form-edit-coordinate" role="form">
+                        <div class="form-group">
+                          <label for="codex">koordinat X :</label>
+                          <input class="form-control input-sm" type="text" value="<?= $info["codex"] ?>" name="codex"
+                            id="codex" style="width: 250px;" required>
+                          <input type="hidden" value="<?= $info["sid"] ?>" name="smk_id">
+                          <input type="hidden" value="<?= $info["smk_akaun"] ?>" name="no_akaun">
+                        </div>
+                        <div class="form-group ml20">
+                          <label for="codey">koordinat Y :</label>
+                          <input class="form-control input-sm" type="text" value="<?= $info["codey"] ?>" name="codey"
+                            id="codey" style="width: 250px;" required>
+                        </div>
+                        <button type="submit" class="btn btn-square btn-primary btn-sm ml20"><i class="icon-save"></i>
+                          Simpan Rekod</button>
+                      </form>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

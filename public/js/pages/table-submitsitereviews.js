@@ -245,7 +245,7 @@ $(document).ready(function () {
         className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
-          console.log(row.files)
+          // console.log(row.files)
           if (type === "display") {
             if (row.file > "0") {
               data = "Ada (" + row.file + ")</br>"
@@ -265,7 +265,7 @@ $(document).ready(function () {
         className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
-          console.log(row.docs)
+          // console.log(row.docs)
           if (type === "display") {
             if (row.doc > "0") {
               data = "Ada (" + row.doc + ")</br>"
@@ -312,7 +312,7 @@ $(document).ready(function () {
           // console.log(data);
           if (type === "display") {
             data = '<div class="btn-group btn-group-xs" role="group">'
-            data += '<a href="viewdetails/' + row.akaun + '" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Papar</a>'
+            data += '<a href="../Amendment/viewpsdetails/' + row.akaun + '" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Papar</a>'
             data += "</div>"
           }
 

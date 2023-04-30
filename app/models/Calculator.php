@@ -11,6 +11,12 @@ class Calculator extends Model
     return $result;
   }
 
+  public function generateSiriNo()
+  {
+    $siriNo = mt_rand(100000, 999999);
+    return $siriNo;
+  }
+
   public function landSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $current, $discount, $even, $yearly, $rate, $tax)
   {
     $comparison = empty($comparison) ? null : $comparison;
@@ -68,7 +74,7 @@ class Calculator extends Model
     return true;
   }
 
-  public function buildingSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
+  public function buildingSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
   {
     $comparison = empty($comparison) ? null : $comparison;
     $breadth_land = empty($breadth_land) ? 0 : $breadth_land;
@@ -80,7 +86,7 @@ class Calculator extends Model
     $rate = empty($rate) ? 0 : $rate;
     $tax = empty($tax) ? 0 : $tax;
     $total = $breadth_land * $price_land;
-    $corner = $corner == false ? 0 : 1;
+    $corner = $corner == false ? "false" : "true";
     $calcType = 2;
     $capital = 0;
     $sectionsOne_id = "";
@@ -127,33 +133,33 @@ class Calculator extends Model
       }
     }
 
-    $itemsTwo_id = [];
-    $itemsTwo_sum = [];
-    foreach ($section_two as $val) {
-      if ($val["external_title"] != "") {
-        $sectionTwo = "INSERT INTO data.section(section_type, siri_no, title) values (2,'" . $siriNo . "','" . $val["external_title"] . "')";
-        $database->prepare($sectionTwo);
-        $database->execute();
-        $sectionsTwo_id = $database->lastInsertedId();
-      }
-      if ($sectionsTwo_id == null || $sectionsTwo_id == "") {
-        $sectionsTwo_id = 0;
-      } else {
-        $sectionsTwo_id = $sectionsTwo_id;
-      }
-      foreach ($val['item'] as $value) {
-        $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
-        $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
-        $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
+    // $itemsTwo_id = [];
+    // $itemsTwo_sum = [];
+    // foreach ($section_two as $val) {
+    //   if ($val["external_title"] != "") {
+    //     $sectionTwo = "INSERT INTO data.section(section_type, siri_no, title) values (2,'" . $siriNo . "','" . $val["external_title"] . "')";
+    //     $database->prepare($sectionTwo);
+    //     $database->execute();
+    //     $sectionsTwo_id = $database->lastInsertedId();
+    //   }
+    //   if ($sectionsTwo_id == null || $sectionsTwo_id == "") {
+    //     $sectionsTwo_id = 0;
+    //   } else {
+    //     $sectionsTwo_id = $sectionsTwo_id;
+    //   }
+    //   foreach ($val['item'] as $value) {
+    //     $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
+    //     $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
+    //     $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
 
-        $query = "INSERT INTO data.items_out(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
-        $query .= "(" . $sectionsTwo_id . ",'" . $siriNo . "','" . $value["title_two"] . "'," . $breadth_two . ",'" . $value["breadthtype_two"] . "'," . $price_two . ",'" . $value["pricetype_two"] . "'," . $total_two . ")";
-        $database->prepare($query);
-        $database->execute();
-        $itemsTwo_id[] = $database->lastInsertedId();
-        $itemsTwo_sum[] = $value["total_two"];
-      }
-    }
+    //     $query = "INSERT INTO data.items_out(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
+    //     $query .= "(" . $sectionsTwo_id . ",'" . $siriNo . "','" . $value["title_two"] . "'," . $breadth_two . ",'" . $value["breadthtype_two"] . "'," . $price_two . ",'" . $value["pricetype_two"] . "'," . $total_two . ")";
+    //     $database->prepare($query);
+    //     $database->execute();
+    //     $itemsTwo_id[] = $database->lastInsertedId();
+    //     $itemsTwo_sum[] = $value["total_two"];
+    //   }
+    // }
 
     if ($comparison != null) {
       $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
@@ -161,14 +167,14 @@ class Calculator extends Model
       $comparison = $comparison;
     }
     $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsOne_id)));
-    $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
+    // $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
 
     // $sumItemOne = array_sum($itemsOne_sum);
     // $sumItemTwo = array_sum($itemsTwo_sum);
 
-    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
-    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', '" . $idItemsTwo . "', ";
-    $query .= "'" . $capital . "', " . $discount . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
+    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, capital, discount, corner, rental, yearly_price, even, rate, assessment_tax) ";
+    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', ";
+    $query .= "'" . $capital . "', " . $discount . ", " . $corner . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
     $database->prepare($query);
     $result = $database->execute();
 
@@ -192,120 +198,120 @@ class Calculator extends Model
     return true;
   }
 
-  public function buildingVendorSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax)
-  {
-    $comparison = empty($comparison) ? null : $comparison;
-    $breadth_land = empty($breadth_land) ? 0 : $breadth_land;
-    $price_land = empty($price_land) ? 0 : $price_land;
-    $discount = empty($discount) ? 0 : $discount;
-    $rental = empty($rental) ? 0 : $rental;
-    $even = empty($even) ? 0 : $even;
-    $yearly = empty($yearly) ? 0 : $yearly;
-    $rate = empty($rate) ? 0 : $rate;
-    $tax = empty($tax) ? 0 : $tax;
-    $total = $breadth_land * $price_land;
-    // $corner = $corner == false ? 0 : 1;
-    $calcType = 2;
-    $capital = 0;
-    $sectionsOne_id = "";
-    $sectionsTwo_id = "";
+  // public function buildingVendorSubmit($userId, $workerId, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
+  // {
+  //   $comparison = empty($comparison) ? null : $comparison;
+  //   $breadth_land = empty($breadth_land) ? 0 : $breadth_land;
+  //   $price_land = empty($price_land) ? 0 : $price_land;
+  //   $discount = empty($discount) ? 0 : $discount;
+  //   $rental = empty($rental) ? 0 : $rental;
+  //   $even = empty($even) ? 0 : $even;
+  //   $yearly = empty($yearly) ? 0 : $yearly;
+  //   $rate = empty($rate) ? 0 : $rate;
+  //   $tax = empty($tax) ? 0 : $tax;
+  //   $total = $breadth_land * $price_land;
+  //   $corner = $corner == false ? "false" : "true";
+  //   $calcType = 2;
+  //   $capital = 0;
+  //   $sectionsOne_id = "";
+  //   $sectionsTwo_id = "";
 
-    $database = Database::openConnection();
-    $dbOracle = new Oracle();
+  //   $database = Database::openConnection();
+  //   $dbOracle = new Oracle();
 
-    $info = $this->getSubmissionInfo($siriNo);
-    $dbOracle->getDataByTableColumnsNoAcct("SPMC.V_HVNDUK", "peg_nilth", "peg_akaun", $acctNo);
-    $acct = $dbOracle->fetchAssociative();
+  //   $info = $this->getSubmissionInfo($siriNo);
+  //   $dbOracle->getDataByTableColumnsNoAcct("SPMC.V_HVNDUK", "peg_nilth", "peg_akaun", $acctNo);
+  //   $acct = $dbOracle->fetchAssociative();
 
-    $land = "INSERT INTO data.items_land(siri_no, breadth, price, total) values ('" . $siriNo . "', " . $breadth_land . ", " . $price_land . ", " . $total . ")";
-    $database->prepare($land);
-    $database->execute();
-    $land_id = $database->lastInsertedId();
+  //   $land = "INSERT INTO data.items_land(siri_no, breadth, price, total) values ('" . $siriNo . "', " . $breadth_land . ", " . $price_land . ", " . $total . ")";
+  //   $database->prepare($land);
+  //   $database->execute();
+  //   $land_id = $database->lastInsertedId();
 
-    $itemsOne_id = [];
-    $itemsOne_sum = [];
-    foreach ($section_one as $val) {
-      if ($val["main_title"] != "") {
-        $sectionOne = "INSERT INTO data.section(section_type, siri_no, title) values (1,'" . $siriNo . "','" . $val["main_title"] . "')";
-        $database->prepare($sectionOne);
-        $database->execute();
-        $sectionsOne_id = $database->lastInsertedId();
-      }
-      if ($sectionsOne_id == null || $sectionsOne_id == "") {
-        $sectionsOne_id = 0;
-      } else {
-        $sectionsOne_id = $sectionsOne_id;
-      }
-      foreach ($val['item'] as $value) {
-        $breadth_one = empty($value["breadth_one"]) ? 0 : $value["breadth_one"];
-        $price_one = empty($value["price_one"]) ? 0 : $value["price_one"];
-        $total_one = empty($value["total_one"]) ? 0 : $value["total_one"];
+  //   $itemsOne_id = [];
+  //   $itemsOne_sum = [];
+  //   foreach ($section_one as $val) {
+  //     if ($val["main_title"] != "") {
+  //       $sectionOne = "INSERT INTO data.section(section_type, siri_no, title) values (1,'" . $siriNo . "','" . $val["main_title"] . "')";
+  //       $database->prepare($sectionOne);
+  //       $database->execute();
+  //       $sectionsOne_id = $database->lastInsertedId();
+  //     }
+  //     if ($sectionsOne_id == null || $sectionsOne_id == "") {
+  //       $sectionsOne_id = 0;
+  //     } else {
+  //       $sectionsOne_id = $sectionsOne_id;
+  //     }
+  //     foreach ($val['item'] as $value) {
+  //       $breadth_one = empty($value["breadth_one"]) ? 0 : $value["breadth_one"];
+  //       $price_one = empty($value["price_one"]) ? 0 : $value["price_one"];
+  //       $total_one = empty($value["total_one"]) ? 0 : $value["total_one"];
 
-        $sql = "INSERT INTO data.items_main(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
-        $sql .= "(" . $sectionsOne_id . ",'" . $siriNo . "','" . $value["title_one"] . "'," . $breadth_one . ",'" . $value["breadthtype_one"] . "'," . $price_one . ",'" . $value["pricetype_one"] . "'," . $total_one . ")";
-        $database->prepare($sql);
-        $database->execute();
-        $itemsOne_id[] = $database->lastInsertedId();
-        $itemsOne_sum[] = $value["total_one"];
-      }
-    }
+  //       $sql = "INSERT INTO data.items_main(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
+  //       $sql .= "(" . $sectionsOne_id . ",'" . $siriNo . "','" . $value["title_one"] . "'," . $breadth_one . ",'" . $value["breadthtype_one"] . "'," . $price_one . ",'" . $value["pricetype_one"] . "'," . $total_one . ")";
+  //       $database->prepare($sql);
+  //       $database->execute();
+  //       $itemsOne_id[] = $database->lastInsertedId();
+  //       $itemsOne_sum[] = $value["total_one"];
+  //     }
+  //   }
 
-    $itemsTwo_id = [];
-    $itemsTwo_sum = [];
-    foreach ($section_two as $val) {
-      if ($val["external_title"] != "") {
-        $sectionTwo = "INSERT INTO data.section(section_type, siri_no, title) values (2,'" . $siriNo . "','" . $val["external_title"] . "')";
-        $database->prepare($sectionTwo);
-        $database->execute();
-        $sectionsTwo_id = $database->lastInsertedId();
-      }
-      if ($sectionsTwo_id == null || $sectionsTwo_id == "") {
-        $sectionsTwo_id = 0;
-      } else {
-        $sectionsTwo_id = $sectionsTwo_id;
-      }
-      foreach ($val['item'] as $value) {
-        $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
-        $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
-        $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
+  // $itemsTwo_id = [];
+  // $itemsTwo_sum = [];
+  // foreach ($section_two as $val) {
+  //   if ($val["external_title"] != "") {
+  //     $sectionTwo = "INSERT INTO data.section(section_type, siri_no, title) values (2,'" . $siriNo . "','" . $val["external_title"] . "')";
+  //     $database->prepare($sectionTwo);
+  //     $database->execute();
+  //     $sectionsTwo_id = $database->lastInsertedId();
+  //   }
+  //   if ($sectionsTwo_id == null || $sectionsTwo_id == "") {
+  //     $sectionsTwo_id = 0;
+  //   } else {
+  //     $sectionsTwo_id = $sectionsTwo_id;
+  //   }
+  //   foreach ($val['item'] as $value) {
+  //     $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
+  //     $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
+  //     $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
 
-        $query = "INSERT INTO data.items_out(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
-        $query .= "(" . $sectionsTwo_id . ",'" . $siriNo . "','" . $value["title_two"] . "'," . $breadth_two . ",'" . $value["breadthtype_two"] . "'," . $price_two . ",'" . $value["pricetype_two"] . "'," . $total_two . ")";
-        $database->prepare($query);
-        $database->execute();
-        $itemsTwo_id[] = $database->lastInsertedId();
-        $itemsTwo_sum[] = $value["total_two"];
-      }
-    }
+  //     $query = "INSERT INTO data.items_out(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
+  //     $query .= "(" . $sectionsTwo_id . ",'" . $siriNo . "','" . $value["title_two"] . "'," . $breadth_two . ",'" . $value["breadthtype_two"] . "'," . $price_two . ",'" . $value["pricetype_two"] . "'," . $total_two . ")";
+  //     $database->prepare($query);
+  //     $database->execute();
+  //     $itemsTwo_id[] = $database->lastInsertedId();
+  //     $itemsTwo_sum[] = $value["total_two"];
+  //   }
+  // }
 
-    if ($comparison != null) {
-      $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
-    } else {
-      $comparison = $comparison;
-    }
-    $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsOne_id)));
-    $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
+  // if ($comparison != null) {
+  //   $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
+  // } else {
+  //   $comparison = $comparison;
+  // }
+  // $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsOne_id)));
+  // $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
 
-    // $sumItemOne = array_sum($itemsOne_sum);
-    // $sumItemTwo = array_sum($itemsTwo_sum);
+  // $sumItemOne = array_sum($itemsOne_sum);
+  // $sumItemTwo = array_sum($itemsTwo_sum);
 
-    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
-    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', '" . $idItemsTwo . "', ";
-    $query .= "'" . $capital . "', " . $discount . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
-    $database->prepare($query);
-    $result = $database->execute();
+  //   $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, corner, rental, yearly_price, even, rate, assessment_tax) ";
+  //   $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', ";
+  //   $query .= "'" . $capital . "', " . $discount . ", " . $corner . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
+  //   $database->prepare($query);
+  //   $result = $database->execute();
 
-    if ($result) {
-      $update = "UPDATE data.v_hacmjb SET mjb_nilth = " . $acct['peg_nilth'] . ", mjb_bnilt = " . $yearly . " WHERE mjb_nsiri = '" . $siriNo . "'";
-      $database->prepare($update);
-      $database->execute();
+  //   if ($result) {
+  //     $update = "UPDATE data.v_hacmjb SET mjb_nilth = " . $acct['peg_nilth'] . ", mjb_bnilt = " . $yearly . " WHERE mjb_nsiri = '" . $siriNo . "'";
+  //     $database->prepare($update);
+  //     $database->execute();
 
-      $activity = "Pengiraan Nilaian : No Siri - " . $siriNo;
-      $database->logActivity($userId, $activity);
-    }
+  //     $activity = "Pengiraan Nilaian : No Siri - " . $siriNo;
+  //     $database->logActivity($userId, $activity);
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   public function buildingEdit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax)
   {

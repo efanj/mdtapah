@@ -16,7 +16,7 @@
       width: "100%",
       height: mapmobileheight
     })
-    $(".mapViewEdit").css({
+    $("#mapViewEdit").css({
       width: "100%",
       height: mapmobileheighthalf
     })

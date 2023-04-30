@@ -177,50 +177,50 @@ var handleinfo = $("#handleinfo").DataTable({
         return data
       }
     },
-    {
-      width: "15%",
-      targets: 6,
-      searchable: false,
-      orderable: false,
-      data: null,
-      render: function (data, type, row, meta) {
-        if (type === "display") {
-          data = row.pvd_almt1 + "<br/>"
-          if (row.pvd_almt2 != null) {
-            data += row.pvd_almt2 + "<br/>"
-          }
-          if (row.pvd_almt3 != null) {
-            data += row.pvd_almt3 + "<br/>"
-          }
-          if (row.pvd_almt4 != null) {
-            data += row.pvd_almt4 + "<br/>"
-          }
-          if (row.pvd_almt5 != null) {
-            data += row.pvd_almt5 + "<br/>"
-          }
-          if (row.pvd_notel != null) {
-            data += "Telefon : " + row.pvd_notel + "<br/>"
-          }
-          if (row.pvd_nofax != null) {
-            data += "Fax : " + row.pvd_nofax + "<br/>"
-          }
-          if (row.pvd_email != null) {
-            data += "Emel : " + row.pvd_email + "<br/>"
-          }
-        }
+    // {
+    //   width: "15%",
+    //   targets: 6,
+    //   searchable: false,
+    //   orderable: false,
+    //   data: null,
+    //   render: function (data, type, row, meta) {
+    //     if (type === "display") {
+    //       data = row.pvd_almt1 + "<br/>"
+    //       if (row.pvd_almt2 != null) {
+    //         data += row.pvd_almt2 + "<br/>"
+    //       }
+    //       if (row.pvd_almt3 != null) {
+    //         data += row.pvd_almt3 + "<br/>"
+    //       }
+    //       if (row.pvd_almt4 != null) {
+    //         data += row.pvd_almt4 + "<br/>"
+    //       }
+    //       if (row.pvd_almt5 != null) {
+    //         data += row.pvd_almt5 + "<br/>"
+    //       }
+    //       if (row.pvd_notel != null) {
+    //         data += "Telefon : " + row.pvd_notel + "<br/>"
+    //       }
+    //       if (row.pvd_nofax != null) {
+    //         data += "Fax : " + row.pvd_nofax + "<br/>"
+    //       }
+    //       if (row.pvd_email != null) {
+    //         data += "Emel : " + row.pvd_email + "<br/>"
+    //       }
+    //     }
 
-        return data
-      }
-    },
+    //     return data
+    //   }
+    // },
     {
       width: "6%",
-      targets: 7,
+      targets: 6,
       orderable: false,
       data: "jpk_jnama"
     },
     {
       width: "10%",
-      targets: 8,
+      targets: 7,
       orderable: false,
       data: "peg_statf",
       render: function (data, type, row, meta) {
@@ -248,15 +248,22 @@ var handleinfo = $("#handleinfo").DataTable({
     },
     {
       width: "12%",
-      targets: 9,
+      targets: 8,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
         // console.log(data);
         if (type === "display") {
-          data = '<div class="btn-group btn-group-sm" role="group">'
-          data += '<a href="javascript:void(0)" class="btn btn-default btn-sm" type="button" title="Print" id="btn_print" data-akaun="' + row.acct + '"><i class="fa fa-print"></i></a>'
-          data += '<a href="../vendor/investigation/' + row.acct + '" class="btn btn-primary btn-sm" type="button" title="Semakan">Semakan</a>'
+          data = '<div class="btn-group btn-group-xs">'
+          data += '<a href="javascript:void(0)" type="button" class="btn btn-default" title="Print" id="btn_print" data-akaun="' + row.acct + '"><i class="fa fa-print"></i></a>'
+          data += '<a href="../vendor/investigation/' + row.acct + '" type="button" class="btn btn-primary" title="Semakan">Semakan</a>'
+          data += '<div class="btn-group dropdown mb10 mr10">'
+          data += '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Jadual <span class="caret"></span></button>'
+          data += '<ul class="dropdown-menu right animated fadeIn" role="menu" style="margin-left: -51.5px;">'
+          data += '<li><a href="../Account/eliminated/' + row.acct + '">Jadual A</a></li>'
+          data += '<li><a href="../Account/amendaccount/' + row.acct + '">Jadual B</a></li>'
+          data += '<li><a href="../Account/evaluation/' + row.acct + '">Jadual B(PS)</a></li>'
+          data += "</ul></div>"
           data += "</div>"
         }
 
@@ -295,7 +302,7 @@ $("#handleinfo tbody").on("click", "td.details-control", function () {
     tr.addClass("shown")
   }
 })
-$("#handleinfo tbody").css("font-size", 13)
+$("#handleinfo").css("font-size", 12)
 
 $(document).ready(function () {
   // handleinfo.draw()

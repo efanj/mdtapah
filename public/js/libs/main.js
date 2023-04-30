@@ -707,6 +707,30 @@ var events = {
   },
 
   /*
+   * Informations
+   */
+  // informations: {
+  //   init: function () {
+  //     events.informations.newaccount()
+  //   },
+  //   newaccount: function () {
+  //     $("#form-akaunbaru-desktop").submit(function (e) {
+  //       e.preventDefault()
+  //       ajax.send("Informations/createnewaccount", helpers.serialize(this), submitNewAccountCallBack)
+  //     })
+
+  //     function submitNewAccountCallBack(result) {
+  //       if (result.success === true) {
+  //         $("#submit_popup").modal("hide")
+  //         swal("Berjaya!", "Akaun Baru, Telah berjaya direkodkan.", "success")
+  //       } else {
+  //         swal("Oops...!", "Akaun baru tidak berjaya.", "info")
+  //       }
+  //     }
+  //   }
+  // },
+
+  /*
    * Vendor
    */
   vendor: {
@@ -1091,136 +1115,6 @@ var events = {
           })
         }
       }
-    }
-  },
-
-  /*
-   * Posts
-   */
-  posts: {
-    init: function () {}
-  },
-
-  /*
-   * Comments
-   */
-  comments: {
-    init: function () {
-      events.comments.create()
-      events.comments.update()
-      events.comments.delete()
-    },
-    reInit: function () {
-      events.comments.update()
-      events.comments.delete()
-    },
-    get: function (pageNumber, commentsCreated) {
-      if (helpers.empty(pageNumber)) pageNumber = 1
-      if (helpers.empty(commentsCreated)) commentsCreated = 0
-
-      ajax.send("Comments/getAll", { post_id: config.postId, page: pageNumber, comments_created: commentsCreated }, getCommentsCallBack, "#list-comments")
-
-      function getCommentsCallBack(result) {
-        if (helpers.validateData(result, "#list-comments", "html", "default", "data")) {
-          $("#list-comments").append(result.data.comments)
-          events.comments.reInit()
-
-          $("ul.pagination").html(result.data.pagination)
-          events.pagination.init()
-        } else {
-          $("ul.pagination").html("")
-        }
-      }
-    },
-    create: function () {
-      $("#form-create-comment").submit(function (e) {
-        e.preventDefault()
-        ajax.send("Comments/create", helpers.serialize(this, "post_id=" + config.postId), createCommentCallBack, "#form-create-comment")
-      })
-      function createCommentCallBack(result) {
-        if (helpers.validateData(result, "#form-create-comment", "after", "default", "data")) {
-          $("#list-comments .no-data").remove()
-          $("#list-comments").append(result.data)
-
-          $("#form-create-comment textarea").val("")
-
-          // increment number of comments created in-place
-          events.pagination.commentsCreated++
-          events.comments.reInit()
-        }
-      }
-    },
-    update: function () {
-      $("#list-comments .header .edit")
-        .off("click")
-        .on("click", function () {
-          var commentBody = $(this).parent().parent().parent().parent()
-          var commentId = commentBody.attr("id")
-          getCommentUpdateForm()
-
-          // 1. get the update form
-          function getCommentUpdateForm() {
-            ajax.send("Comments/getUpdateForm", { comment_id: commentId }, getCommentUpdateFormCallBack)
-
-            function getCommentUpdateFormCallBack(result) {
-              if (helpers.validateData(result, commentBody, "html", "default", "data")) {
-                commentBody.html(result.data)
-                activateCancelCommentEvent()
-                activateUpdateCommentEvent()
-              }
-            }
-          }
-
-          // 2.
-          function activateCancelCommentEvent() {
-            $("#form-update-" + commentId + " button[name='cancel']").click(function (e) {
-              e.preventDefault()
-              ajax.send("Comments/getById", { comment_id: commentId }, getCommentByIdCallBack)
-              function getCommentByIdCallBack(result) {
-                if (helpers.validateData(result, commentBody, "html", "default", "data")) {
-                  $(commentBody).after(result.data)
-                  $(commentBody).remove()
-                  events.comments.reInit()
-                }
-              }
-            })
-          }
-
-          // 3.
-          function activateUpdateCommentEvent() {
-            $("#form-update-" + commentId).submit(function (e) {
-              e.preventDefault()
-              ajax.send("Comments/update", helpers.serialize("#form-update-" + commentId, "comment_id=" + commentId), updateCommentCallBack)
-              function updateCommentCallBack(result) {
-                if (helpers.validateData(result, commentBody, "after", "default", "data")) {
-                  $(commentBody).after(result.data)
-                  $(commentBody).remove()
-                  events.comments.reInit()
-                }
-              }
-            })
-          }
-        })
-    },
-    delete: function () {
-      $("#list-comments .header .delete")
-        .off("click")
-        .on("click", function (e) {
-          e.preventDefault()
-          if (!confirm("Are you sure?")) {
-            return
-          }
-
-          var commentBody = $(this).parent().parent().parent().parent()
-          var commentId = commentBody.attr("id")
-
-          ajax.send("Comments/delete", { comment_id: commentId }, deleteCommentCallBack)
-          function deleteCommentCallBack(result) {
-            if (helpers.validateData(result, commentBody, "html", "default", "success")) {
-              $(commentBody).remove()
-            }
-          }
-        })
     }
   },
 

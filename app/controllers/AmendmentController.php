@@ -101,6 +101,12 @@ class AmendmentController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/viewdocuments/", Config::get("VIEWS_PATH") . "amendment/viewdocuments.php", ["fileId" => $fileId]);
   }
 
+  public function viewpsdetails($fileId)
+  {
+    Config::setJsConfig("curPage", "account");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/viewpsdetails/", Config::get("VIEWS_PATH") . "amendment/viewpsdetails.php", ["fileId" => $fileId]);
+  }
+
   public function getAmendTable()
   {
     $draw = $this->request->data("draw");

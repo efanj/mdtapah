@@ -314,6 +314,13 @@ class Oracle
         $this->execute();
     }
 
+    public function compareRate($kwkod, $htkod)
+    {
+        $this->statement = $this->connection->prepare("SELECT KAW_KADAR FROM SPMC.V_HKADAR WHERE KWS_KWKOD = " . $kwkod . " AND HRT_HTKOD = " . $htkod . "");
+        $this->execute();
+        return $this->fetchAssociative()["kaw_kadar"];
+    }
+
     public function getElementById($table, $column, $where, $id)
     {
         $this->statement = $this->connection->prepare('SELECT ' . $column . ' FROM ' . $table . ' WHERE ' . $where . ' = :id');

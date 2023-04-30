@@ -6,23 +6,24 @@
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
           <?php $info = $this->controller->informations->getCalcInfo($siriNo); ?>
+          <?php $corner = $info["corner"] == false ? "false" : "true"; ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
             </div>
             <div class="panel-body s13">
               <div class="row mb5">
-                <div class="col-md-6 s13"><label class="control-label tal">No. Akaun</label> : <?= $info["no_akaun"] ?>
+                <div class="col-md-6 s13"><label class="control-label tal">No. Akaun :</label> <?= $info["no_akaun"] ?>
                 </div>
-                <div class="col-md-6 s13"><label class="control-label tal">IC Pemilik</label> : <?= $info["plgid"] ?>
+                <div class="col-md-6 s13"><label class="control-label tal">ID Pemilik :</label> <?= $info["plgid"] ?>
                 </div>
               </div>
               <div class="row mb5">
-                <dv class="col-md-12 s13"><label class="control-label tal">Nama Pemilik</label> : <?= $info["nmbil"] ?>
+                <dv class="col-md-12 s13"><label class="control-label tal">Nama Pemilik :</label> <?= $info["nmbil"] ?>
                 </dv>
               </div>
               <div class="row mb5">
-                <div class="col-md-12 s13"><label class="control-label tal">Alamat Harta</label> :
+                <div class="col-md-12 s13"><label class="control-label tal">Alamat Harta :</label>
                   <?php
                   if ($info["adpg1"] != "") {
                     echo $info["adpg1"] . ", ";
@@ -40,26 +41,26 @@
                 </div>
               </div>
               <div class="row mb5">
-                <div class="col-md-6 s13"><label class="control-label tal">Kegunaan Tanah</label> :
+                <div class="col-md-6 s13"><label class="control-label tal">Guna Tanah :</label>
                   <?= $info["tnama"]; ?>
                 </div>
-                <div class="col-md-6 s13"><label class="control-label tal">Kegunaan Hartanah</label> :
+                <div class="col-md-6 s13"><label class="control-label tal">Guna Hartanah :</label>
                   <?= $info["hnama"]; ?></div>
               </div>
               <div class="row mb5">
-                <div class="col-md-4 s13"><label class="control-label tal">Luas Tanah</label> :
+                <div class="col-md-4 s13"><label class="control-label tal">Ls Tanah :</label>
                   <?= $info["lstnh"] . " mp"; ?></div>
-                <div class="col-md-4 s13"><label class="control-label tal">Luas Bangunan</label> :
+                <div class="col-md-4 s13"><label class="control-label tal">Ls Bangunan :</label>
                   <?= $info["lsbgn"] . " mp"; ?></div>
-                <div class="col-md-4 s13"><label class="control-label tal">Luas Ansolari</label> :
+                <div class="col-md-4 s13"><label class="control-label tal">Ls Ansolari :</label>
                   <?= $info["lsans"] . " mp"; ?></div>
               </div>
               <div class="row">
-                <div class="col-md-4 s13"><label class="control-label tal">Nilai Tahunan</label> :
+                <div class="col-md-4 s13"><label class="control-label tal">N. Tahunan :</label>
                   <?= "RM " . $info["nilth_asal"] ?></div>
-                <div class="col-md-4 s13"><label class="control-label tal">Kadar</label> :
+                <div class="col-md-4 s13"><label class="control-label tal">Kadar :</label>
                   <?= $info["kadar_asal"] . " %"; ?></div>
-                <div class="col-md-4 s13"><label class="control-label tal">Cukai Tahunan</label> :
+                <div class="col-md-4 s13"><label class="control-label tal">C. Tahunan :</label>
                   <?= "RM " . $info["cukai_asal"] ?></div>
               </div>
               <input type="hidden" id="kwkod" value="<?= $info['kwkod']; ?>">
@@ -90,18 +91,12 @@
                   <li>
                     <a href="#tab2" data-toggle="tab">
                       <span class="step-number">2</span>
-                      <span class="step-text">Bangunan Utama</span>
+                      <span class="step-text">Bangunan</span>
                     </a>
                   </li>
                   <li>
                     <a href="#tab3" data-toggle="tab">
                       <span class="step-number">3</span>
-                      <span class="step-text">Bangunan Luar</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#tab4" data-toggle="tab">
-                      <span class="step-number">4</span>
                       <span class="step-text">Pengiraan</span>
                     </a>
                   </li>
@@ -173,7 +168,7 @@
                         </thead>
                         <tbody>
                           <tr>
-                            <td></td>
+                            <td><input type="hidden" name="id_land" value="<?= $info['land']["breadth"] ?>"></td>
                             <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land" min="0" value="<?= $info['land']["breadth"] ?>"></td>
                             <td>mp</td>
                             <td style="text-align:center">X</td>
@@ -187,7 +182,7 @@
                     </div>
                     <div class="tab-pane" id="tab2">
                       <div class="page-header">
-                        <h4><strong>BANGUNAN UTAMA</strong></h4>
+                        <h4><strong>BANGUNAN</strong></h4>
                       </div>
                       <button id="add-section-one" class="btn btn-success btn-sm mb5" type="button">Add
                         Section</button>
@@ -293,111 +288,6 @@
                     </div>
                     <div class="tab-pane" id="tab3">
                       <div class="page-header">
-                        <h4><strong>BANGUNAN LUAR</strong></h4>
-                      </div>
-                      <button id="add-section-two" class="btn btn-success btn-sm mb5" type="button">Add
-                        Section</button>
-                      <hr>
-                      <div class="section_two">
-                        <?php foreach ($info['afa'] as $section2) { ?>
-                          <section id="<?= $section2['id']; ?>">
-                            <div class="form-group">
-                              <label class="col-lg-2 col-md-3 control-label tal"><strong>Perkara</strong></label>
-                              <div class="col-lg-10 col-md-9">
-                                <input type="hidden" name="section_two[<?= $section2['id']; ?>][id]" value="<?= $section2['id'] ?>">
-                                <input type="text" class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][external_title]" value="<?= $section2['title']; ?>">
-                              </div>
-                            </div>
-                            <button id="0" class="btn btn-primary btn-sm add-two" type="button">Add Row</button>
-                            <table class="table table-bordered two" id="zero" style="font-size:13px;">
-                              <thead>
-                                <tr>
-                                  <th style="width:30%">Perkara</th>
-                                  <th style="width:15%">Keluasan/Kuantiti</th>
-                                  <th style="width:10%">Jenis</th>
-                                  <th></th>
-                                  <th style="width:15%">Nilai Unit</th>
-                                  <th style="width:10%">Jenis</th>
-                                  <th style="width:15%">Jumlah</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody id="zero">
-                                <?php foreach ($section2['items'] as $row) { ?>
-                                  <tr id="<?= $row['id'] ?>">
-                                    <td>
-                                      <input type="hidden" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][id]" value="<?= $row['id'] ?>">
-                                      <input type="text" class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][title_two]" value="<?= $row['title'] ?>">
-                                    </td>
-                                    <td><input type="number" class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][breadth_two]" id="breadth_two" min="0" value="<?= $row['breadth'] ?>"></td>
-                                    <td>
-                                      <select class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][breadthtype_two]">
-                                        <option value="">Sila Pilih</option>
-                                        <option value="mp" <?php if ($row["breadthtype"] == "mp") {
-                                                              echo "selected";
-                                                            } ?>>Meter</option>
-                                        <option value="ft" <?php if ($row["breadthtype"] == "ft") {
-                                                              echo "selected";
-                                                            } ?>>Kaki</option>
-                                        <option value="unit" <?php if ($row["breadthtype"] == "unit") {
-                                                                echo "selected";
-                                                              } ?>>Unit</option>
-                                        <option value="petak" <?php if ($row["breadthtype"] == "petak") {
-                                                                echo "selected";
-                                                              } ?>>Petak</option>
-                                      </select>
-                                    </td>
-                                    <td style="text-align:center">X</td>
-                                    <td><input type="number" class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][price_two]" min="0" id="price_two" value="<?= $row['price'] ?>"></td>
-                                    <td>
-                                      <select class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][pricetype_two]">
-                                        <option value="">Sila Pilih</option>
-                                        <option value="smp" <?php if ($row["pricetype"] == "smp") {
-                                                              echo "selected";
-                                                            } ?>>Meter Persegi</option>
-                                        <option value="sft" <?php if ($row["pricetype"] == "sft") {
-                                                              echo "selected";
-                                                            } ?>>Kaki Persegi</option>
-                                        <option value="p/unit" <?php if ($row["pricetype"] == "p/unit") {
-                                                                  echo "selected";
-                                                                } ?>>Per-Unit</option>
-                                        <option value="sepetak" <?php if ($row["pricetype"] == "sepetak") {
-                                                                  echo "selected";
-                                                                } ?>>Sepetak</option>
-                                      </select>
-                                    </td>
-                                    <td><input type="number" class="form-control input-sm" name="section_two[<?= $section2['id']; ?>][item][<?= $row['id'] ?>][total_two]" id="total_two" value="<?= $row['total'] ?>" readonly></td>
-                                    <td></td>
-                                  </tr>
-                                <?php } ?>
-                              </tbody>
-                            </table>
-                          </section>
-                        <?php } ?>
-                      </div>
-                      <table class="table mb10">
-                        <tbody>
-                          <tr>
-                          <tr>
-                            <td style="width:25%"></td>
-                            <td style="width:15%"></td>
-                            <td style="width:10%"></td>
-                            <td></td>
-                            <td style="width:15%"></td>
-                            <td style="width:15%">Jumlah</td>
-                            <td colspan="2">
-                              <div class="input-group input-group-sm">
-                                <span class="input-group-addon">RM</span>
-                                <input type="text" class="form-control input-sm ttl_partly" value="<?= $info['totalafa']; ?>" id="overall_two" readonly>
-                              </div>
-                            </td>
-
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="tab-pane" id="tab4">
-                      <div class="page-header">
                         <h4><strong>PENGIRAAN</strong></h4>
                       </div>
                       <table style="width:100%;font-size:13px;" class="calculator mb15">
@@ -409,24 +299,27 @@
                           </td>
                         </tr>
                         <tr>
-                          <td style="width:65%"></td>
+                          <td style="width:60%"></td>
                           <td>
-                            <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount" placeholder="Diskaun" value="<?= $info['discount']; ?>">
-                              <span class=" input-group-addon">%</span>
+                            <div class="checkbox-custom">
+                              <input type="checkbox" id="dummy_corner" <?php if ($info['corner'] === true) {
+                                                                          echo "checked";
+                                                                        } ?>>
+                              <label for="corner">Corner Lot 10%</label>
                             </div>
+                            <input type="hidden" id="corner" name="corner" value="<?= $corner; ?>">
                           </td>
                           <td>
-                            RM <span class="control-label tal" id="dummy_discount">
-                              <?php if ($info['discount'] < 1) {
+                            RM <span class="control-label tal" id="value_corner">
+                              <?php if ($info['corner'] === true) {
+                                echo round(($info['rental'] / 100) * 10 + $info['rental'], 2);
+                              } else {
                                 echo $info['rental'];
-                              } else if ($info['discount'] == "" || $info['discount'] == 0 || $info['discount'] >= 1) {
-                                echo $info['rental'] - ($info['rental'] * ($info['discount'] / 100));
-                              }
-                              ?>
+                              } ?>
                             </span>
                           </td>
                         </tr>
+
                         <tr>
                           <td colspan="2"><strong>SEWA BULANAN DIGENAPKAN</strong></td>
                           <td>

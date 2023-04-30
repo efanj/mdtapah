@@ -19,8 +19,10 @@ class Uploader
   private static $allowedMIME = [
     "image" => ["image/jpeg", "image/png", "image/gif"],
     "csv" => ["text/csv", "application/vnd.ms-excel", "text/plain"],
-    "file" => ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf", "application/zip", "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"],
+    "file" => [
+      "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf", "application/zip", "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    ],
   ];
 
   /**

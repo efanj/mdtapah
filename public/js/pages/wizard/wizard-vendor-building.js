@@ -126,4 +126,26 @@ $(document).ready(function () {
       }
     })
   })
+
+  $("#calc-building #update_rate").click(function (e) {
+    e.preventDefault()
+    var rate = $("#rate").val()
+    var kwkod = $("#kwkod").val()
+    var htkod = $("#htkod").val()
+    $.ajax({
+      url: config.root + "elements/updateRate",
+      type: "post",
+      dataType: "json",
+      data: { rate: rate, kwkod: kwkod, htkod: htkod }
+    }).done(function (result) {
+      console.log(result)
+      if (result === "1") {
+        swal("Oops...", "Kadar lama, sama dengan kadar yang anda ingin kemaskini.", "info")
+      } else if (result === "2") {
+        swal("Berjaya", "Kemaskini kadar, telah Berjaya direkodkan.", "success")
+      } else {
+        swal("Oops...", "Kemaskini kadar, tidak berjaya direkodkan!", "error")
+      }
+    })
+  })
 })

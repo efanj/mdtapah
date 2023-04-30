@@ -592,15 +592,24 @@ class Elements extends Model
   public function updateRate($rate, $kwkod, $htkod)
   {
     $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
-    $query = "UPDATE data.kadar_nilai SET kadar_nilai=:rate ";
-    $query .= "WHERE kws_kwkod = :kws_kwkod AND hrt_htkod = :hrt_htkod";
-    $database->prepare($query);
-    $database->bindValue(":rate", $rate);
-    $database->bindValue(":kws_kwkod", (int) $kwkod);
-    $database->bindValue(":hrt_htkod", (int) $htkod);
-    $database->execute();
+    $currentrate = $dbOracle->compareRate($kwkod, $htkod);
 
-    return true;
+    if ($rate == $currentrate) {
+      $status =  "1";
+    } elseif ($rate != $currentrate) {
+      $query = "UPDATE data.kadar_nilai SET kadar_nilai=:rate ";
+      $query .= "WHERE kws_kwkod = :kws_kwkod AND hrt_htkod = :hrt_htkod";
+      $database->prepare($query);
+      $database->bindValue(":rate", $rate);
+      $database->bindValue(":kws_kwkod", (int) $kwkod);
+      $database->bindValue(":hrt_htkod", (int) $htkod);
+      $database->execute();
+
+      $status =  "2";
+    }
+
+    return $status;
   }
 }

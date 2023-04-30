@@ -7,6 +7,8 @@
         <div class="col-lg-4 col-sm-4 col-md-4">
           <?php $info = $this->controller->informations->getReviewAcctInfo($reviewId); ?>
           <div class="panel panel-primary">
+            <input type="hidden" id="kwkod" value="<?= $info['jln_kwkod']; ?>">
+            <input type="hidden" id="htkod" value="<?= $info['peg_htkod']; ?>">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
             </div>
@@ -43,7 +45,7 @@
               </div>
               <div class="row mb5">
                 <div class="col-md-6 s13"><label class="control-label tal">Kegunaan Tanah</label> :
-                  <?= $info["tnama"]; ?>
+                  <?= $info["tnh_tnama"]; ?>
                 </div>
                 <div class="col-md-6 s13"><label class="control-label tal">Kegunaan Hartanah</label> :
                   <?= $info["hnama"]; ?></div>
@@ -92,24 +94,21 @@
                   <li>
                     <a href="#tab2" data-toggle="tab">
                       <span class="step-number">2</span>
-                      <span class="step-text">Bangunan Utama</span>
+                      <span class="step-text">Bangunan</span>
                     </a>
                   </li>
                   <li>
                     <a href="#tab3" data-toggle="tab">
                       <span class="step-number">3</span>
-                      <span class="step-text">Bangunan Luar</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#tab4" data-toggle="tab">
-                      <span class="step-number">4</span>
                       <span class="step-text">Pengiraan</span>
                     </a>
                   </li>
                 </ul>
                 <form class="form-horizontal" role="form" id="calcBuilding" method="post">
                   <input type="hidden" name="akaun" value="<?= $info["smk_akaun"] ?>">
+                  <input type="hidden" id="luas_ansolari" value="<?= $info["peg_lsans"] ?>">
+                  <input type="hidden" id="tamb_bangunan" value="<?= $info["lsbgnt"] ?>">
+                  <input type="hidden" id="tamb_ansolari" value="<?= $info["lsanst"] ?>">
                   <div class="tab-content">
                     <div class=" tab-pane active" id="tab1">
                       <div class="page-header">
@@ -186,7 +185,7 @@
                     </div>
                     <div class="tab-pane" id="tab2">
                       <div class="page-header">
-                        <h4><strong>BANGUNAN UTAMA</strong></h4>
+                        <h4><strong>BANGUNAN</strong></h4>
                       </div>
                       <button id="add-section-one" class="btn btn-success btn-sm mb5" type="button">Add
                         Section</button>
@@ -215,8 +214,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm" name="section_one[0][item][0][title_one]"></td>
-                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][breadth_one]" id="breadth_one" min="0" value="<?= $info["lsbgn"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_one[0][item][0][title_one]" value="MFA"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][breadth_one]" id="breadth_one" min="0" value="<?= $info["peg_lsbgn"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][breadthtype_one]">
                                     <option value="">Sila Pilih</option>
@@ -267,87 +266,6 @@
                     </div>
                     <div class="tab-pane" id="tab3">
                       <div class="page-header">
-                        <h4><strong>BANGUNAN LUAR</strong></h4>
-                      </div>
-                      <button id="add-section-two" class="btn btn-success btn-sm mb5" type="button">Add
-                        Section</button>
-                      <hr>
-                      <div class="section_two">
-                        <section id="0">
-                          <div class="form-group">
-                            <label class="col-lg-2 col-md-3 control-label tal"><strong>Perkara</strong></label>
-                            <div class="col-lg-10 col-md-9">
-                              <input type="text" class="form-control input-sm" name="section_two[0][external_title]">
-                            </div>
-                          </div>
-                          <button id="0" class="btn btn-primary btn-sm add-two" type="button">Add Row</button>
-                          <table class="table table-bordered two" id="zero" style="font-size:13px;">
-                            <thead>
-                              <tr>
-                                <th style="width:30%">Perkara</th>
-                                <th style="width:15%">Keluasan/Kuantiti</th>
-                                <th style="width:10%">Jenis</th>
-                                <th></th>
-                                <th style="width:15%">Nilai Unit</th>
-                                <th style="width:10%">Jenis</th>
-                                <th style="width:15%">Jumlah</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody id="zero">
-                              <tr id="0">
-                                <td><input type="text" class="form-control input-sm" name="section_two[0][item][0][title_two]" value=""></td>
-                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][breadth_two]" id="breadth_two" min="0" value="<?= $info["lsans"] ?>"></td>
-                                <td>
-                                  <select class="form-control input-sm" name="section_two[0][item][0][breadthtype_two]">
-                                    <option value="">Sila Pilih</option>
-                                    <option value="mp" selected>Meter</option>
-                                    <option value="ft">Kaki</option>
-                                    <option value="unit">Unit</option>
-                                    <option value="petak">Petak</option>
-                                  </select>
-                                </td>
-                                <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][price_two]" min="0" id="price_two" value="0"></td>
-                                <td>
-                                  <select class="form-control input-sm" name="section_two[0][item][0][pricetype_two]">
-                                    <option value="">Sila Pilih</option>
-                                    <option value="smp" selected>Meter Persegi</option>
-                                    <option value="sft">Kaki Persegi</option>
-                                    <option value="p/unit">Per-Unit</option>
-                                    <option value="sepetak">Sepetak</option>
-                                  </select>
-                                </td>
-                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
-                                <td></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </section>
-                      </div>
-                      <table class="table mb10">
-                        <tbody>
-                          <tr>
-                          <tr>
-                            <td style="width:25%"></td>
-                            <td style="width:15%"></td>
-                            <td style="width:10%"></td>
-                            <td></td>
-                            <td style="width:15%"></td>
-                            <td style="width:15%">Jumlah</td>
-                            <td colspan="2">
-                              <div class="input-group input-group-sm">
-                                <span class="input-group-addon">RM</span>
-                                <input type="text" class="form-control input-sm ttl_partly" id="overall_two" readonly>
-                              </div>
-                            </td>
-
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="tab-pane" id="tab4">
-                      <div class="page-header">
                         <h4><strong>PENGIRAAN</strong></h4>
                       </div>
                       <table style="width:100%;font-size:13px;" class="calculator mb15">
@@ -359,15 +277,16 @@
                           </td>
                         </tr>
                         <tr>
-                          <td style="width:65%"></td>
+                          <td style="width:60%"></td>
                           <td>
-                            <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount" placeholder="Diskaun">
-                              <span class=" input-group-addon">%</span>
+                            <div class="checkbox-custom">
+                              <input type="checkbox" id="dummy_corner">
+                              <label for="corner">Corner Lot 10%</label>
                             </div>
+                            <input type="hidden" id="corner" name="corner" value="false">
                           </td>
                           <td>
-                            RM <span class="control-label tal" id="dummy_discount"></span>
+                            RM <span class="control-label tal" id="value_corner"></span>
                           </td>
                         </tr>
                         <tr>
@@ -393,7 +312,7 @@
                         <tr>
                           <td><strong>KADAR</strong></td>
                           <td>
-                            <button type="button" class="btn btn-default btn-sm" id="update_rate">Kemaskini</button>
+                            <button type="button" class="btn btn-info btn-sm" id="update_rate">Kemaskini</button>
                           </td>
                           <td>
                             <div class="input-group input-group-sm">
@@ -411,6 +330,7 @@
                         </tr>
                       </table>
                     </div>
+
                   </div>
                 </form>
                 <ul class="pager">

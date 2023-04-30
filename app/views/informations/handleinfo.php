@@ -49,7 +49,7 @@
                         Jenis Hartanah
                       </th>
                       <th>Alamat Harta</th>
-                      <th>Alamat Surat Menyurat</th>
+                      <!-- <th>Alamat Surat Menyurat</th> -->
                       <th>Jenis Pemilik</th>
                       <th>Status</th>
                       <th></th>

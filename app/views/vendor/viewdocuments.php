@@ -79,7 +79,7 @@
                 <div class="row mb5">
                   <div class="col-md-12">
                     <label class="control-label">Penerangan :</label>
-                    <textarea class="form-control" name="description" cols="30" rows="2" required></textarea>
+                    <textarea class="form-control" name="description" cols="30" rows="2"></textarea>
                   </div>
                 </div>
                 <div class="row mb10">

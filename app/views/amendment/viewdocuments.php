@@ -59,8 +59,7 @@
             <div class="panel-body">
               <div class="row mb20">
                 <div class="col-lg-12 col-sm-12 col-md-12">
-                  <form class="form-horizontal" id="form-upload-docs" role="form" method="post"
-                    enctype="multipart/form-data" style="font-size:13px;">
+                  <form class="form-horizontal" id="form-upload-docs" role="form" method="post" enctype="multipart/form-data" style="font-size:13px;">
                     <input type="hidden" name="no_akaun" value="<?= $docs["no_akaun"] ?>">
                     <div class="row mb5">
                       <div class="col-md-8">
@@ -73,7 +72,7 @@
                         <select class="form-control input-sm" name="file_type" required>
                           <option value="0" selected>Sila Pilih</option>
                           <?php foreach ($dtype as $row) { ?>
-                          <option value="<?= $row["id"] ?>"><?= $row["document"] ?></option>
+                            <option value="<?= $row["id"] ?>"><?= $row["document"] ?></option>
                           <?php } ?>
                         </select>
                       </div>

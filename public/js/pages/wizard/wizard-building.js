@@ -139,8 +139,10 @@ $(document).ready(function () {
       dataType: "json",
       data: { rate: rate, kwkod: kwkod, htkod: htkod }
     }).done(function (result) {
-      // console.log(result.success)
-      if (result === true) {
+      console.log(result)
+      if (result === "1") {
+        swal("Oops...", "Kadar lama, sama dengan kadar yang anda ingin kemaskini.", "info")
+      } else if (result === "2") {
         swal("Berjaya", "Kemaskini kadar, telah Berjaya direkodkan.", "success")
       } else {
         swal("Oops...", "Kemaskini kadar, tidak berjaya direkodkan!", "error")

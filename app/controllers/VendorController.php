@@ -409,7 +409,8 @@ class VendorController extends Controller
     $columnSortOrder = $column[0]["dir"];
     $search = $this->request->data("search");
     $searchValue = $search["value"];
-    $result = $this->vendor->submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
+    $date = $this->request->data("date");
+    $result = $this->vendor->submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $date);
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
     } else {
@@ -538,15 +539,16 @@ class VendorController extends Controller
     $breadth_land = $this->request->data("breadth_land");
     $price_land = $this->request->data("price_land");
     $section_one = $this->request->data("section_one");
-    $section_two = $this->request->data("section_two");
+    // $section_two = $this->request->data("section_two");
     $discount = $this->request->data("discount");
     $rental = $this->request->data("rental");
+    $corner = $this->request->data("corner");
     $even = $this->request->data("even");
     $yearly = $this->request->data("yearly");
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->vendor->buildingSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+    $result = $this->vendor->buildingSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax);
 
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
@@ -563,15 +565,16 @@ class VendorController extends Controller
     $breadth_land = $this->request->data("breadth_land");
     $price_land = $this->request->data("price_land");
     $section_one = $this->request->data("section_one");
-    $section_two = $this->request->data("section_two");
+    // $section_two = $this->request->data("section_two");
     $discount = $this->request->data("discount");
+    $corner = $this->request->data("corner");
     $rental = $this->request->data("rental");
     $even = $this->request->data("even");
     $yearly = $this->request->data("yearly");
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->vendor->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+    $result = $this->vendor->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax);
 
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());

@@ -726,7 +726,7 @@ class Vendor extends Model
     return $response;
   }
 
-  public function submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
+  public function submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $date)
   {
     $database = Database::openConnection();
     $dbOracle = new Oracle();
@@ -747,7 +747,9 @@ class Vendor extends Model
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
     if ($searchValue != "") {
-      $sql .= "WHERE " . $searchQuery;
+      $sql .= "WHERE s.smk_submit_id = " . $date . " AND " . $searchQuery;
+    } else {
+      $sql .= "WHERE s.smk_submit_id = " . $date;
     }
     $sel = $database->prepare($sql);
     $database->execute($sel);
@@ -763,7 +765,9 @@ class Vendor extends Model
     $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
     $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     if ($searchValue != "") {
-      $query .= "WHERE " . $searchQuery;
+      $query .= "WHERE s.smk_submit_id = " . $date . " AND " . $searchQuery;
+    } else {
+      $query .= "WHERE s.smk_submit_id = " . $date;
     }
 
     if ($columnName != "") {
@@ -795,7 +799,8 @@ class Vendor extends Model
         }
       }
 
-      $rowOutput["id"] = $val["id"];
+      // $rowOutput["id"] = $val["id"];
+      $rowOutput["id"] = Encryption::encryptId($val["id"]);
       $rowOutput["sid"] = $val["smk_submit_id"];
       $rowOutput["akaun"] = Encryption::encryptId($val["smk_akaun"]);
       $rowOutput["sirino"] = $this->checkSiriNo($val["siri_no"]);
@@ -1224,7 +1229,7 @@ class Vendor extends Model
     return $file;
   }
 
-  public function buildingSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax)
+  public function buildingSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
   {
     $comparison = empty($comparison) ? null : $comparison;
     $breadth_land = empty($breadth_land) ? 0 : $breadth_land;
@@ -1236,9 +1241,10 @@ class Vendor extends Model
     $rate = empty($rate) ? 0 : $rate;
     $tax = empty($tax) ? 0 : $tax;
     $total = $breadth_land * $price_land;
-    // $corner = $corner == false ? 0 : 1;
+    $corner = $corner == false ? "false" : "true";
     $calcType = 2;
     $capital = 0;
+    $sectionsOne_id = 0;
 
     $database = Database::openConnection();
 
@@ -1257,43 +1263,21 @@ class Vendor extends Model
         $database->prepare($sectionOne);
         $database->execute();
         $sectionsOne_id = $database->lastInsertedId();
-
-        foreach ($val['item'] as $value) {
-          $breadth_one = empty($value["breadth_one"]) ? 0 : $value["breadth_one"];
-          $price_one = empty($value["price_one"]) ? 0 : $value["price_one"];
-          $total_one = empty($value["total_one"]) ? 0 : $value["total_one"];
-
-          $sql = "INSERT INTO data.items_main(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
-          $sql .= "(" . $sectionsOne_id . ",'" . $siriNo . "','" . $value["title_one"] . "'," . $breadth_one . ",'" . $value["breadthtype_one"] . "'," . $price_one . ",'" . $value["pricetype_one"] . "'," . $total_one . ")";
-          $database->prepare($sql);
-          $database->execute();
-          $itemsOne_id[] = $database->lastInsertedId();
-          $itemsOne_sum[] = $value["total_one"];
-        }
       }
-    }
+      if ($sectionsOne_id != null || $sectionsOne_id != "") {
+        $sectionsOne_id = $sectionsOne_id;
+      }
+      foreach ($val['item'] as $value) {
+        $breadth_one = empty($value["breadth_one"]) ? 0 : $value["breadth_one"];
+        $price_one = empty($value["price_one"]) ? 0 : $value["price_one"];
+        $total_one = empty($value["total_one"]) ? 0 : $value["total_one"];
 
-    $itemsTwo_id = [];
-    $itemsTwo_sum = [];
-    foreach ($section_two as $val) {
-      if ($val["external_title"] != "") {
-        $sectionTwo = "INSERT INTO data.section(section_type, siri_no, title) values (2,'" . $siriNo . "','" . $val["external_title"] . "')";
-        $database->prepare($sectionTwo);
+        $sql = "INSERT INTO data.items_main(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
+        $sql .= "(" . $sectionsOne_id . ",'" . $siriNo . "','" . $value["title_one"] . "'," . $breadth_one . ",'" . $value["breadthtype_one"] . "'," . $price_one . ",'" . $value["pricetype_one"] . "'," . $total_one . ")";
+        $database->prepare($sql);
         $database->execute();
-        $sectionsTwo_id = $database->lastInsertedId();
-
-        foreach ($val['item'] as $value) {
-          $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
-          $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
-          $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
-
-          $query = "INSERT INTO data.items_out(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
-          $query .= "(" . $sectionsTwo_id . ",'" . $siriNo . "','" . $value["title_two"] . "'," . $breadth_two . ",'" . $value["breadthtype_two"] . "'," . $price_two . ",'" . $value["pricetype_two"] . "'," . $total_two . ")";
-          $database->prepare($query);
-          $database->execute();
-          $itemsTwo_id[] = $database->lastInsertedId();
-          $itemsTwo_sum[] = $value["total_two"];
-        }
+        $itemsOne_id[] = $database->lastInsertedId();
+        $itemsOne_sum[] = $value["total_one"];
       }
     }
 
@@ -1303,26 +1287,26 @@ class Vendor extends Model
       $comparison = $comparison;
     }
     $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsOne_id)));
-    $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
+    // $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
 
     // $sumItemOne = array_sum($itemsOne_sum);
     // $sumItemTwo = array_sum($itemsTwo_sum);
 
-    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
-    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', '" . $idItemsTwo . "', ";
-    $query .= "'" . $capital . "', " . $discount . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
+    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, capital, discount, corner, rental, yearly_price, even, rate, assessment_tax) ";
+    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', ";
+    $query .= "'" . $capital . "', " . $discount . ", " . $corner . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
     $database->prepare($query);
     $result = $database->execute();
 
-    // if ($result) {
-    //   $activity = "Pengiraan Nilaian : No Siri - " . $siriNo;
-    //   $database->logActivity($userId, $activity);
-    // }
+    if ($result) {
+      $activity = "Pengiraan Nilaian : No Siri - " . $siriNo;
+      $database->logActivity($userId, $activity);
+    }
 
     return true;
   }
 
-  public function buildingEdit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax)
+  public function buildingEdit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
   {
     $comparison = empty($comparison) ? null : $comparison;
     $breadth_land = empty($breadth_land) ? 0 : $breadth_land;
@@ -1334,55 +1318,112 @@ class Vendor extends Model
     $rate = empty($rate) ? 0 : $rate;
     $tax = empty($tax) ? 0 : $tax;
     $total = $breadth_land * $price_land;
-    // $corner = $corner == false ? 0 : 1;
+    $corner = $corner == false ? "false" : "true";
     $calcType = 2;
     $capital = 0;
 
     $database = Database::openConnection();
 
-    $land = "UPDATE data.items_land SET breadth = " . $breadth_land . ", price = " . $price_land . ", total = " . $total . " WHERE siri_no = '" . $siriNo . "'";
-    $database->prepare($land);
-    $database->execute();
+    $curLand = $this->getLandInfo($siriNo);
+    $breadth = (!empty($breadth_land) && $breadth_land !== $curLand["breadth"]) ? $breadth_land : 0;
+    $price = (!empty($price_land) && $price_land !== $curLand["price"]) ? $price_land : 0;
+    $total = (!empty($total) && $total !== $curLand["total"]) ? $total : 0;
 
-    foreach ($section_one as $val) {
-      if ($val["main_title"] != "") {
-        $section_id = $val["id"];
+    $landUpdated = ($breadth || $price || $total) ? true : false;
+    if ($landUpdated) {
+      $landOpt = [
+        $breadth => "breadth = :breadth ",
+        $price => "price = :price ",
+        $total => "total = :total "
+      ];
+      $query = "UPDATE data.items_land SET ";
+      $query .= $this->applyOptions($landOpt, ", ");
+      $query .= "WHERE siri_no = :siri_no AND id = :id ";
+      $database->prepare($query);
 
-        $sectionOne = "UPDATE data.section SET title = '" . $val["main_title"] . "' WHERE siri_no = '" . $siriNo . "' AND id = " . $section_id;
-        $database->prepare($sectionOne);
-        $database->execute();
-
-        foreach ($val['item'] as $value) {
-          $breadth_one = empty($value["breadth_one"]) ? 0 : $value["breadth_one"];
-          $price_one = empty($value["price_one"]) ? 0 : $value["price_one"];
-          $total_one = empty($value["total_one"]) ? 0 : $value["total_one"];
-          $item_id = $value["id"];
-
-          $sql = "UPDATE data.items_main SET title='" . $value["title_one"] . "', breadth=" . $breadth_one . ", breadthtype='" . $value["breadthtype_one"] . "', price=" . $price_one . ", pricetype='" . $value["pricetype_one"] . "', total=" . $total_one;
-          $sql .= " WHERE siri_no = '" . $siriNo . "' AND id = " . $item_id;
-          $database->prepare($sql);
-          $database->execute();
-        }
+      if ($breadth) {
+        $database->bindValue(':breadth', $breadth);
       }
+      if ($price) {
+        $database->bindValue(':price', $price);
+      }
+      if ($total) {
+        $database->bindValue(':total', $total);
+      }
+      $database->bindValue(':siri_no', $siriNo);
+      $database->bindValue(':id', $curLand["id"]);
+      $database->execute();
     }
 
-    foreach ($section_two as $key => $val) {
-      if ($val["external_title"] != "") {
-        $section_id = $val["id"];
+    foreach ($section_one as $val) {
+      $curSection = $this->getSectionInfo($val["id"]);
+      $title = (!empty($val["main_title"]) && $val["main_title"] !== $curSection["title"]) ? $val["main_title"] : null;
 
-        $sectionTwo = "UPDATE data.section SET title = '" . $val["external_title"] . "' WHERE siri_no = '" . $siriNo . "' AND id = " . $key;
-        $database->prepare($sectionTwo);
+      $sectionUpdated = ($title) ? true : false;
+      if ($sectionUpdated) {
+        $sectionId = $val["id"];
+
+        $sectionOpt = [
+          $val["main_title"] => "title = :title "
+        ];
+
+        $query = "UPDATE data.section SET ";
+        $query .= $this->applyOptions($sectionOpt, ", ");
+        $query .= "WHERE siri_no = :siri_no AND id = :id ";
+        $database->prepare($query);
+
+        if ($val["main_title"]) {
+          $database->bindValue(':title', $val["main_title"]);
+        }
+        $database->bindValue(':siri_no', $siriNo);
+        $database->bindValue(':id', $sectionId);
         $database->execute();
+      }
 
-        foreach ($val['item'] as $value) {
-          $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
-          $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
-          $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
-          $item_id = $value["id"];
+      foreach ($val['item'] as $value) {
+        $curBuilding = $this->getBuildingInfo($value["id"]);
+        $title = (!empty($value["title_one"]) && $value["title_one"] !== $curBuilding["title"]) ? $value["title_one"] : null;
+        $breadth = (!empty($value["breadth_one"]) && $value["breadth_one"] !== $curBuilding["breadth"]) ? $value["breadth_one"] : 0;
+        $breadthtype = (!empty($value["breadthtype_one"]) && $value["breadthtype_one"] !== $curBuilding["breadthtype"]) ? $value["breadthtype_one"] : null;
+        $price = (!empty($value["price_one"]) && $value["price_one"] !== $curBuilding["price"]) ? $value["price_one"] : 0;
+        $pricetype = (!empty($value["pricetype_one"]) && $value["pricetype_one"] !== $curBuilding["pricetype"]) ? $value["pricetype_one"] : null;
+        $total = (!empty($value["total_one"]) && $value["total_one"] !== $curBuilding["total"]) ? $value["total_one"] : 0;
 
-          $query = "UPDATE data.items_out SET title = '" . $value["title_two"] . "', breadth = " . $breadth_two . ", breadthtype = '" . $value["breadthtype_two"] . "', price = " . $price_two . ", pricetype = '" . $value["pricetype_two"] . "', total = " . $total_two;
-          $query .= " WHERE siri_no = '" . $siriNo . "' AND id = " . $item_id;
+        $buildingUpdated = ($title || $breadth || $breadthtype || $price || $pricetype || $total) ? true : false;
+        if ($buildingUpdated) {
+          $buildingOpt = [
+            $title => "title = :title ",
+            $breadth => "breadth = :breadth ",
+            $breadthtype => "breadthtype = :breadthtype ",
+            $price => "price = :price ",
+            $pricetype => "pricetype = :pricetype ",
+            $total => "total = :total "
+          ];
+          $query = "UPDATE data.items_main SET ";
+          $query .= $this->applyOptions($buildingOpt, ", ");
+          $query .= "WHERE siri_no = :siri_no AND id = :id ";
           $database->prepare($query);
+
+          if ($title) {
+            $database->bindValue(':title', $title);
+          }
+          if ($breadth) {
+            $database->bindValue(':breadth', $breadth);
+          }
+          if ($breadthtype) {
+            $database->bindValue(':breadthtype', $breadthtype);
+          }
+          if ($price) {
+            $database->bindValue(':price', $price);
+          }
+          if ($pricetype) {
+            $database->bindValue(':pricetype', $pricetype);
+          }
+          if ($total) {
+            $database->bindValue(':total', $total);
+          }
+          $database->bindValue(':siri_no', $siriNo);
+          $database->bindValue(':id', $value["id"]);
           $database->execute();
         }
       }
@@ -1391,18 +1432,74 @@ class Vendor extends Model
     if ($comparison != null) {
       $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
     } else {
-      $comparison = "{}";
+      $comparison = null;
     }
 
-    $query = "UPDATE data.calculator SET comparison = '" . $comparison . "', capital = '" . $capital . "', discount = " . $discount . ", rental = '" . $rental . "', yearly_price = " . $yearly . ", even = " . $even . ", rate = " . $rate . ", assessment_tax = " . $tax;
-    $query .= " WHERE siri_no = '" . $siriNo . "'";
-    $database->prepare($query);
-    $result = $database->execute();
+    $curCalc = $this->getCalculatorInfo($siriNo);
 
-    // if ($result) {
-    //   $activity = "Pengiraan Nilaian : No Siri - " . $siriNo;
-    //   $database->logActivity($userId, $activity);
-    // }
+    $comparison = (!empty($comparison) && $comparison !== $curCalc["comparison"]) ? $comparison : null;
+    $capital = (!empty($capital) && $capital !== $curCalc["capital"]) ? $capital : 0;
+    $discount = (!empty($discount) && $discount !== $curCalc["discount"]) ? $discount : 0;
+    $corner = (!empty($corner) && $corner !== $curCalc["corner"]) ? $corner : "false";
+    $rental = (!empty($rental) && $rental !== $curCalc["rental"]) ? $rental : 0;
+    $yearly = (!empty($yearly) && $yearly !== $curCalc["yearly_price"]) ? $yearly : 0;
+    $even = (!empty($even) && $even !== $curCalc["even"]) ? $even : 0;
+    $rate = (!empty($rate) && $rate !== $curCalc["rate"]) ? $rate : 0;
+    $tax = (!empty($tax) && $tax !== $curCalc["assessment_tax"]) ? $tax : 0;
+
+    $calcUpdated = ($comparison || $capital || $discount || $corner || $rental || $yearly || $even || $rate || $tax) ? true : false;
+    if ($calcUpdated) {
+      $calcOpt = [
+        $comparison => "comparison = :comparison ",
+        $capital => "capital = :capital ",
+        $discount => "discount = :discount ",
+        $corner => "corner = :corner ",
+        $rental => "rental = :rental ",
+        $yearly => "yearly_price = :yearly_price ",
+        $even => "even = :even ",
+        $rate => "rate = :rate ",
+        $tax => "assessment_tax = :assessment_tax "
+      ];
+      $query = "UPDATE data.calculator SET ";
+      $query .= $this->applyOptions($calcOpt, ", ");
+      $query .= "WHERE siri_no = :siri_no ";
+      $database->prepare($query);
+
+      if ($comparison) {
+        $database->bindValue(':comparison', $comparison);
+      }
+      if ($capital) {
+        $database->bindValue(':capital', $capital);
+      }
+      if ($discount) {
+        $database->bindValue(':discount', $discount);
+      }
+      if ($corner) {
+        $database->bindValue(':corner', $corner);
+      }
+      if ($rental) {
+        $database->bindValue(':rental', $rental);
+      }
+      if ($yearly) {
+        $database->bindValue(':yearly_price', $total);
+      }
+      if ($even) {
+        $database->bindValue(':even', $even);
+      }
+      if ($rate) {
+        $database->bindValue(':rate', $rate);
+      }
+      if ($tax) {
+        $database->bindValue(':assessment_tax', $tax);
+      }
+      $database->bindValue(':siri_no', $siriNo);
+      $result = $database->execute();
+    }
+
+    if ($result) {
+      $activity = "Kemas kini Pengiraan Nilaian : No Siri - " . $siriNo;
+      $database->logActivity($userId, $activity);
+    }
 
     return true;
   }
@@ -1674,30 +1771,145 @@ class Vendor extends Model
     $database = Database::openConnection();
     $dbOracle = new Oracle();
 
+    $no_akaun = empty($no_akaun) ? null : $no_akaun;
+    $koordinat_x = empty($codex) ? null : substr($codex, 0, 15);
+    $koordinat_y = empty($codey) ? null : substr($codey, 0, 15);
+
+    // if ($no_akaun != null) {
+    //   $dbOracle->getByNoAcct("V_HVNDUK", "peg_akaun", $no_akaun);
+    //   $info = $dbOracle->fetchAssociative();
+    // }
+
     $query = "UPDATE data.smktpk SET smk_codex=:codex, smk_codey=:codey WHERE id=:id ";
 
     $database->prepare($query);
-    $database->bindValue(":codex", $codex);
-    $database->bindValue(":codey", $codey);
+    $database->bindValue(":codex", $koordinat_x);
+    $database->bindValue(":codey", $koordinat_y);
     $database->bindValue(":id", $sid);
-    $result = $database->execute();
+    $database->execute();
 
-    if ($result) {
-      $dbOracle->getByNoAcct("V_HVNDUK", "peg_akaun", $no_akaun);
-      $info = $dbOracle->fetchAssociative();
+    $localcount = $database->countByNoAcct("coordinates", "akaun", $no_akaun);
+    $epbtcount = $dbOracle->countByNoAcct("KOORDINAT", "AKAUN", $no_akaun);
 
-      $qry = "INSERT INTO data.coordinates (akaun, plgid, nama, codex, codey, nolot) ";
-      $qry .= "VALUES($no_akaun, '" . $info['pmk_plgid'] . "', '" . $info['pmk_nmbil'] . "', $codex, $codey, '" . $info['peg_nolot'] . "')";
+    $dbOracle->getByNoAcct("V_HVNDUK", "peg_akaun", $no_akaun);
+    $info = $dbOracle->fetchAssociative();
+
+    if ($no_akaun != null && $localcount > 0) {
+      $qry = "UPDATE data.coordinates SET codex= '" . $koordinat_x . "', codey = '" . $koordinat_y . "', geom=ST_SetSRID(ST_MakePoint($koordinat_y, $koordinat_x), 4326) WHERE akaun = " . $no_akaun;
       $database->prepare($qry);
       $database->execute();
+    } elseif ($no_akaun != null && $localcount < 1) {
+      $qry = "INSERT INTO data.coordinates (akaun, plgid, nama, codex, codey, nolot) ";
+      $qry .= "VALUES($no_akaun, '" . $info['pmk_plgid'] . "', '" . $info['pmk_nmbil'] . "', $koordinat_x, $koordinat_y, '" . $info['peg_nolot'] . "')";
+      $database->prepare($qry);
+      $database->execute();
+    }
 
+    if ($no_akaun != null && $epbtcount > 0) {
+      $stmt = "UPDATE SPMC.KOORDINAT SET CODEX= '" . $koordinat_x . "', CODEY = '" . $koordinat_y . "' WHERE AKAUN = " . $no_akaun;
+      $dbOracle->prepare($stmt);
+      $dbOracle->execute();
+    } elseif ($no_akaun != null && $epbtcount < 1) {
       $stmt = "INSERT INTO SPMC.KOORDINAT (AKAUN, PLGID, NAMA, CODEX, CODEY, NOLOT) ";
-      $stmt .= "VALUES(VALUES($no_akaun, '" . $info['pmk_plgid'] . "', '" . $info['pmk_nmbil'] . "', $codex, $codey, '" . $info['peg_nolot'] . "')";
+      $stmt .= "VALUES($no_akaun, '" . $info['pmk_plgid'] . "', '" . $info['pmk_nmbil'] . "', $koordinat_x, $koordinat_y, '" . $info['peg_nolot'] . "')";
       $dbOracle->prepare($stmt);
       $dbOracle->execute();
     }
 
     return ["success" => true];
+  }
+
+  public function getCalculatorInfo($siriNo)
+  {
+
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.calculator ";
+    $query .= "WHERE siri_no = :siri_no ";
+    $database->prepare($query);
+    $database->bindValue(':siri_no', $siriNo);
+    $database->execute();
+
+    $calc = $database->fetchAssociative();
+
+    $calc["calc_type"] = empty($calc['calc_type']) ? null : $calc['calc_type'];
+    $calc["account_no"] = empty($calc['account_no']) ? null : $calc['account_no'];
+    $calc["comparison"] = empty($calc['comparison']) ? null : $calc['comparison'];
+    $calc["land"] = empty($calc['land']) ? null : $calc['land'];
+    $calc["bmain"] = empty($calc['bmain']) ? null : $calc['bmain'];
+    $calc["capital"] = empty($calc['capital']) ? null : $calc['capital'];
+    $calc["discount"] = empty($calc['discount']) ? null : $calc['discount'];
+    $calc["corner"] = empty($calc['corner']) ? null : $calc['corner'];
+    $calc["rental"] = empty($calc['rental']) ? null : $calc['rental'];
+    $calc["yearly_price"] = empty($calc['yearly_price']) ? null : $calc['yearly_price'];
+    $calc["even"] = empty($calc['even']) ? null : $calc['even'];
+    $calc["rate"] = empty($calc['rate']) ? null : $calc['rate'];
+    $calc["assessment_tax"] = empty($calc['assessment_tax']) ? null : $calc['assessment_tax'];
+
+    return $calc;
+  }
+
+  public function getSectionInfo($Id)
+  {
+
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.section ";
+    $query .= "WHERE id = :id ";
+    $database->prepare($query);
+    $database->bindValue(':id', $Id);
+    $database->execute();
+
+    $section = $database->fetchAssociative();
+
+    $section["id"] = (int) $section["id"];
+    $section["section_type"] = empty($section['section_type']) ? null : $section['section_type'];
+    $section["siri_no"] = empty($section['siri_no']) ? null : $section['siri_no'];
+    $section["title"] = empty($section['title']) ? null : $section['title'];
+
+    return $section;
+  }
+
+  public function getLandInfo($Id)
+  {
+
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.items_land ";
+    $query .= "WHERE id = :id ";
+    $database->prepare($query);
+    $database->bindValue(':id', $Id);
+    $database->execute();
+
+    $land = $database->fetchAssociative();
+    $land["id"] = (int) $land["id"];
+    $land["siri_no"] = empty($land['siri_no']) ? null : $land['siri_no'];
+    $land["breadth"] = empty($land['breadth']) ? null : $land['breadth'];
+    $land["price"] = empty($land['price']) ? null : $land['price'];
+    $land["total"] = empty($land['total']) ? null : $land['total'];
+
+    return $land;
+  }
+
+  public function getBuildingInfo($Id)
+  {
+
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.items_main ";
+    $query .= "WHERE id = :id ";
+    $database->prepare($query);
+    $database->bindValue(':id', $Id);
+    $database->execute();
+
+    $building = $database->fetchAssociative();
+
+    $building["id"] = (int) $building["id"];
+    $building["section_id"] = empty($building['section_id']) ? null : $building['section_id'];
+    $building["siri_no"] = empty($building['siri_no']) ? null : $building['siri_no'];
+    $building["title"] = empty($building['title']) ? null : $building['title'];
+    $building["breadthtype"] = empty($building['breadthtype']) ? null : $building['breadthtype'];
+    $building["price"] = empty($building['price']) ? null : $building['price'];
+    $building["pricetype"] = empty($building['pricetype']) ? null : $building['pricetype'];
+    $building["total"] = empty($building['total']) ? null : $building['total'];
+
+    return $building;
   }
 
   public function checkEmptyLand($id)

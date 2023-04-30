@@ -1049,11 +1049,12 @@ class Informations extends Model
       }
       $rowOutput["land"] = $this->getLand(Encryption::decryptId($siriNo));
       $rowOutput["mfa"] = $this->getMfa(Encryption::decryptId($siriNo));
-      $rowOutput["afa"] = $this->getAfa(Encryption::decryptId($siriNo));
+      // $rowOutput["afa"] = $this->getAfa(Encryption::decryptId($siriNo));
       $rowOutput["totalmfa"] = $this->getTotalMfa(Encryption::decryptId($siriNo));
-      $rowOutput["totalafa"] = $this->getTotalAfa(Encryption::decryptId($siriNo));
+      // $rowOutput["totalafa"] = $this->getTotalAfa(Encryption::decryptId($siriNo));
       $rowOutput["capital"] = $val["capital"];
       $rowOutput["discount"] = $val["discount"];
+      $rowOutput["corner"] = $val["corner"];
       $rowOutput["rental"] = $val["rental"];
       $rowOutput["yearly_price"] = $val["yearly_price"];
       $rowOutput["even"] = $val["even"];
@@ -1651,6 +1652,7 @@ class Informations extends Model
     $rowOutput["peg_stcbk"] = $info["peg_stcbk"];
     $rowOutput["pmk_nmbil"] = $info["pmk_nmbil"];
     $rowOutput["peg_nolot"] = $info["peg_nolot"];
+    $rowOutput["jln_kwkod"] = $info["jln_kwkod"];
     $rowOutput["jln_jnama"] = $info["jln_jnama"];
     $rowOutput["jln_knama"] = $info["jln_knama"];
     $rowOutput["kaw_kwkod"] = $info["kaw_kwkod"];
@@ -1687,7 +1689,7 @@ class Informations extends Model
     } else {
       $rowOutput["hrt_hnama"] = $this->checkNull($row["smk_kgtnh"]);
     }
-    $rowOutput["htkod"] = $info["peg_htkod"];
+    $rowOutput["peg_htkod"] = $info["peg_htkod"];
     $rowOutput["hnama"] = $info["hrt_hnama"];
     $rowOutput["lsbgn"] = $info["peg_lsbgn"];
     $rowOutput["lstnh"] = $info["peg_lstnh"];
@@ -1697,6 +1699,83 @@ class Informations extends Model
     $rowOutput["cukai_asal"] = $info["peg_tksir"];
     $rowOutput["workerid"] = $row["workerid"];
     $rowOutput["name"] = $row["name"];
+    $rowOutput["role"] = Session::getUserRole();
+
+    return $rowOutput;
+  }
+
+  public function getReviewSubmitInfo($fileId)
+  {
+    $database = Database::openConnection();
+    $dboracle = new Oracle();
+
+    $query = "SELECT vs.id as sid, vs.smk_akaun, vs.smk_nolot, vs.smk_nompt, vs.smk_adpg1, vs.smk_adpg2, vs.smk_adpg3, vs.smk_adpg4, vs.smk_jalan, vs.smk_kodkws, ";
+    $query .= "vs.smk_jstnh, vs.smk_jsbgn, vs.smk_kgtnh, vs.smk_stbgn, vs.smk_lsbgn, vs.smk_lstnh, vs.smk_lsans, vs.smk_lsbgn_tmbh, vs.smk_lsans_tmbh, ";
+    $query .= "vs.smk_codex, vs.smk_codey, vs.smk_onama, vs.smk_type, vs.smk_stspn, vs.smk_nota, vs.smk_stsen, vs.smk_datevisit, vs.hadapan, vs.belakang, c.siri_no ";
+    $query .= "FROM data.v_semak_raw vs ";
+    $query .= "LEFT JOIN data.calculator c ON vs.smk_akaun = c.account_no ";
+    $query .= "WHERE vs.smk_akaun = :akaun ";
+    $database->prepare($query);
+    $database->bindValue(":akaun", Encryption::decryptId($fileId));
+    $database->execute();
+
+    $row = $database->fetchAssociative();
+
+    $rowOutput = [];
+
+    $dboracle->getByNoAcct("V_HVNDUK", "peg_akaun", $row["smk_akaun"]);
+    $info = $dboracle->fetchAssociative();
+
+    $rowOutput["id"] = Encryption::encryptId($row["sid"]);
+    $rowOutput["smk_akaun"] = $row["smk_akaun"];
+    $rowOutput["siriNo"] = $row["siri_no"];
+    $rowOutput["adpg1"] = $row["smk_adpg1"];
+    $rowOutput["adpg2"] = $row["smk_adpg2"];
+    $rowOutput["adpg3"] = $row["smk_adpg3"];
+    $rowOutput["adpg4"] = $row["smk_adpg4"];
+    $rowOutput["thkod"] = $row["smk_jstnh"];
+    $rowOutput["bgkod"] = $row["smk_jsbgn"];
+    $rowOutput["htkod"] = $row["smk_kgtnh"];
+    $rowOutput["stkod"] = $row["smk_stbgn"];
+    $rowOutput["codex"] = $row["smk_codex"];
+    $rowOutput["codey"] = $row["smk_codey"];
+    $rowOutput["lsbgnt"] = $row["smk_lsbgn_tmbh"];
+    $rowOutput["lsanst"] = $row["smk_lsans_tmbh"];
+    if ($row["hadapan"] != null && $row["belakang"] == null) {
+      $rowOutput["catatan"] = $row["hadapan"];
+    } elseif ($row["hadapan"] == null && $row["belakang"] != null) {
+      $rowOutput["catatan"] = $row["belakang"];
+    } elseif ($row["hadapan"] != null && $row["belakang"] != null) {
+      $rowOutput["catatan"] = $row["hadapan"] . "</br>" . $row["belakang"];
+    } else {
+      $rowOutput["catatan"] = "";
+    }
+    $rowOutput["pmk_nmbil"] = $info["pmk_nmbil"];
+    $rowOutput["pmk_plgid"] = $info["pmk_plgid"];
+    $rowOutput["peg_digit"] = $info["peg_digit"];
+    $rowOutput["peg_oldac"] = $info["peg_oldac"];
+    $rowOutput["peg_stcbk"] = $info["peg_stcbk"];
+    $rowOutput["pmk_nmbil"] = $info["pmk_nmbil"];
+    $rowOutput["peg_nolot"] = $info["peg_nolot"];
+    $rowOutput["jln_jnama"] = $info["jln_jnama"];
+    $rowOutput["jln_knama"] = $info["jln_knama"];
+    $rowOutput["kaw_kwkod"] = $info["kaw_kwkod"];
+    $rowOutput["jpk_jnama"] = $info["jpk_jnama"];
+    $rowOutput["peg_jpkod"] = $info["jpk_jpkod"];
+    $rowOutput["peg_nompt"] = $info["peg_nompt"];
+    $rowOutput["peg_rjfil"] = $info["peg_rjfil"];
+    $rowOutput["peg_pelan"] = $info["peg_pelan"];
+    $rowOutput["peg_bilpk"] = $info["peg_bilpk"];
+    $rowOutput["peg_rjmmk"] = $info["peg_rjmmk"];
+    $rowOutput["peg_lsbgn"] = $info["peg_lsbgn"];
+    $rowOutput["peg_lstnh"] = $info["peg_lstnh"];
+    $rowOutput["peg_lsans"] = $info["peg_lsans"];
+    $rowOutput["peg_nilth"] = $info["peg_nilth"];
+    $rowOutput["kaw_kadar"] = $info["kaw_kadar"];
+    $rowOutput["peg_lsans"] = $info["peg_lsans"];
+    $rowOutput["lsbgn"] = $info["peg_lsbgn"];
+    $rowOutput["lstnh"] = $info["peg_lstnh"];
+    $rowOutput["lsans"] = $info["peg_lsans"];
     $rowOutput["role"] = Session::getUserRole();
 
     return $rowOutput;
