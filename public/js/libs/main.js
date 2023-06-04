@@ -805,7 +805,11 @@ var events = {
 
       function submitsitereviewsCallBack(result) {
         if (result.success === true) {
-          $("#submitsitereview").DataTable().ajax.reload()
+          // $("#submitsitereview").DataTable().destroy()
+          // $("#submitsitereview").DataTable().ajax.reload()
+          $("#form-submit-sitereview").each(function () {
+            this.reset()
+          })
           $("#submit_popup").modal("hide")
           swal("Berjaya!", "Serahan, Telah berjaya direkodkan.", "success")
         } else {

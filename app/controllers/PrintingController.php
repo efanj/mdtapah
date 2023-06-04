@@ -17,12 +17,15 @@ class PrintingController extends Controller
       case "datasubmition":
         $this->Security->config("validateForm", false);
         break;
+      case "sitereviews":
+        $this->Security->config("validateForm", false);
+        break;
     }
   }
 
-  public function datasubmition($date)
+  public function datasubmition($id)
   {
-    $this->view->render(Config::get('VIEWS_PATH') . 'printing/datasubmition.php', ["date" => $date]);
+    $this->view->render(Config::get('VIEWS_PATH') . 'printing/datasubmition.php', ["id" => $id]);
   }
 
   public function datanilaiansemula()
@@ -34,6 +37,22 @@ class PrintingController extends Controller
   {
     $this->view->render(Config::get('VIEWS_PATH') . 'printing/dataSerahanNilaianSemula.php');
   }
+
+  public function calccomparison($siriNo)
+  {
+    $this->view->render(Config::get('VIEWS_PATH') . 'printing/calc_comparison.php', ["siriNo" => $siriNo]);
+  }
+
+  public function sitereviews($fileId)
+  {
+    $this->view->render(Config::get('VIEWS_PATH') . 'printing/datareviews.php', ["fileId" => $fileId]);
+  }
+
+  public function printjadualall($siriNo)
+  {
+    $this->view->render(Config::get('VIEWS_PATH') . 'printing/printjadualall.php', ["siriNo" => $siriNo]);
+  }
+
 
 
   public function isAuthorized()
@@ -49,7 +68,7 @@ class PrintingController extends Controller
     Permission::allow("penilaian", $resource, "*");
 
     //only for normal vendor
-    Permission::allow("vendor", $resource, ["datasubmition", "datareviews", "getCalculation", "datanilaiansemula"]);
+    Permission::allow("vendor", $resource, ["datasubmition", "datareviews", "getCalculation", "datanilaiansemula", "sitereviews"]);
 
     return Permission::check($role, $resource, $action);
   }

@@ -134,26 +134,27 @@ $(document).ready(function () {
     serverSide: true,
     searching: true,
     order: [],
-    serverMethod: "post",
-    ajax: "submitsitereviewtable",
+    ajax: {
+      url: "submitpbtsitereview",
+      type: "POST",
+      data: function (d) {
+        return $.extend({}, d, {
+          area: $("#area").val(),
+          street: $("#street").val()
+        })
+      }
+    },
     columnDefs: [
       {
-        targets: 0,
-        data: "id",
-        checkboxes: {
-          selectRow: true
-        }
-      },
-      {
         width: "3%",
-        targets: 1,
+        targets: 0,
         className: "details-control",
         orderable: false,
         data: null,
         defaultContent: ""
       },
       {
-        targets: 2,
+        targets: 1,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -165,7 +166,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 3,
+        targets: 2,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -187,12 +188,12 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 4,
+        targets: 3,
         orderable: false,
         data: "tnh_tnama"
       },
       {
-        targets: 5,
+        targets: 4,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -203,7 +204,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 6,
+        targets: 5,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -214,7 +215,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 7,
+        targets: 6,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -225,7 +226,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 8,
+        targets: 7,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -240,7 +241,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 9,
+        targets: 8,
         orderable: false,
         className: "dt-body-center",
         data: null,
@@ -260,7 +261,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 10,
+        targets: 9,
         orderable: false,
         className: "dt-body-center",
         data: null,
@@ -281,7 +282,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 11,
+        targets: 10,
         orderable: false,
         className: "dt-body-center",
         data: null,
@@ -305,7 +306,7 @@ $(document).ready(function () {
         }
       },
       {
-        targets: 12,
+        targets: 11,
         orderable: false,
         data: null,
         render: function (data, type, row, meta) {
@@ -323,7 +324,7 @@ $(document).ready(function () {
     select: {
       style: "multi"
     },
-    order: [[3, "asc"]],
+    order: [[2, "asc"]],
     language: {
       search: "Saring : ",
       lengthMenu: "Paparkan _MENU_ rekod",
@@ -383,16 +384,14 @@ $(document).ready(function () {
 
   $("#submitsitereview").css("font-size", 13)
 
-  $("#filter").click(function () {
+  $("#filter").bind("click", function () {
     var area = $("#area").val()
     var street = $("#street").val()
     if (area != "" && street != "") {
-      $("#submitsitereview").DataTable().destroy()
-      fill_datatable(area, street)
+      table.draw()
     } else {
-      alert("Select Both filter option")
-      $("#submitsitereview").DataTable().destroy()
-      fill_datatable()
+      alert("Select filter option")
+      table.draw()
     }
   })
 

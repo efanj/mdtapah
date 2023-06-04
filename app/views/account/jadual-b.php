@@ -5,7 +5,7 @@
       <!-- Start .row -->
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
-          <?php $hacmjb = $this->controller->account->getAccountInfo($fileId); ?>
+          <?php $hacmjb = $this->controller->account->getAccountInfoByAcct($fileId); ?>
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>PEGANGAN YANG DIPINDA NILAI TAHUNAN - JADUAL B</h4>

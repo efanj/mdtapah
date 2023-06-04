@@ -20,6 +20,15 @@ class Amendment extends Model
     }
   }
 
+  public function checkDigitNull($data)
+  {
+    if ($data == null) {
+      return "0";
+    } else {
+      return number_format($data, 2, '.', '');
+    }
+  }
+
   public function macthingtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
@@ -294,38 +303,41 @@ class Amendment extends Model
       $rowOutput["noAcct"] = Encryption::encryptId($val["no_akaun"]);
       $rowOutput["no_siri"] = $val["no_siri"];
       $rowOutput["no_akaun"] = $val["no_akaun"];
-      $rowOutput["tkhpl"] = $val["tkhpl"];
-      $rowOutput["tkhtk"] = $val["tkhtk"];
+      $rowOutput["tkhpl"] = date("d/m/Y", strtotime($val["tkhpl"]));
+      $rowOutput["tkhtk"] = date("d/m/Y", strtotime($val["tkhtk"]));
       if ($val["thkod"] != 0) {
         $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["thkod"]);
       } else {
-        $rowOutput["tnama"] = $val["thkod"];
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $info["peg_thkod"]);
       }
       if ($val["htkod"] != 0) {
         $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $val["htkod"]);
       } else {
-        $rowOutput["hnama"] = $val["htkod"];
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $info["peg_htkod"]);
       }
-      if ($val["thkod"] != 0) {
+      if ($val["bgkod"] != 0) {
         $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["bgkod"]);
       } else {
-        $rowOutput["bnama"] = $val["bgkod"];
+        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $info["peg_bgkod"]);
       }
-      if ($val["thkod"] != 0) {
+      if ($val["stkod"] != 0) {
         $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $val["stkod"]);
       } else {
-        $rowOutput["snama"] = $val["stkod"];
+        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $info["peg_stkod"]);
       }
-      $rowOutput["nilth_asal"] = $info["peg_nilth"];
+      $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
       $rowOutput["kadar_asal"] = $info["kaw_kadar"];
-      $rowOutput["cukai_asal"] = $info["peg_tksir"];
-      $rowOutput["nilth_baru"] = $val["new_nilth"];
+      $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+      $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
       $rowOutput["kadar_baru"] = $val["new_rate"];
-      $rowOutput["cukai_baru"] = $val["new_tax"];
+      $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+      $rowOutput["beza_nilth"] = number_format($this->checkDigitNull($info["peg_nilth"]) - $this->checkDigitNull($val["new_nilth"]), 2, '.', '');
+      $rowOutput["beza_kadar"] = $info["kaw_kadar"] - $val["new_rate"];
+      $rowOutput["beza_cukai"] = number_format($this->checkDigitNull($info["peg_tksir"]) - $this->checkDigitNull($val["new_tax"]), 2, '.', '');
       $rowOutput["sebab"] = $dboracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $val["sebab"]);
       $rowOutput["mesej"] = $val["mesej"];
       // $rowOutput["status"] = $val["status"];
-      // $rowOutput["vstatus"] = $val["vstatus"];
+      $rowOutput["vstatus"] = $val["vstatus"];
       $rowOutput["entry"] = $val["entry"];
       $rowOutput["verifier"] = $val["verifier"];
       $rowOutput["form"] = $val["form"];

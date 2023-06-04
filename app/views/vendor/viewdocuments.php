@@ -3,7 +3,7 @@
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
-      <?php $docs = $this->controller->Informations->getReviewAcctInfo($reviewId); ?>
+      <?php $docs = $this->controller->Informations->getReviewInfoById($reviewId); ?>
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
           <div class="panel panel-primary">
@@ -57,8 +57,7 @@
               <h4>MUATNAIK DOKUMEN</h4>
             </div>
             <div class="panel-body">
-              <form class="form-horizontal" id="form-upload-docs" role="form" method="post"
-                enctype="multipart/form-data" style="font-size:13px;">
+              <form class="form-horizontal" id="form-upload-docs" role="form" method="post" enctype="multipart/form-data" style="font-size:13px;">
                 <input type="hidden" name="no_akaun" value="<?= $docs["smk_akaun"] ?>">
                 <div class="row mb5">
                   <div class="col-lg-8 col-sm-8 col-md-8">
@@ -71,7 +70,7 @@
                     <select class="form-control input-sm" name="file_type" required>
                       <option value="0" selected>Sila Pilih</option>
                       <?php foreach ($dtype as $row) { ?>
-                      <option value="<?= $row["id"] ?>"><?= $row["document"] ?></option>
+                        <option value="<?= $row["id"] ?>"><?= $row["document"] ?></option>
                       <?php } ?>
                     </select>
                   </div>

@@ -20,6 +20,24 @@ class Printing extends Model
     }
   }
 
+  public function checkCalcNull($data)
+  {
+    if ($data == null || $data == "") {
+      return "Tiada";
+    } else {
+      return "Ada";
+    }
+  }
+
+  public function checkAttachNull($data)
+  {
+    if ($data == null || $data == "") {
+      return "Tiada (0)";
+    } else {
+      return "Ada (" . $data . ")";
+    }
+  }
+
   public function checkNullNumber($data)
   {
     if ($data == null || $data == "") {
@@ -29,25 +47,62 @@ class Printing extends Model
     }
   }
 
-  public function datasubmition($date)
+  public function datesubmition($fileId)
+  {
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.submission ";
+    $query .= "WHERE id = :id ";
+
+    $database->prepare($query);
+    $database->bindValue(":id", Encryption::decryptId($fileId));
+    $database->execute();
+    $date = $database->fetchAssociative();
+    // date("d/m/Y", strtotime($date["submition_date"]));
+    return array("date" => date("d/m/Y", strtotime($date["submition_date"])), "rujukan" => $date["reference"]);
+  }
+
+  public function getAllImgs($fileId)
+  {
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.files ";
+    $query .= "WHERE no_akaun = :no_akaun ";
+    $query .= "ORDER BY files.date DESC limit 2";
+
+    $database->prepare($query);
+    $database->bindValue(":no_akaun", $fileId);
+    $database->execute();
+    $files = $database->fetchAllAssociative();
+
+    return $files;
+  }
+
+  public function getAllDocs($fileId)
+  {
+    $database = Database::openConnection();
+    $query = "SELECT f.*, d.document as doc_name FROM data.fdocs f ";
+    $query .= "LEFT JOIN data.doctype d ON f.file_type = d.id ";
+    $query .= "WHERE f.no_akaun = :no_akaun";
+
+    $database->prepare($query);
+    $database->bindValue(":no_akaun", $fileId);
+    $database->execute();
+    $files = $database->fetchAllAssociative();
+
+    return $files;
+  }
+
+  public function datasubmition($id)
   {
     $database = Database::openConnection();
     $dbOracle = new Oracle();
 
-    $year = substr($date, 4, 8);
-    $month = substr($date, 2, 2);
-    $day = substr($date, 0, 2);
-
-    $newdate = $year . "-" . $month . "-" . $day;
-
-    $query = "SELECT s.*, s1.*, c.*, f.*, d.* FROM data.submission s ";
-    $query .= "LEFT JOIN data.v_semak_raw s1 ON s.id = s1.smk_submit_id ";
-    $query .= "LEFT JOIN data.calculator c ON s1.smk_akaun = c.account_no ";
-    $query .= "LEFT JOIN data.files f ON s1.smk_akaun = f.no_akaun ";
-    $query .= "LEFT JOIN data.fdocs d ON s1.smk_akaun = d.no_akaun ";
-    $query .= "WHERE s.submition_date = :date";
+    $query = "SELECT s.*, c.siri_no, cf.file, cd.doc FROM data.v_semak_raw s ";
+    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
+    $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
+    $query .= "WHERE s.smk_submit_id = :id";
     $database->prepare($query);
-    $database->bindValue(":date", $newdate);
+    $database->bindValue(":id", Encryption::decryptId($id));
     $database->execute();
 
     $rows = $database->fetchAllAssociative();
@@ -59,24 +114,27 @@ class Printing extends Model
       $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["smk_akaun"]);
       $info = $dbOracle->fetchAssociative();
 
-      $rowOutput["id"] = Encryption::encryptId($val["id"]);
-      $rowOutput["sid"] = $val["id"];
+      $rowOutput["id"] = Encryption::encryptId($val["smk_submit_id"]);
+      $rowOutput["sid"] = $val["smk_submit_id"];
       $rowOutput["akaun"] = $val["smk_akaun"];
       $rowOutput["pmk_nmbil"] = $info["pmk_nmbil"];
       $rowOutput["pmk_plgid"] = $info["pmk_plgid"];
       $rowOutput["pmk_hkmlk"] = $info["pmk_hkmlk"];
       $rowOutput["peg_pelan"] = $info["peg_pelan"];
       $rowOutput["peg_rjmmk"] = $info["peg_rjmmk"];
+      $rowOutput["peg_lstnh"] = $this->checkNullNumber($info["peg_lstnh"]);
+      $rowOutput["peg_lsbgn"] = $this->checkNullNumber($info["peg_lsbgn"]);
+      $rowOutput["peg_lsans"] = $this->checkNullNumber($info["peg_lsans"]);
       $rowOutput["peg_nilth"] = $info["peg_nilth"];
       $rowOutput["kaw_kadar"] = $info["kaw_kadar"];
       $rowOutput["peg_tksir"] = $info["peg_tksir"];
       $rowOutput["smk_akaun"] = $val["smk_akaun"];
-      $rowOutput["smk_nolot"] = $val["smk_nolot"];
-      $rowOutput["smk_nompt"] = $val["smk_nompt"];
-      $rowOutput["smk_adpg1"] = $val["smk_adpg1"];
-      $rowOutput["smk_adpg2"] = $val["smk_adpg2"];
-      $rowOutput["smk_adpg3"] = $val["smk_adpg3"];
-      $rowOutput["smk_adpg4"] = $val["smk_adpg4"];
+      $rowOutput["smk_nolot"] = $info["peg_nolot"];
+      $rowOutput["smk_nompt"] = $info["peg_nompt"];
+      $rowOutput["smk_adpg1"] = $info["adpg1"];
+      $rowOutput["smk_adpg2"] = $info["adpg2"];
+      $rowOutput["smk_adpg3"] = $info["adpg3"];
+      $rowOutput["smk_adpg4"] = $info["adpg4"];
       $rowOutput["jln_kname"] = $dbOracle->getElementById("SPMC.V_MKWJLN", "kws_knama", "jln_jlkod", $info["jln_jlkod"]);
       if ($val["smk_jstnh"] != null) {
         $rowOutput["tnh_tnama"] = $dbOracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["smk_jstnh"]);
@@ -96,6 +154,12 @@ class Printing extends Model
       $rowOutput["belakang"] = $val["belakang"];
       $rowOutput["hrt_hnama"] = $info["hrt_hnama"];
       $rowOutput["jln_jnama"] = $info["jln_jnama"];
+      $rowOutput["siri_no"] = $this->checkCalcNull($val["siri_no"]);
+      $rowOutput["file"] = $this->checkAttachNull($val["file"]);
+      $rowOutput["doc"] = $this->checkAttachNull($val["doc"]);
+
+      $rowOutput["files"] = $this->getAllImgs($val["smk_akaun"]);
+      $rowOutput["docs"] = $this->getAllDocs($val["smk_akaun"]);
       $rowOutput["role"] = Session::getUserRole();
       array_push($output, $rowOutput);
     }

@@ -200,11 +200,11 @@ class AmendmentController extends Controller
     //only for admin
     Permission::allow("administrator", $resource, "*");
 
-    //only for user
-    Permission::allow("user", $resource, "*");
+    //only for penilaian
+    Permission::allow("penilaian", $resource, "*");
 
     //only for vendor
-    Permission::allow("user", $resource, ["getReviewTable"]);
+    Permission::allow("vendor", $resource, ["getReviewTable"]);
 
     return Permission::check($role, $resource, $action);
   }

@@ -474,11 +474,11 @@ function semakSumbangan(value) {
 }
 
 function getSumbanganCallBack(result) {
-  if (result["jpk_stcbk"] === "Y") {
+  if (result[0]["jpk_stcbk"] === "Y") {
     $("#dummy_mjc_Stcbk").prop("checked", true)
   } else {
     $("#dummy_mjc_Stcbk").prop("checked", false)
   }
-  $("#mjc_Stcbk").val(result["jpk_stcbk"])
-  // console.log(result)
+  $("#mjc_Stcbk").val(result[0]["jpk_stcbk"])
+  console.log(result[0]["jpk_stcbk"])
 }

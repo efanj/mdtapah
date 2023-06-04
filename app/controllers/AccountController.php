@@ -85,10 +85,22 @@ class AccountController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/account/newaccount/", Config::get("VIEWS_PATH") . "account/jadual-c.php");
   }
 
+  public function jadualcsemak($fileId)
+  {
+    Config::setJsConfig("curPage", "account");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/account/jadualcsemak/", Config::get("VIEWS_PATH") . "account/jadualcsemak.php", ["fileId" => $fileId]);
+  }
+
   public function amendaccount($fileId)
   {
     Config::setJsConfig("curPage", "account");
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/account/amendaccount/", Config::get("VIEWS_PATH") . "account/jadual-b.php", ["fileId" => $fileId]);
+  }
+
+  public function jadualbsemak($fileId)
+  {
+    Config::setJsConfig("curPage", "account");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/account/jadualbsemak/", Config::get("VIEWS_PATH") . "account/jadualbsemak.php", ["fileId" => $fileId]);
   }
 
   public function eliminated($fileId)

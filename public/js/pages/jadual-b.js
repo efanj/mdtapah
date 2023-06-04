@@ -211,20 +211,28 @@ $(document).ready(function () {
     }).done(function (result) {
       console.log(result.success)
       if (result.success === true) {
-        swal(
-          {
-            title: "Berjaya!",
-            text: "Jadual B, Telah berjaya direkodkan.",
-            icon: "success",
-            confirmButtonClass: "btn-primary",
-            confirmButtonText: "Ok",
-            closeOnConfirm: false
-          },
-          function () {
-            window.location = config.root + "calculator/" + result.calcUrl + "/" + result.sirino
+        swal("Sila pilih kaedah pengiraan cukai taksiran.", {
+          buttons: {
+            sewaan: {
+              text: "Kaedah Perbandingan",
+              value: "rent"
+            },
+            kos: {
+              text: "Kaedah Kos",
+              value: "cost"
+            }
           }
-        )
-        // $("#calc_button_popup").modal("show")
+        }).then((value) => {
+          switch (value) {
+            case "rent":
+              window.location = config.root + "calculator/" + result.calcUrl + "/" + result.sirino
+              break
+
+            case "cost":
+              window.location = config.root + "calculator/" + result.calcUrl + "/" + result.sirino
+              break
+          }
+        })
       } else {
         swal("Oops...", "Jadual B, tidak berjaya direkodkan!", "error")
       }

@@ -105,6 +105,21 @@ var evaluation = $("#evaluationlist").DataTable({
       targets: 11,
       orderable: false,
       data: "kadar_baru"
+    },
+    {
+      targets: 12,
+      orderable: false,
+      data: null,
+      render: function (data, type, row, meta) {
+        // console.log(data);
+        if (type === "display") {
+          data = '<div class="btn-group btn-group-xs" role="group">'
+          data += '<a href="../Amendment/viewpsdetails/' + row.encryp_nosiri + '" class="btn btn-primary btn-alt btn-xs"><i class="fa fa-eye"></i> Lihat</a>'
+          data += "</div>"
+        }
+
+        return data
+      }
     }
   ],
   order: [[2, "asc"]],

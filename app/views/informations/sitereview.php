@@ -52,13 +52,13 @@
                         Jenis Hartanah
                       </th>
                       <th>
-                        Luas Bangunan(mp) <br />
-                        Luas Tanah(mp) <br />
-                        Luas Ansolari(mp)
+                        Luas Bangunan <br />
+                        Luas Tanah<br />
+                        Luas Ansolari
                       </th>
                       <th>
-                        Luas Bgn Tamb.(mp) <br />
-                        Luas Ans Tamb.(mp)
+                        Luas Bgn Tamb. <br />
+                        Luas Ans Tamb.
                       </th>
                       <th width="10%">
                         Catatan Hadapan <br />

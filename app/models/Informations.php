@@ -684,12 +684,8 @@ class Informations extends Model
       $rowOutput["id"] = $val["id"];
       $rowOutput["akaun"] = $val["akaun"];
       $rowOutput["nmbil"] = $val["nmbil"];
-      $rowOutput["jln_kname"] = $dbOracle->getElementById("SPMC.V_MKWJLN", "kws_knama", "jln_jlkod", $val["jlkod"]);
-      if ($val["smk_jsbgn"] != null) {
-        $rowOutput["bgn_bnama"] = $dbOracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["bgkod"]);
-      } else {
-        $rowOutput["bgn_bnama"] = $this->checkNull($val["bgkod"]);
-      }
+      $rowOutput["jln_jnama"] = $dbOracle->getElementById("SPMC.V_MKWJLN", "jln_jnama", "jln_jlkod", $val["jlkod"]);
+      $rowOutput["bgn_bnama"] = $dbOracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["bgkod"]);
       $rowOutput["peg_nolot"] = $info["peg_nolot"];
       $rowOutput["peg_lsbgn"] = $info["peg_lsbgn"];
       $rowOutput["peg_nilth"] = $info["peg_nilth"];
@@ -950,16 +946,15 @@ class Informations extends Model
     return $rowOutput;
   }
 
-  public function getReviewInfo($fileId)
+  public function getReviewAcctInfo($fileId)
   {
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
     $query = "SELECT * FROM data.v_semak_raw vsr ";
-    // $query .= "LEFT JOIN data.hvnduk h ON vsr.smk_akaun = h.peg_akaun ";
-    $query .= "WHERE vsr.smk_akaun = :smk_akaun";
+    $query .= "WHERE vsr.id = :id";
     $database->prepare($query);
-    $database->bindValue(":smk_akaun", Encryption::decryptId($fileId));
+    $database->bindValue(":id", Encryption::decryptId($fileId));
     $database->execute();
 
     $row = $database->fetchAllAssociative();
@@ -986,22 +981,41 @@ class Informations extends Model
       $rowOutput["knama"] = $info["jln_knama"];
       $rowOutput["kwkod"] = $info["jln_kwkod"];
 
-      $rowOutput["thkod"] = $row["smk_jstnh"];
-      $rowOutput["bgkod"] = $row["smk_jsbgn"];
-      $rowOutput["htkod"] = $row["smk_kgtnh"];
-      $rowOutput["stkod"] = $row["smk_stbgn"];
+      if ($val["smk_jstnh"] != null) {
+        $rowOutput["thkod"] = $val["smk_jstnh"];
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["smk_jstnh"]);
+      } else {
+        $rowOutput["thkod"] = $info["tnh_thkod"];
+        $rowOutput["tnama"] = $info["tnh_tnama"];
+      }
+      if ($val["smk_kgtnh"] != null) {
+        $rowOutput["htkod"] = $val["smk_kgtnh"];
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $val["smk_kgtnh"]);
+      } else {
+        $rowOutput["htkod"] = $info["peg_htkod"];
+        $rowOutput["hnama"] = $info["hrt_hnama"];
+      }
+      $rowOutput["bgkod"] = $val["smk_jsbgn"];
+      $rowOutput["htkod"] = $val["smk_kgtnh"];
+      $rowOutput["stkod"] = $val["smk_stbgn"];
 
-      $rowOutput["thkod"] = $info["tnh_thkod"];
-      $rowOutput["tnama"] = $info["tnh_tnama"];
-      $rowOutput["htkod"] = $info["peg_htkod"];
-      $rowOutput["hnama"] = $info["hrt_hnama"];
-      // $rowOutput["bnama"] = $val["bnama"];
-      // $rowOutput["snama"] = $val["snama"];
-      $rowOutput["lsbgn"] = $info["peg_lsbgn"];
-      $rowOutput["lstnh"] = $info["peg_lstnh"];
-      $rowOutput["lsans"] = $info["peg_lsans"];
-      $rowOutput["ttl_bgn"] = $val["smk_lsbgn_tmbh"] + $info["peg_lsbgn"];
-      $rowOutput["ttl_ans"] = $val["smk_lsans_tmbh"] + $info["peg_lsans"];
+      if ($info["peg_lsbgn"] != null) {
+        $rowOutput["lsbgn"] = $info["peg_lsbgn"];
+      } else {
+        $rowOutput["lsbgn"] = $val["smk_lsbgn"];
+      }
+      if ($info["peg_lstnh"] != null) {
+        $rowOutput["lstnh"] = $info["peg_lstnh"];
+      } else {
+        $rowOutput["lstnh"] = $val["smk_lstnh"];
+      }
+      if ($info["peg_lsans"] != null) {
+        $rowOutput["lsans"] = $info["peg_lsans"];
+      } else {
+        $rowOutput["lsans"] = $val["smk_lsans"];
+      }
+      $rowOutput["lsbgnt"] = $val["smk_lsbgn_tmbh"] + $info["peg_lsbgn"];
+      $rowOutput["lsanst"] = $val["smk_lsans_tmbh"] + $info["peg_lsans"];
       $rowOutput["nilth_asal"] = $info["peg_nilth"];
       $rowOutput["kadar_asal"] = $info["kaw_kadar"];
       $rowOutput["cukai_asal"] = $info["peg_tksir"];
@@ -1012,13 +1026,13 @@ class Informations extends Model
     $dboracle->closeOciConnection();
   }
 
-  public function getCalcInfo($siriNo)
+  public function getCalcCostInfo($siriNo)
   {
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
     $query = "SELECT c.*, vs.* FROM data.calculator c ";
-    $query .= "LEFT JOIN data.v_semak_raw vs ON c.account_no = vs.smk_akaun ";
+    $query .= "LEFT JOIN data.v_semak_raw vs ON c.acct_no = vs.smk_akaun ";
     $query .= "WHERE c.siri_no = :siri_no";
     $database->prepare($query);
     $database->bindValue(":siri_no", Encryption::decryptId($siriNo));
@@ -1027,12 +1041,8 @@ class Informations extends Model
     $row = $database->fetchAllAssociative();
     $rowOutput = [];
     foreach ($row as $val) {
-      $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["account_no"]);
+      $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["acct_no"]);
       $row = $dboracle->fetchAssociative();
-
-      $dataList = substr($val["comparison"], 1, -1);
-      $result = $dataList ? explode(',', $dataList) : array();
-      $integers = array_map('intval', $result);
 
       $rowOutput["nmbil"] = $row["pmk_nmbil"];
       $rowOutput["plgid"] = $row["pmk_plgid"];
@@ -1041,25 +1051,111 @@ class Informations extends Model
 
       $rowOutput["calc_type"] = $val["calc_type"];
       $rowOutput["siri_no"] = $val["siri_no"];
-      $rowOutput["account_no"] = $val["account_no"];
-      if (count($integers) > 0) {
-        $rowOutput["comparison"] = $this->getComparison($val["comparison"]);
-      } else {
-        $rowOutput["comparison"] = [];
-      }
-      $rowOutput["land"] = $this->getLand(Encryption::decryptId($siriNo));
-      $rowOutput["mfa"] = $this->getMfa(Encryption::decryptId($siriNo));
-      // $rowOutput["afa"] = $this->getAfa(Encryption::decryptId($siriNo));
-      $rowOutput["totalmfa"] = $this->getTotalMfa(Encryption::decryptId($siriNo));
-      // $rowOutput["totalafa"] = $this->getTotalAfa(Encryption::decryptId($siriNo));
-      $rowOutput["capital"] = $val["capital"];
-      $rowOutput["discount"] = $val["discount"];
+      $rowOutput["esirino"] = Encryption::encryptId($val["siri_no"]);
+      $rowOutput["account_no"] = $val["acct_no"];
+      $rowOutput["land"] = $this->getLand($val["land"]);
+      $rowOutput["main"] = $this->getMain($val["section"], $val["main"]);
+      $rowOutput["moverall"] = $val["moverall"];
+      $rowOutput["capital_rental"] = $val["capital_rental"];
       $rowOutput["corner"] = $val["corner"];
-      $rowOutput["rental"] = $val["rental"];
-      $rowOutput["yearly_price"] = $val["yearly_price"];
-      $rowOutput["even"] = $val["even"];
+      $rowOutput["yearly"] = $val["yearly"];
+      $rowOutput["round"] = $val["round"];
       $rowOutput["rate"] = $val["rate"];
-      $rowOutput["assessment_tax"] = $val["assessment_tax"];
+      $rowOutput["tax"] = $val["tax"];
+
+      $rowOutput["no_akaun"] = $val["smk_akaun"];
+      $rowOutput["no_lot"] = $val["smk_nolot"];
+      $rowOutput["adpg1"] = $val["smk_adpg1"];
+      $rowOutput["adpg2"] = $val["smk_adpg2"];
+      $rowOutput["adpg3"] = $val["smk_adpg3"];
+      $rowOutput["adpg4"] = $val["smk_adpg4"];
+      $rowOutput["thkod"] = $val["smk_jstnh"];
+      $rowOutput["tnama"] = $dboracle->getElementById("V_HTANAH", "tnh_tnama", "tnh_thkod", $val["smk_jstnh"]);
+      $rowOutput["htkod"] = $val["smk_kgtnh"];
+      if ($row["peg_lsbgn"] != null) {
+        $rowOutput["lsbgn"] = $row["peg_lsbgn"];
+      } else {
+        $rowOutput["lsbgn"] = $val["smk_lsbgn"];
+      }
+      if ($row["peg_lstnh"] != null) {
+        $rowOutput["lstnh"] = $row["peg_lstnh"];
+      } else {
+        $rowOutput["lstnh"] = $val["smk_lstnh"];
+      }
+      if ($row["peg_lsans"] != null) {
+        $rowOutput["lsans"] = $row["peg_lsans"];
+      } else {
+        $rowOutput["lsans"] = $val["smk_lsans"];
+      }
+      $rowOutput["lsbgnt"] = $val["smk_lsbgn_tmbh"] + $row["peg_lsbgn"];
+      $rowOutput["lsanst"] = $val["smk_lsans_tmbh"] + $row["peg_lsans"];
+      $rowOutput["hnama"] = $row["hrt_hnama"];
+      $rowOutput["jnama"] = $row["jln_jnama"];
+      $rowOutput["knama"] = $row["jln_knama"];
+      $rowOutput["kwkod"] = $row["jln_kwkod"];
+      $rowOutput["lsbgn"] = $row["peg_lsbgn"];
+      $rowOutput["lstnh"] = $row["peg_lstnh"];
+      $rowOutput["lsans"] = $row["peg_lsans"];
+      $rowOutput["nilth_asal"] = $row["peg_nilth"];
+      $rowOutput["kadar_asal"] = $row["kaw_kadar"];
+      $rowOutput["cukai_asal"] = $row["peg_tksir"];
+    }
+
+    return $rowOutput;
+
+    $dboracle->closeOciConnection();
+  }
+
+  public function getCalcRentInfo($siriNo)
+  {
+    $database = Database::openConnection();
+    $dboracle = new Oracle();
+
+    $query = "SELECT c.*, vs.* FROM data.calculator c ";
+    $query .= "LEFT JOIN data.v_semak_raw vs ON c.acct_no = vs.smk_akaun ";
+    $query .= "WHERE c.siri_no = :siri_no";
+    $database->prepare($query);
+    $database->bindValue(":siri_no", Encryption::decryptId($siriNo));
+    $database->execute();
+
+    $row = $database->fetchAllAssociative();
+    $rowOutput = [];
+    foreach ($row as $val) {
+      $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["acct_no"]);
+      $row = $dboracle->fetchAssociative();
+
+      $integers = [];
+      if ($val["compare"] != NULL) {
+        $dataList = substr($val["compare"], 1, -1);
+        $result = $dataList ? explode(',', $dataList) : array();
+        $integers = array_map('intval', $result);
+      }
+
+      if (count($integers) > 0) {
+        $rowOutput["compare"] = $this->getCompare($val["compare"]);
+      } else {
+        $rowOutput["compare"] = [];
+      }
+
+      $rowOutput["nmbil"] = $row["pmk_nmbil"];
+      $rowOutput["plgid"] = $row["pmk_plgid"];
+      $rowOutput["nolot"] = $this->checkNull($val["smk_nolot"]);
+      $rowOutput["nompt"] = $this->checkNull($val["smk_nompt"]);
+
+      $rowOutput["calc_type"] = $val["calc_type"];
+      $rowOutput["siri_no"] = $val["siri_no"];
+      $rowOutput["esirino"] = Encryption::encryptId($val["siri_no"]);
+      $rowOutput["account_no"] = $val["acct_no"];
+      $rowOutput["land"] = $this->getLand(Encryption::decryptId($siriNo));
+      $rowOutput["main"] = $this->getItemsMain($val["main"], Encryption::decryptId($siriNo));
+      $rowOutput["out"] = $this->getItemsOut($val["out"], Encryption::decryptId($siriNo));
+      $rowOutput["moverall"] = $val["moverall"];
+      $rowOutput["capital_rental"] = $val["capital_rental"];
+      $rowOutput["corner"] = $val["corner"];
+      $rowOutput["yearly"] = $val["yearly"];
+      $rowOutput["round"] = $val["round"];
+      $rowOutput["rate"] = $val["rate"];
+      $rowOutput["tax"] = $val["tax"];
 
       $rowOutput["no_akaun"] = $val["smk_akaun"];
       $rowOutput["no_lot"] = $val["smk_nolot"];
@@ -1094,35 +1190,70 @@ class Informations extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $query = "SELECT * FROM data.v_submitioninfo ";
-    $query .= "WHERE no_siri = :no_siri";
+    $query = "SELECT vs.*, vsr.smk_lsbgn as lsbgn, vsr.smk_lstnh as lstnh, vsr.smk_lsans as lsans, ";
+    $query .= "vsr.smk_lsbgn_tmbh as lsbgnt, vsr.smk_lsans_tmbh as lsanst FROM data.v_submitioninfo vs ";
+    $query .= "LEFT JOIN data.v_semak_raw vsr ON vs.no_akaun = vsr.smk_akaun ";
+    $query .= "WHERE vs.no_siri = :no_siri";
     $database->prepare($query);
     $database->bindValue(":no_siri", Encryption::decryptId($siriNo));
     $database->execute();
 
-    $row = $database->fetchAllAssociative();
+    $rows = $database->fetchAllAssociative();
     $rowOutput = [];
-    foreach ($row as $val) {
+    foreach ($rows as $val) {
       $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["no_akaun"]);
       $row = $dboracle->fetchAssociative();
 
       $rowOutput["no_siri"] = $val["no_siri"];
       $rowOutput["no_akaun"] = $val["no_akaun"];
-      $rowOutput["no_lot"] = $val["no_lot"];
+      $rowOutput["no_lot"] = $row["peg_nolot"];
       $rowOutput["tkhpl"] = $val["tkhpl"];
       $rowOutput["tkhtk"] = $val["tkhtk"];
-      $rowOutput["nmbil"] = $val["nmbil"];
-      $rowOutput["plgid"] = $val["plgid"];
-      $rowOutput["adpg1"] = $val["adpg1"];
-      $rowOutput["adpg2"] = $val["adpg2"];
+      $rowOutput["nmbil"] = $row["pmk_nmbil"];
+      $rowOutput["plgid"] = $row["pmk_plgid"];
+      $rowOutput["adpg1"] = $row["adpg1"];
+      $rowOutput["adpg2"] = $row["adpg2"];
       $rowOutput["adpg3"] = $row["adpg3"];
       $rowOutput["adpg4"] = $row["adpg4"];
-      $rowOutput["jlkod"] = $val["jlkod"];
-      $rowOutput["thkod"] = $val["thkod"];
+      $rowOutput["jlkod"] = $row["peg_jlkod"];
+      if ($row["peg_thkod"] != 0) {
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $row["peg_thkod"]);
+      } else {
+        $rowOutput["tnama"] = $val["thkod"];
+      }
+      if ($row["peg_htkod"] != 0) {
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $row["peg_htkod"]);
+      } else {
+        $rowOutput["hnama"] = $val["htkod"];
+      }
+      if ($row["peg_bgkod"] != 0) {
+        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $row["peg_bgkod"]);
+      } else {
+        $rowOutput["bnama"] = $val["bgkod"];
+      }
+      if ($row["peg_stkod"] != 0) {
+        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $row["peg_stkod"]);
+      } else {
+        $rowOutput["snama"] = $val["stkod"];
+      }
       $rowOutput["htkod"] = $val["htkod"];
-      $rowOutput["lsbgn"] = $row["peg_lsbgn"];
-      $rowOutput["lstnh"] = $row["peg_lstnh"];
-      $rowOutput["lsans"] = $row["peg_lsans"];
+      if (!empty($row["peg_lsbgn"])) {
+        $rowOutput["lsbgn"] = $row["peg_lsbgn"];
+      } else {
+        $rowOutput["lsbgn"] = $val["lsbgn"];
+      }
+      if (!empty($row["peg_lstnh"])) {
+        $rowOutput["lstnh"] = $row["peg_lstnh"];
+      } else {
+        $rowOutput["lstnh"] = $val["lstnh"];
+      }
+      if (!empty($row["peg_lsans"])) {
+        $rowOutput["lsans"] = $row["peg_lsans"];
+      } else {
+        $rowOutput["lsans"] = $val["lsans"];
+      }
+      $rowOutput["lsbgnt"] = $val["lsbgnt"];
+      $rowOutput["lsanst"] = $val["lsanst"];
       $rowOutput["nilth_baru"] = $val["new_nilth"];
       $rowOutput["sebab"] = $val["sebab"];
       $rowOutput["mesej"] = $val["mesej"];
@@ -1167,12 +1298,12 @@ class Informations extends Model
       $sql = "SELECT PMK_NMBIL, PMK_PLGID, PEG_NOLOT, PEG_NOMPT,";
       $sql .= "rtrim( ADPG1||', '||ADPG2||', '||ADPG3||', '||ADPG4,' ,') AS address, ";
       $sql .= "rtrim( PVD_ALMT1||', '||PVD_ALMT2||', '||PVD_ALMT3||', '||PVD_ALMT4,' ,') AS postal ";
-      $sql .= "FROM SPMC.V_HVNDUK WHERE PEG_AKAUN = " . $val["account_no"];
+      $sql .= "FROM SPMC.V_HVNDUK WHERE PEG_AKAUN = " . $val["acct_no"];
       $sel = $dboracle->prepare($sql);
       $dboracle->execute($sel);
       $row = $dboracle->fetchAssociative();
 
-      $dataList = substr($val["comparison"], 1, -1);
+      $dataList = substr($val["compare"], 1, -1);
       $result = $dataList ? explode(',', $dataList) : array();
       $integers = array_map('intval', $result);
 
@@ -1185,26 +1316,23 @@ class Informations extends Model
 
       $rowOutput["calc_type"] = $val["calc_type"];
       $rowOutput["siri_no"] = $val["siri_no"];
-      $rowOutput["account_no"] = $val["account_no"];
+      $rowOutput["acct_no"] = $val["acct_no"];
       if (count($integers) >= 1) {
-        $rowOutput["comparison"] = $this->getComparison($val["comparison"]);
+        $rowOutput["compare"] = $this->getCompare($val["compare"]);
       } else {
-        $rowOutput["comparison"] = [];
+        $rowOutput["compare"] = "{}";
       }
       $rowOutput["land"] = $this->getLand(Encryption::decryptId($siriNo));
-      $rowOutput["mfa"] = $this->getMfa(Encryption::decryptId($siriNo));
-      $rowOutput["afa"] = $this->getAfa(Encryption::decryptId($siriNo));
-      $rowOutput["totalmfa"] = $this->getTotalMfa(Encryption::decryptId($siriNo));
-      $rowOutput["totalafa"] = $this->getTotalAfa(Encryption::decryptId($siriNo));
-      $rowOutput["capital"] = $val["capital"];
-      $rowOutput["discount"] = $val["discount"];
-      $rowOutput["rental"] = $val["rental"];
-      $rowOutput["yearly_price"] = $val["yearly_price"];
-      $rowOutput["even"] = $val["even"];
+      $rowOutput["main"] = $this->getMain(Encryption::decryptId($siriNo), $val["section"]);
+      // $rowOutput["out"] = $this->getOut(Encryption::decryptId($siriNo));
+      $rowOutput["moverall"] = $val["moverall"];
+      $rowOutput["capital_rental"] = $val["capital_rental"];
+      $rowOutput["corner"] = $val["corner"];
+      $rowOutput["yearly"] = $val["yearly"];
+      $rowOutput["round"] = $val["round"];
       $rowOutput["rate"] = $val["rate"];
-      $rowOutput["assessment_tax"] = $val["assessment_tax"];
+      $rowOutput["tax"] = $val["tax"];
 
-      $rowOutput["bnama"] = $val["bnama"];
       $rowOutput["clerk"] = $val["entry"];
       $rowOutput["clerk_pos"] = $val["entry_pos"];
       $rowOutput["verifier"] = $this->checkNull($val["verifier"]);
@@ -1216,7 +1344,7 @@ class Informations extends Model
     return $rowOutput;
   }
 
-  public function getComparison($comparison)
+  public function getCompare($comparison)
   {
     $database = Database::openConnection();
     $dboracle = new Oracle();
@@ -1257,147 +1385,167 @@ class Informations extends Model
     return $output;
   }
 
-  public function getLand($siriNo)
+  public function getLand($landId)
   {
     $database = Database::openConnection();
     $query = "SELECT * FROM data.items_land ";
-    $query .= "WHERE siri_no = :siri_no";
+    $query .= "WHERE id = :id ";
     $database->prepare($query);
-    $database->bindValue(":siri_no", $siriNo);
+    $database->bindValue(":id", $landId);
     $database->execute();
     $rows = $database->fetchAssociative();
 
     return $rows;
   }
 
-  public function getMfa($siriNo)
+  public function getMain($section, $mainId)
   {
     $database = Database::openConnection();
 
     $output = [];
     $rowOutput = [];
 
-    $query = "SELECT id, title FROM data.section ";
-    $query .= "WHERE section_type = 1 AND siri_no = :siri_no";
-    $database->prepare($query);
-    $database->bindValue(":siri_no", $siriNo);
-    $database->execute();
+    $dataList = substr($section, 1, -1);
+    $result = $dataList ? explode(',', $dataList) : array();
+    $integers = array_map('intval', $result);
+    foreach ($integers as $id) {
+      $query = "SELECT * FROM data.section ";
+      $query .= "WHERE id = " . $id;
+      $database->prepare($query);
+      $database->execute();
 
-    if ($database->countRows() >= 1) {
-      foreach ($database->fetchAllAssociative() as $row) {
-        $rowOutput["id"] = $row["id"];
-        $rowOutput["title"] = $row["title"];
-        $rowOutput["items"] = $this->itemsMain($row["id"], $siriNo);
+      if ($database->countRows() >= 1) {
+        foreach ($database->fetchAllAssociative() as $row) {
+          $rowOutput["id"] = $row["id"];
+          $rowOutput["title"] = $row["title"];
+          $rowOutput["total"] = $row["total"];
+          $rowOutput["adjust"] = $row["adjust"];
+          $rowOutput["items"] = $this->itemsMain($id, "");
+          array_push($output, $rowOutput);
+        }
+      } else {
+        $rowOutput["id"] = 0;
+        $rowOutput["title"] = "";
+        $rowOutput["total"] = 0;
+        $rowOutput["adjust"] = 0;
+        $rowOutput["items"] = $this->itemsMain("", $mainId);
         array_push($output, $rowOutput);
       }
-    } else {
-      $rowOutput["id"] = 0;
-      $rowOutput["title"] = "";
-      $rowOutput["items"] = $this->itemsMain("", $siriNo);
-      array_push($output, $rowOutput);
     }
 
     return $output;
   }
 
-  public function getAfa($siriNo)
+  public function itemsMain($sectionId = "", $mainId = "")
   {
     $database = Database::openConnection();
 
     $output = [];
     $rowOutput = [];
 
-    $query = "SELECT id, title FROM data.section ";
-    $query .= "WHERE section_type = 2 AND siri_no = :siri_no";
-    $database->prepare($query);
-    $database->bindValue(":siri_no", $siriNo);
-    $database->execute();
+    if (empty($sectionId) && !empty($mainId)) {
+      $dataList = substr($mainId, 1, -1);
+      $integers = array_map('intval', explode(',', $dataList));
+      foreach ($integers as $value) {
+        $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_main ";
+        $query .= "WHERE id = :id ";
+        $database->prepare($query);
+        $database->bindValue(":id", $value);
+        $database->execute();
+        $row = $database->fetchAssociative();
 
-    if ($database->countRows() >= 1) {
-      foreach ($database->fetchAllAssociative() as $row) {
         $rowOutput["id"] = $row["id"];
         $rowOutput["title"] = $row["title"];
-        $rowOutput["items"] = $this->itemsOut($row["id"], $siriNo);
+        $rowOutput["breadth"] = $row["breadth"];
+        $rowOutput["breadthtype"] = $row["breadthtype"];
+        $rowOutput["price"] = $row["price"];
+        $rowOutput["pricetype"] = $row["pricetype"];
+        $rowOutput["total"] = $row["total"];
         array_push($output, $rowOutput);
       }
-    } else {
-      $rowOutput["id"] = 0;
-      $rowOutput["title"] = "";
-      $rowOutput["items"] = $this->itemsOut("", $siriNo);
+    }
+
+    if (!empty($sectionId) && empty($mainId)) {
+      $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_main ";
+      $query .= "WHERE section_id = :section_id";
+      $database->prepare($query);
+      $database->bindValue(":section_id", $sectionId);
+      $database->execute();
+      $rows = $database->fetchAllAssociative();
+
+      foreach ($rows as $row) {
+        $rowOutput["id"] = $row["id"];
+        $rowOutput["title"] = $row["title"];
+        $rowOutput["breadth"] = $row["breadth"];
+        $rowOutput["breadthtype"] = $row["breadthtype"];
+        $rowOutput["price"] = $row["price"];
+        $rowOutput["pricetype"] = $row["pricetype"];
+        $rowOutput["total"] = $row["total"];
+        array_push($output, $rowOutput);
+      }
+    }
+
+    return $output;
+  }
+
+  public function getItemsMain($itemId)
+  {
+    $database = Database::openConnection();
+
+    $output = [];
+    $rowOutput = [];
+
+    $dataList = substr($itemId, 1, -1);
+    $integers = array_map('intval', explode(',', $dataList));
+    foreach ($integers as $value) {
+      $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_main ";
+      $query .= "WHERE id = :id ";
+      $database->prepare($query);
+      $database->bindValue(":id", $value);
+      $database->execute();
+      $row = $database->fetchAssociative();
+
+      $rowOutput["id"] = $row["id"];
+      $rowOutput["title"] = $row["title"];
+      $rowOutput["breadth"] = $row["breadth"];
+      $rowOutput["breadthtype"] = $row["breadthtype"];
+      $rowOutput["price"] = $row["price"];
+      $rowOutput["pricetype"] = $row["pricetype"];
+      $rowOutput["total"] = $row["total"];
       array_push($output, $rowOutput);
     }
 
     return $output;
   }
 
-  public function getTotalMfa($siriNo)
-  {
-    $database = Database::openConnection();
-    $query = "SELECT SUM(total) as total FROM data.items_main ";
-    $query .= "WHERE siri_no = :siri_no";
-    $database->prepare($query);
-    $database->bindValue(":siri_no", $siriNo);
-    $database->execute();
-    $records = $database->fetchAssociative();
-    $total = $records["total"];
-
-    return $total;
-  }
-
-  public function getTotalAfa($siriNo)
-  {
-    $database = Database::openConnection();
-    $query = "SELECT SUM(total) as total FROM data.items_out ";
-    $query .= "WHERE siri_no = :siri_no";
-    $database->prepare($query);
-    $database->bindValue(":siri_no", $siriNo);
-    $database->execute();
-    $records = $database->fetchAssociative();
-    $total = $records["total"];
-
-    return $total;
-  }
-
-  public function itemsMain($sectionId, $siriNo)
+  public function getItemsOut($itemId)
   {
     $database = Database::openConnection();
 
-    $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_main ";
-    if (!empty($sectionId)) {
-      $query .= "WHERE section_id = :section_id AND siri_no = :siri_no";
-    } else {
-      $query .= "WHERE siri_no = :siri_no";
-    }
-    $database->prepare($query);
-    if (!empty($sectionId)) {
-      $database->bindValue(":section_id", $sectionId);
-    }
-    $database->bindValue(":siri_no", $siriNo);
-    $database->execute();
-    $result = $database->fetchAllAssociative();
+    $output = [];
+    $rowOutput = [];
 
-    return $result;
-  }
+    $dataList = substr($itemId, 1, -1);
+    $integers = array_map('intval', explode(',', $dataList));
+    foreach ($integers as $value) {
+      $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_out ";
+      $query .= "WHERE id = :id ";
+      $database->prepare($query);
+      $database->bindValue(":id", $value);
+      $database->execute();
+      $row = $database->fetchAssociative();
 
-  public function itemsOut($sectionId, $siriNo)
-  {
-    $database = Database::openConnection();
-
-    $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_out ";
-    if (!empty($sectionId)) {
-      $query .= "WHERE section_id = :section_id AND siri_no = :siri_no";
-    } else {
-      $query .= "WHERE siri_no = :siri_no";
+      $rowOutput["id"] = $row["id"];
+      $rowOutput["title"] = $row["title"];
+      $rowOutput["breadth"] = $row["breadth"];
+      $rowOutput["breadthtype"] = $row["breadthtype"];
+      $rowOutput["price"] = $row["price"];
+      $rowOutput["pricetype"] = $row["pricetype"];
+      $rowOutput["total"] = $row["total"];
+      array_push($output, $rowOutput);
     }
-    $database->prepare($query);
-    if (!empty($sectionId)) {
-      $database->bindValue(":section_id", $sectionId);
-    }
-    $database->bindValue(":siri_no", $siriNo);
-    $database->execute();
-    $result = $database->fetchAllAssociative();
 
-    return $result;
+    return $output;
   }
 
   public function sitereview($fileId)
@@ -1597,7 +1745,7 @@ class Informations extends Model
     return $row;
   }
 
-  public function getReviewAcctInfo($fileId)
+  public function getReviewInfoById($fileId)
   {
     $database = Database::openConnection();
     $dboracle = new Oracle();
@@ -1663,12 +1811,6 @@ class Informations extends Model
     $rowOutput["peg_pelan"] = $info["peg_pelan"];
     $rowOutput["peg_bilpk"] = $info["peg_bilpk"];
     $rowOutput["peg_rjmmk"] = $info["peg_rjmmk"];
-    $rowOutput["peg_lsbgn"] = $info["peg_lsbgn"];
-    $rowOutput["peg_lstnh"] = $info["peg_lstnh"];
-    $rowOutput["peg_lsans"] = $info["peg_lsans"];
-    $rowOutput["peg_nilth"] = $info["peg_nilth"];
-    $rowOutput["kaw_kadar"] = $info["kaw_kadar"];
-    $rowOutput["peg_lsans"] = $info["peg_lsans"];
     if ($row["smk_jstnh"] != null) {
       $rowOutput["tnh_tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $row["smk_jstnh"]);
     } else {
@@ -1691,9 +1833,21 @@ class Informations extends Model
     }
     $rowOutput["peg_htkod"] = $info["peg_htkod"];
     $rowOutput["hnama"] = $info["hrt_hnama"];
-    $rowOutput["lsbgn"] = $info["peg_lsbgn"];
-    $rowOutput["lstnh"] = $info["peg_lstnh"];
-    $rowOutput["lsans"] = $info["peg_lsans"];
+    if (!empty($info["peg_lsbgn"])) {
+      $rowOutput["lsbgn"] = $info["peg_lsbgn"];
+    } else {
+      $rowOutput["lsbgn"] = $row["smk_lsbgn"];
+    }
+    if (!empty($info["peg_lstnh"])) {
+      $rowOutput["lstnh"] = $info["peg_lstnh"];
+    } else {
+      $rowOutput["lstnh"] = $row["smk_lstnh"];
+    }
+    if (!empty($info["peg_lsans"])) {
+      $rowOutput["lsans"] = $info["peg_lsans"];
+    } else {
+      $rowOutput["lsans"] = $row["smk_lsans"];
+    }
     $rowOutput["nilth_asal"] = $info["peg_nilth"];
     $rowOutput["kadar_asal"] = $info["kaw_kadar"];
     $rowOutput["cukai_asal"] = $info["peg_tksir"];

@@ -268,10 +268,10 @@ class Account extends Model
     }
 
     if ($this->checkEmptyLand($mjbHtkod)) {
-      $calcUrl = "calcland";
+      $calcUrl = "calcrent";
       $calcType = "1";
     } else {
-      $calcUrl = "calcbuilding";
+      $calcUrl = "calccost";
       $calcType = "2";
     }
 
@@ -436,10 +436,10 @@ class Account extends Model
     }
 
     if ($mjbHtkod == "11" || $mjbHtkod == "12" || $mjbHtkod == "13" || $mjbHtkod == "14" || $mjbHtkod == "15" || $mjbHtkod == "28" || $mjbHtkod == "29" || $mjbHtkod == "30" || $mjbHtkod == "31" || $mjbHtkod == "32" || $mjbHtkod == "33" || $mjbHtkod == "34" || $mjbHtkod == "35") {
-      $calcUrl = "calcland";
+      $calcUrl = "calcrent";
       $calcType = "1";
     } else {
-      $calcUrl = "calcbuilding";
+      $calcUrl = "calccost";
       $calcType = "2";
     }
 
@@ -503,9 +503,9 @@ class Account extends Model
     return ["success" => true, "sirino" => Encryption::encryptId($mjbNsiri), "calcUrl" => $calcUrl];
   }
 
-  public function getAccountInfo($fileId)
+  public function getAccountInfoByAcct($fileId)
   {
-    $dbOracle = Oracle::openOriConnection();
+    $dbOracle = new Oracle();
     $query = "SELECT v.*, h2.TNH_TNAMA,h3.HRT_HNAMA,h4.BGN_BNAMA,h5.STB_SNAMA FROM SPMC.V_HVNDUK v ";
     $query .= "LEFT JOIN SPMC.V_HTANAH h2 ON v.PEG_THKOD = h2.TNH_THKOD ";
     $query .= "LEFT JOIN SPMC.V_HHARTA h3 ON v.PEG_HTKOD = h3.HRT_HTKOD ";
@@ -514,6 +514,29 @@ class Account extends Model
     $query .= "WHERE v.PEG_AKAUN = :PEG_AKAUN ";
     $dbOracle->prepare($query);
     $dbOracle->bindValue(":PEG_AKAUN", Encryption::decryptId($fileId));
+    $dbOracle->execute();
+
+    $info = $dbOracle->fetchAssociative();
+    return $info;
+  }
+
+  public function getAmendmentAccountInfo($fileId)
+  {
+    $database = Database::openConnection();
+    $dbOracle = new Oracle();
+
+    $id = Encryption::decryptId($fileId);
+    $database->getById("data.smktpk", $id);
+    $akaun = $database->fetchAssociative()['smk_akaun'];
+
+    $query = "SELECT v.*, h2.TNH_TNAMA,h3.HRT_HNAMA,h4.BGN_BNAMA,h5.STB_SNAMA FROM SPMC.V_HVNDUK v ";
+    $query .= "LEFT JOIN SPMC.V_HTANAH h2 ON v.PEG_THKOD = h2.TNH_THKOD ";
+    $query .= "LEFT JOIN SPMC.V_HHARTA h3 ON v.PEG_HTKOD = h3.HRT_HTKOD ";
+    $query .= "LEFT JOIN SPMC.V_HBANGN h4 ON v.PEG_BGKOD = h4.BGN_BGKOD ";
+    $query .= "LEFT JOIN SPMC.V_HSTBGN h5 ON v.PEG_STKOD = h5.STB_STKOD ";
+    $query .= "WHERE v.PEG_AKAUN = :PEG_AKAUN ";
+    $dbOracle->prepare($query);
+    $dbOracle->bindValue(":PEG_AKAUN", $akaun);
     $dbOracle->execute();
 
     $info = $dbOracle->fetchAssociative();
@@ -544,9 +567,7 @@ class Account extends Model
     $database = Database::openConnection();
     $dbOracle = new Oracle();
 
-    $query = "SELECT b.*, jp.jpk_jnama, sb.acm_sbktr, u.name FROM data.t_hacmjb b ";
-    $query .= "LEFT JOIN data.hmjacm sb ON b.mjb_sbkod = sb.acm_sbkod ";
-    $query .= "LEFT JOIN data.hjenpk jp ON b.mjb_jpkod = jp.jpk_jpkod ";
+    $query = "SELECT b.*, u.name FROM data.t_hacmjb b ";
     $query .= "LEFT JOIN public.users u ON b.mjb_onama = u.workerid ";
     $query .= "WHERE b.mjb_nsiri = :nsiri ";
     $database->prepare($query);
@@ -580,8 +601,8 @@ class Account extends Model
     $rowOutput["mjb_tkpos"] = $info["mjb_tkpos"];
     $rowOutput["mjb_onama"] = $info["mjb_onama"];
     $rowOutput["name"] = $info["name"];
-    $rowOutput["acm_sbktr"] = $info["acm_sbktr"];
-    $rowOutput["jpk_jnama"] = $info["jpk_jnama"];
+    $rowOutput["acm_sbktr"] = $dbOracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $info["mjb_sbkod"]);
+    $rowOutput["jpk_jnama"] = $dbOracle->getElementById("SPMC.V_HJENPK", "jpk_jnama", "jpk_jpkod", $info["mjb_jpkod"]);
     $rowOutput["peg_oldac"] = $val["peg_oldac"];
     $rowOutput["pmk_nmbil"] = $val["pmk_nmbil"];
     $rowOutput["peg_nolot"] = $val["peg_nolot"];
@@ -643,17 +664,15 @@ class Account extends Model
 
   public function getSumbangan($jpkod)
   {
-    $database = Database::openConnection();
 
-    $query = "SELECT jpk_stcbk ";
-    $query .= "FROM data.hjenpk ";
-    $query .= "WHERE jpk_jpkod = :jpk_jpkod LIMIT 1";
+    $dbOracle = new Oracle();
+    $query = "SELECT * FROM V_HJENPK ";
+    $query .= "WHERE jpk_jpkod = :jpk_jpkod";
+    $dbOracle->prepare($query);
+    $dbOracle->bindValue(":jpk_jpkod", $jpkod);
+    $dbOracle->execute();
+    $info = $dbOracle->fetchAllAssociative();
 
-    $database->prepare($query);
-    $database->bindValue(":jpk_jpkod", $jpkod);
-    $database->execute();
-
-    $info = $database->fetchAssociative();
     return $info;
   }
 

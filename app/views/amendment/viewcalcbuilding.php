@@ -5,7 +5,6 @@
       <!-- Start .row -->
       <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
       <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
-      <?php print_r($calc); ?>
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
           <div class="panel panel-primary">
@@ -90,18 +89,12 @@
                   <li>
                     <a href="#tab2" data-toggle="tab">
                       <span class="step-number">2</span>
-                      <span class="step-text">Bangunan Utama</span>
+                      <span class="step-text">Bangunan</span>
                     </a>
                   </li>
                   <li>
                     <a href="#tab3" data-toggle="tab">
                       <span class="step-number">3</span>
-                      <span class="step-text">Bangunan Luar</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#tab4" data-toggle="tab">
-                      <span class="step-number">4</span>
                       <span class="step-text">Pengiraan</span>
                     </a>
                   </li>
@@ -123,28 +116,64 @@
                         </tr>
                       </thead>
                       <tbody id="comparison_table">
-                        <?php foreach ($calc['comparison'] as $row) { ?>
-                        <tr id="0">
-                          <td>
-                            <input type="hidden" name="comparison[]" id="comparison" value="<?= $row['id'] ?>">
-                            <div class='control-label tal' id='jlname'><?= $row['jln_jnama'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='bgtype'><?= $row['bgn_bnama'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='breadth'><?= $row['peg_lsbgn'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='nilth'><?php echo "RM " . $row['peg_nilth'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='mfa'><?php echo "RM " . $row['mfa'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='afa'><?php echo "RM " . $row['afa'] ?></div>
-                          </td>
-                        </tr>
+                        <?php if ($calc['comparison'] != "{}") {
+                          foreach ($calc['comparison'] as $row) { ?>
+                            <tr id="0">
+                              <td>
+                                <input type="hidden" name="comparison[]" id="comparison" value="<?= $row["id"] == "" ? null : $row['id']; ?>">
+                                <div class='control-label tal' id='jlname'>
+                                  <?= $row["jln_jnama"] == "" ? null : $row['jln_jnama']; ?></div>
+                              </td>
+                              <td>
+                                <div class='control-label tal' id='bgtype'>
+                                  <?= $row["bgn_bnama"] == "" ? null : $row['bgn_bnama']; ?></div>
+                              </td>
+                              <td>
+                                <div class='control-label tal' id='breadth'>
+                                  <?= $row["peg_lsbgn"] == "" ? null : $row['peg_lsbgn']; ?></div>
+                              </td>
+                              <td>
+                                <div class='control-label tal' id='nilth'>
+                                  <?php echo "RM " . $row["peg_nilth"] == "" ? null : $row['peg_nilth']; ?></div>
+                              </td>
+                              <td>
+                                <div class='control-label tal' id='mfa'>
+                                  <?php echo "RM " . $row["mfa"] == "" ? null : $row['mfa']; ?></div>
+                              </td>
+                              <td>
+                                <div class='control-label tal' id='afa'>
+                                  <?php echo "RM " . $row["afa"] == "" ? null : $row['afa']; ?></div>
+                              </td>
+                            </tr>
+                          <?php }
+                        } else { ?>
+                          <tr id="0">
+                            <td>
+                              <input type="hidden" name="comparison[]" id="comparison" value="">
+                              <div class='control-label tal' id='jlname'>
+                              </div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='bgtype'>
+                              </div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='breadth'>
+                              </div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='nilth'>
+                              </div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='mfa'>
+                              </div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='afa'>
+                              </div>
+                            </td>
+                          </tr>
                         <?php } ?>
                       </tbody>
                     </table>
@@ -183,48 +212,48 @@
                     </div>
                     <div class="section_one">
                       <?php foreach ($calc['mfa'] as $section) { ?>
-                      <section id="<?php
+                        <section id="<?php
                                       if ($section['id'] != "") {
                                         echo $section['id'];
                                       }
                                       ?>">
-                        <div class="form-group">
-                          <label class="col-lg-2 col-md-3 control-label tal"><strong>Perkara : </strong></label>
-                          <div class="col-lg-10 col-md-9">
-                            <?php
+                          <div class="form-group">
+                            <label class="col-lg-2 col-md-3 control-label tal"><strong>Perkara : </strong></label>
+                            <div class="col-lg-10 col-md-9">
+                              <?php
                               if ($section['title'] != "") {
                                 echo $section['title'];
                               }
                               ?>
+                            </div>
                           </div>
-                        </div>
-                        <table class="table table-bordered one" id="zero" style="font-size:13px;">
-                          <thead>
-                            <tr>
-                              <th style="width:30%">Perkara</th>
-                              <th style="width:15%">Keluasan/Kuantiti</th>
-                              <th style="width:10%">Jenis</th>
-                              <th></th>
-                              <th style="width:15%">Nilai Unit</th>
-                              <th style="width:10%">Jenis</th>
-                              <th style="width:15%">Jumlah</th>
-                            </tr>
-                          </thead>
-                          <tbody id="zero">
-                            <?php foreach ($section['items'] as $row) { ?>
-                            <tr id="<?= $row['id'] ?>">
-                              <td><?= $row['title'] ?></td>
-                              <td><?= $row["breadth"] ?></td>
-                              <td><?= $row["breadthtype"] ?></td>
-                              <td style="text-align:center">X</td>
-                              <td><?= $row['price'] ?></td>
-                              <td><?= $row['pricetype'] ?>pricetype</td>
-                              <td>RM <?= $row['total'] ?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </section>
+                          <table class="table table-bordered one" id="zero" style="font-size:13px;">
+                            <thead>
+                              <tr>
+                                <th style="width:30%">Perkara</th>
+                                <th style="width:15%">Keluasan/Kuantiti</th>
+                                <th style="width:10%">Jenis</th>
+                                <th></th>
+                                <th style="width:15%">Nilai Unit</th>
+                                <th style="width:10%">Jenis</th>
+                                <th style="width:15%">Jumlah</th>
+                              </tr>
+                            </thead>
+                            <tbody id="zero">
+                              <?php foreach ($section['items'] as $row) { ?>
+                                <tr id="<?= $row['id'] ?>">
+                                  <td><?= $row['title'] ?></td>
+                                  <td><?= $row["breadth"] ?></td>
+                                  <td><?= $row["breadthtype"] ?></td>
+                                  <td style="text-align:center">X</td>
+                                  <td><?= $row['price'] ?></td>
+                                  <td><?= $row['pricetype'] ?></td>
+                                  <td>RM <?= $row['total'] ?></td>
+                                </tr>
+                              <?php } ?>
+                            </tbody>
+                          </table>
+                        </section>
                       <?php } ?>
                     </div>
                     <table class="table mb10">
@@ -240,8 +269,7 @@
                           <td colspan="2">
                             <div class="input-group input-group-sm">
                               <span class="input-group-addon">RM</span>
-                              <input type="text" class="form-control input-sm ttl_partly" id="overall_one"
-                                value="<?= $calc['totalmfa']; ?>" readonly>
+                              <input type="text" class="form-control input-sm ttl_partly" id="overall_one" value="<?= $calc['totalmfa']; ?>" readonly>
                             </div>
                           </td>
                         </tr>
@@ -249,70 +277,6 @@
                     </table>
                   </div>
                   <div class="tab-pane" id="tab3">
-                    <div class="page-header">
-                      <h4><strong>BANGUNAN LUAR</strong></h4>
-                    </div>
-                    <div class="section_two">
-                      <?php foreach ($calc['afa'] as $section2) { ?>
-                      <section id="<?= $section2['id']; ?>">
-                        <div class="form-group">
-                          <label class="col-lg-2 col-md-3 control-label tal"><strong>Perkara : </strong></label>
-                          <div class="col-lg-10 col-md-9">
-                            <?= $section2['title']; ?>
-                          </div>
-                        </div>
-                        <table class="table table-bordered two" id="zero" style="font-size:13px;">
-                          <thead>
-                            <tr>
-                              <th style="width:30%">Perkara</th>
-                              <th style="width:15%">Keluasan/Kuantiti</th>
-                              <th style="width:10%">Jenis</th>
-                              <th></th>
-                              <th style="width:15%">Nilai Unit</th>
-                              <th style="width:10%">Jenis</th>
-                              <th style="width:15%">Jumlah</th>
-                            </tr>
-                          </thead>
-                          <tbody id="zero">
-                            <?php foreach ($section2['items'] as $row) { ?>
-                            <tr id="<?= $row['id'] ?>">
-                              <td><?= $row['title'] ?></td>
-                              <td><?= $row['breadth'] ?></td>
-                              <td><?= $row['breadthtype'] ?></td>
-                              <td style="text-align:center">X</td>
-                              <td><?= $row['price'] ?></td>
-                              <td><?= $row['pricetype'] ?></td>
-                              <td>RM <?= $row['total'] ?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </section>
-                      <?php } ?>
-                    </div>
-                    <table class="table mb10">
-                      <tbody>
-                        <tr>
-                        <tr>
-                          <td style="width:25%"></td>
-                          <td style="width:15%"></td>
-                          <td style="width:10%"></td>
-                          <td></td>
-                          <td style="width:15%"></td>
-                          <td style="width:15%">Jumlah</td>
-                          <td colspan="2">
-                            <div class="input-group input-group-sm">
-                              <span class="input-group-addon">RM</span>
-                              <input type="text" class="form-control input-sm ttl_partly"
-                                value="<?= $calc['totalafa']; ?>" id="overall_two" readonly>
-                            </div>
-                          </td>
-
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="tab-pane" id="tab4">
                     <div class="page-header">
                       <h4><strong>PENGIRAAN</strong></h4>
                     </div>
@@ -360,8 +324,7 @@
                       <tr>
                         <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
                         <td>
-                          <strong>RM</strong> <span class="control-label tal bold"
-                            id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
+                          <strong>RM</strong> <span class="control-label tal bold" id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
                         </td>
                       </tr>
                     </table>
@@ -372,8 +335,7 @@
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#" id="print_calc"
-                      data-siri="<?= $siriNo ?>">Cetak</a>
+                  <li class="next finish" style="display:none;"><a href="#" id="print_calc" data-siri="<?= $siriNo ?>">Cetak</a>
                   </li>
                 </ul>
               </div>

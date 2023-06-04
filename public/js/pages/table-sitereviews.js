@@ -114,8 +114,8 @@ var table = $("#sitereviews").DataTable({
   scrollCollapse: true,
   pageLength: 50,
   lengthMenu: [
-    [50, 100, 500, 1000],
-    [50, 100, 500, 1000]
+    [50, 100, 500, 1000, 2000],
+    [50, 100, 500, 1000, 2000]
   ],
   processing: true,
   serverSide: true,
@@ -134,7 +134,7 @@ var table = $("#sitereviews").DataTable({
   columnDefs: [
     {
       targets: 0,
-      data: "sid",
+      data: "smk_akaun",
       checkboxes: {
         selectRow: true
       }
@@ -206,19 +206,20 @@ var table = $("#sitereviews").DataTable({
     },
     {
       targets: 7,
-      orderable: true,
+      orderable: false,
+      className: "dt-body-center",
       data: null,
       render: function (data, type, row, meta) {
         // console.log(row.smk_type)
         if (type === "display") {
           if (row.smk_type === 1) {
-            data = "<span class='label label-default'>Akaun Baru</span>"
+            data = "Akaun Baru"
           }
           if (row.smk_type === 2) {
-            data = "<span class='label label-primary'>Pindaan</span>"
+            data = "Pindaan"
           }
           if (row.smk_type === 3) {
-            data = "<span class='label label-success'>KemasKini Data</span>"
+            data = "KemasKini Data"
           }
         }
         return data
@@ -226,22 +227,23 @@ var table = $("#sitereviews").DataTable({
     },
     {
       targets: 8,
-      orderable: false,
+      orderable: true,
+      className: "dt-body-center",
       data: null,
       render: function (data, type, row, meta) {
         if (type === "display") {
           if (row.smk_stspn == "0") {
-            data = "Baru"
+            data = "<span class='label label-default'>Baru</span>"
           } else if (row.smk_stspn == "1") {
-            data = "Baca"
+            data = "<span class='label label-info'>Baca</span>"
           } else if (row.smk_stspn == "2") {
-            data = "Serah"
+            data = "<span class='label label-primary'>Serah</span>"
           } else if (row.smk_stspn == "3") {
-            data = "Diterima"
+            data = "<span class='label label-success'>Diterima</span>"
           } else if (row.smk_stspn == "4") {
-            data = "Semak Semula"
+            data = "<span class='label label-warning'>Semak Semula</span>"
           } else if (row.smk_stspn == "5") {
-            data = "Serah Kembali"
+            data = "<span class='label label-primary'>Serah Kembali</span>"
           }
         }
         return data
@@ -281,7 +283,7 @@ var table = $("#sitereviews").DataTable({
           if (row.sirino != "-") {
             data += '<a href="' + row.calctype + "/" + row.sirino + '" class="btn btn-success btn-alt btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
           } else {
-            data += '<a href="' + row.calctype + "/" + row.id + '" class="btn btn-default btn-alt btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+            data += '<a href="#" class="btn btn-default btn-alt btn-xs" data-id="' + row.id + '" id="calc" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
           }
           data += '<a href="viewimages/' + row.id + '" class="btn '
           if (row.file != null) {
@@ -307,7 +309,7 @@ var table = $("#sitereviews").DataTable({
   select: {
     style: "multi"
   },
-  order: [[7, "asc"]],
+  order: [[8, "asc"]],
   language: {
     search: "Saring : ",
     lengthMenu: "Paparkan _MENU_ rekod",
@@ -341,6 +343,18 @@ $("#sitereviews tbody").on("click", "td.details-control", function () {
   }
 })
 
+$("#print").click(function () {
+  var fileId = $("#area").val()
+  var street = $("#street").val()
+  var search = $("#sitereviews_filter [type=search]").val()
+
+  // var fileId = { area, street, search }
+
+  console.log(area, street, search)
+  var url = config.root + "Printing/sitereviews/" + fileId
+  window.open(url, "_blank")
+})
+
 $("#form-verifylists").on("submit", function (e) {
   $("#submit_popup").modal("show")
   var form = this
@@ -354,6 +368,34 @@ $("#form-verifylists").on("submit", function (e) {
 
   // Prevent actual form submission
   e.preventDefault()
+})
+
+$("#sitereviews tbody").on("click", "#calc", function () {
+  var calc = $(this)
+  var fileId = calc.data("id")
+  console.log(fileId)
+  swal("Sila pilih kaedah pengiraan cukai taksiran.", {
+    buttons: {
+      sewaan: {
+        text: "Kaedah Perbandingan",
+        value: "rent"
+      },
+      kos: {
+        text: "Kaedah Kos",
+        value: "cost"
+      }
+    }
+  }).then((value) => {
+    switch (value) {
+      case "rent":
+        window.location = config.root + "Vendor/createRentCalc/" + fileId
+        break
+
+      case "cost":
+        window.location = config.root + "Vendor/createCostCalc/" + fileId
+        break
+    }
+  })
 })
 
 // $("body").on("click", ".edit-area", function () {
@@ -433,22 +475,5 @@ $(document).ready(function () {
   // $("#sitereviews tbody").on("click", "#remove", function () {
   //   var data = table.row($(this).parents("tr")).data()
   //   alert(data[0] + "'s salary is: " + data[5])
-  // })
-
-  // $("#sitereviews tbody tr td #remove").click(function (e) {
-  //   e.preventDefault()
-  //   if (!confirm("Are you sure?")) {
-  //     return
-  //   }
-
-  //   var row = $(this).parent().parent()
-  //   var fileId = row.attr("id")
-
-  //   ajax.send("Vendor/deletesitereview", { file_id: fileId }, deleteFileCallBack)
-  //   function deleteFileCallBack(result) {
-  //     if (helpers.validateData(result, row, "after", "row", "success")) {
-  //       $(row).remove()
-  //     }
-  //   }
   // })
 })

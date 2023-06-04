@@ -14,8 +14,7 @@
                 </div>
                 <!--end col-->
                 <div class="col-auto">
-                  <button class="btn btn-default btn-sm mt5 mr15" id="print"><i
-                      class="glyphicon glyphicon-print"></i></button>
+                  <button class="btn btn-default btn-sm mt5 mr15" id="print"><i class="glyphicon glyphicon-print"></i></button>
                 </div>
                 <!--end col-->
               </div>
@@ -41,14 +40,14 @@
                         Struktur Bangunan
                       </th>
                       <th>
-                        Nilai Tahunan Asal(RM)<br />
-                        Kadar Tahunan Asal(RM)<br />
-                        Cukai Taksiran Asal(RM)
+                        Nilai Tahunan Asal<br />
+                        Kadar Asal<br />
+                        Cukai Taksiran Asal
                       </th>
                       <th>
-                        Nilai Tahunan Baru(RM)<br />
-                        Kadar Tahunan Baru(RM)<br />
-                        Cukai Taksiran Baru(RM)
+                        Nilai Tahunan Baru<br />
+                        Kadar Baru<br />
+                        Cukai Taksiran Baru
                       </th>
                       <th>Perbezaan</th>
                       <th>Sebab-Sebab / Catatan</th>

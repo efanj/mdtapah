@@ -5,6 +5,8 @@ class ImageResizer
   {
     $sourcePath = $file["tmp_name"];
 
+    file_put_contents($sourcePath, file_get_contents($sourcePath));
+
     list($wid, $ht, $ty) = getimagesize($sourcePath);
     $ext = self::MimeToExtension(self::mime($file));
 

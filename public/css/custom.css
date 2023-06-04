@@ -63,6 +63,28 @@
   padding-right: 10px;
 }
 
+/* input */
+
+
+.input-xs {
+  font-size: 12px;
+  height: 24px;
+}
+
+.input-group-addon {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+select.form-control {
+  padding: 3px 12px 4px 12px;
+}
+
+select.input-xs {
+  height: 24px;
+  line-height: 24px;
+}
+
 #header.header-fixed,
 #header.container {
   height: 50px;
@@ -143,16 +165,27 @@ table.calculator .input-sm {
   height: 26px;
 }
 
+table.acct_info tbody {
+  background-color: #ffffff;
+}
+
+table.acct_info thead th {
+  background-color: #0a97b9;
+  color: #ffffff
+}
+
 table.dataTable th {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 table.dataTable td {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 table.dataTable tr.dtrg-level-0 td {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 table.dataTable.dt-checkboxes-select tbody tr,
@@ -165,6 +198,10 @@ table.dataTable thead th.dt-checkboxes-select-all,
 table.dataTable tbody td.dt-checkboxes-cell {
   text-align: center;
 }
+
+/* table.dataTable thead th {
+  background-color: #ddd;
+} */
 
 div.dataTables_wrapper span.select-info,
 div.dataTables_wrapper span.select-item {

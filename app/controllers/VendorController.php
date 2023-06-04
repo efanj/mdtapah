@@ -44,6 +44,9 @@ class VendorController extends Controller
       case "submitsitereviewtable":
         $this->Security->config("validateForm", false);
         break;
+      case "submitpbtsitereview":
+        $this->Security->config("validateForm", false);
+        break;
       case "pendingsitereviewtable":
         $this->Security->config("validateForm", false);
         break;
@@ -77,6 +80,9 @@ class VendorController extends Controller
       case "updatebreadth":
         $this->Security->config("validateForm", false);
         break;
+      case "getBenchmark":
+        $this->Security->config("form", ["fields" => ["type", "kwkod", "htkod"]]);
+        break;
       case "deletesitereview":
         $this->Security->config("form", ["fields" => ["file_id"]]);
         break;
@@ -94,6 +100,9 @@ class VendorController extends Controller
         break;
       case "deletedocument":
         $this->Security->config("form", ["fields" => ["doc_id"]]);
+        break;
+      case "deletesubmition":
+        $this->Security->config("validateForm", false);
         break;
       case "editareasitereview":
         $this->Security->config("validateForm", false);
@@ -128,6 +137,11 @@ class VendorController extends Controller
   public function submissionlist()
   {
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/submissionlist/", Config::get("VIEWS_PATH") . "vendor/submissionlist.php");
+  }
+
+  public function pbtsubmissionlist()
+  {
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/pbtsubmissionlist/", Config::get("VIEWS_PATH") . "vendor/pbtsubmissionlist.php");
   }
 
   public function pending()
@@ -167,28 +181,28 @@ class VendorController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/viewbenchmark/", Config::get("VIEWS_PATH") . "vendor/viewbenchmarkdocs.php", ["id" => $id]);
   }
 
-  public function createBuildingCalc($reviewId)
+  public function createCostCalc($reviewId) // createBuildingCalc
   {
     Config::setJsConfig("curPage", "vendor");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createBuildingCalc/", Config::get("VIEWS_PATH") . "vendor/calcbuilding.php", ["reviewId" => $reviewId]);
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createCostCalc/", Config::get("VIEWS_PATH") . "vendor/createCostCalc.php", ["reviewId" => $reviewId]);
   }
 
-  public function createEmptyLandCalc($reviewId)
+  public function createRentCalc($reviewId) // createEmptyLandCalc
   {
     Config::setJsConfig("curPage", "vendor");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createEmptyLandCalc/", Config::get("VIEWS_PATH") . "vendor/calcland.php", ["reviewId" => $reviewId]);
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createRentCalc/", Config::get("VIEWS_PATH") . "vendor/createRentCalc.php", ["reviewId" => $reviewId]);
   }
 
-  public function editBuildingCalc($siriNo)
+  public function editCostCalc($siriNo) // editBuildingCalc
   {
     Config::setJsConfig("curPage", "vendor");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editBuildingCalc/", Config::get("VIEWS_PATH") . "vendor/editBuildingCalc.php", ["siriNo" => $siriNo]);
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editCostCalc/", Config::get("VIEWS_PATH") . "vendor/editCostCalc.php", ["siriNo" => $siriNo]);
   }
 
-  public function editEmptyLandCalc($siriNo)
+  public function editRentCalc($siriNo) // editEmptyLandCalc
   {
     Config::setJsConfig("curPage", "vendor");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editEmptyLandCalc/", Config::get("VIEWS_PATH") . "vendor/editEmptyLandCalc.php", ["siriNo" => $siriNo]);
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editRentCalc/", Config::get("VIEWS_PATH") . "vendor/editRentCalc.php", ["siriNo" => $siriNo]);
   }
 
   public function viewimages($reviewId)
@@ -261,10 +275,10 @@ class VendorController extends Controller
   public function submitsitereviews()
   {
     $tarikh = $this->request->data("tarikh");
-    $submitid = $this->request->data("submitid");
+    $submitid = $this->request->data("submit_id");
     $data = $this->request->data("data");
 
-    $result = $this->vendor->submitsitereviews(Session::getUserId(), Session::getUserWorkerId(), $tarikh, $data);
+    $result = $this->vendor->submitsitereviews(Session::getUserId(), Session::getUserWorkerId(), $tarikh, $submitid, $data);
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
     } else {
@@ -409,8 +423,30 @@ class VendorController extends Controller
     $columnSortOrder = $column[0]["dir"];
     $search = $this->request->data("search");
     $searchValue = $search["value"];
-    $date = $this->request->data("date");
-    $result = $this->vendor->submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $date);
+    $id = $this->request->data("id");
+    $result = $this->vendor->submitsitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $id);
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function submitpbtsitereview()
+  {
+    $draw = $this->request->data("draw");
+    $row = $this->request->data("start");
+    $rowperpage = $this->request->data("length");
+    $column = $this->request->data("order");
+    $columnIndex = $column[0]["column"];
+    $columns = $this->request->data("columns");
+    $columnName = $columns[$columnIndex]["data"];
+    $columnSortOrder = $column[0]["dir"];
+    $search = $this->request->data("search");
+    $searchValue = $search["value"];
+    $area = $this->request->data("area");
+    $street = $this->request->data("street");
+    $result = $this->vendor->submitpbtsitereview($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area, $street);
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
     } else {
@@ -561,6 +597,7 @@ class VendorController extends Controller
   {
     $siriNo = $this->request->data("siri_no");
     $akaun = $this->request->data("akaun");
+    $landId = $this->request->data("id_land");
     $comparison = $this->request->data("comparison");
     $breadth_land = $this->request->data("breadth_land");
     $price_land = $this->request->data("price_land");
@@ -574,7 +611,7 @@ class VendorController extends Controller
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->vendor->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax);
+    $result = $this->vendor->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $landId, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax);
 
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
@@ -605,6 +642,21 @@ class VendorController extends Controller
     $nota = $this->request->data("nota");
 
     $result = $this->vendor->updatebreadth(Session::getUserId(), $id, $akaun, $lsbgn, $lsans, $nota);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function getBenchmark()
+  {
+    $type = $this->request->data("type");
+    $kwkod = $this->request->data("kwkod");
+    $htkod = $this->request->data("htkod");
+
+    $result = $this->vendor->getBenchmark(Session::getUserId(), $type, $kwkod, $htkod);
 
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
@@ -667,6 +719,15 @@ class VendorController extends Controller
     $this->view->renderJson(["success" => true]);
   }
 
+  public function deletesubmition()
+  {
+    $Id = Encryption::decryptId($this->request->data("id"));
+
+    $this->vendor->deletesubmition(Session::getUserId(), $Id);
+
+    $this->view->renderJson(["success" => true]);
+  }
+
   public function editareasitereview()
   {
     $pid = $this->request->data("pindaan_id");
@@ -704,8 +765,11 @@ class VendorController extends Controller
     $no_akaun = $this->request->data("no_akaun");
     $codex = $this->request->data("codex");
     $codey = $this->request->data("codey");
+    $lstnh = $this->request->data("lstnh");
+    $lsbgn = $this->request->data("lsbgn");
+    $lsans = $this->request->data("lsans");
 
-    $result = $this->vendor->editcoordssitereview(Session::getUserId(), $sid, $no_akaun, $codex, $codey);
+    $result = $this->vendor->editcoordssitereview(Session::getUserId(), $sid, $no_akaun, $codex, $codey, $lstnh, $lsbgn, $lsans);
 
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
@@ -724,7 +788,8 @@ class VendorController extends Controller
     Permission::allow("administrator", $resource, "*");
 
     //only for user
-    Permission::allow("penilaian", $resource, ["submitsitereview"]);
+    Permission::allow("penilaian", $resource, ["submitsitereview", "submitsitereviewtable", "pbtsubmissionlist", "submitiondatareviews", "submitsitereviews"]);
+    Permission::allow("penilaian", $resource, ["submitpbtsitereview", "getBenchmark"]);
 
     //only for normal vendor
     Permission::allow("vendor", $resource, "*");

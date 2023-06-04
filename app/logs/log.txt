@@ -1,0 +1,16 @@
+04/06/2023, 03:16:00 | /usr/local/var/www/mdt/portal/app/models/Database.php | 221 | PDOException
+SQLSTATE[55000]: Object not in prerequisite state: 7 ERROR:  lastval is not yet defined in this session
+*******************************************************************
+
+04/06/2023, 07:11:36 | /usr/local/var/www/mdt/portal/app/views/vendor/editCostCalc.php | 69 | ErrorException
+Undefined array key "lsbgnt"
+*******************************************************************
+
+04/06/2023, 16:23:53 | /usr/local/var/www/mdt/portal/app/models/Informations.php | 688 | ErrorException
+Undefined array key "smk_jsbgn"
+*******************************************************************
+
+04/06/2023, 16:24:08 | /usr/local/var/www/mdt/portal/app/models/Informations.php | 688 | ErrorException
+Undefined array key "smk_jsbgn"
+*******************************************************************
+

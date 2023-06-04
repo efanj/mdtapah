@@ -8,7 +8,16 @@
         <div class="col-lg-12 col-sm-12 col-md-12">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h4>MAKLUMAT SIASATAN TAPAK</h4>
+              <div class="row align-items-center">
+                <div class="col">
+                  <h4 class="ml15">MAKLUMAT SIASATAN TAPAK</h4>
+                </div>
+                <!--end col-->
+                <div class="col-auto">
+                  <button type="button" class="btn btn-default btn-xs mt10 mr10" id="print"><i class="glyphicon glyphicon-print"></i></button>
+                </div>
+                <!--end col-->
+              </div>
             </div>
             <div class="panel-body">
               <div class="row">

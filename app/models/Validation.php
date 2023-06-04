@@ -10,7 +10,8 @@
  * @author     Omar El Gabry <omar.elgabry.93@gmail.com>
  */
 
-class Validation {
+class Validation
+{
 
     /**
      * validation errors
@@ -27,65 +28,68 @@ class Validation {
      */
     private $ruleMessages = [];
 
-     /**
-      * Start the validation using values and rules passed in $data
-      *
-      * @param  array  $data
-      * @param  bool   $skip To skip validations as soon as one of the rules fails.
-      *
-      * @throws Exception if rule method doesn't exist
-      * @return bool
-      */
-    public function validate($data, $skip = false){
+    /**
+     * Start the validation using values and rules passed in $data
+     *
+     * @param  array  $data
+     * @param  bool   $skip To skip validations as soon as one of the rules fails.
+     *
+     * @throws Exception if rule method doesn't exist
+     * @return bool
+     */
+    public function validate($data, $skip = false)
+    {
 
         $passed = true;
 
-        foreach($data as $placeholder => $rules){
+        foreach ($data as $placeholder => $rules) {
 
             $value = $rules[0];
             $rules = explode('|', $rules[1]);
 
             // no need to validate the value if the value is empty and not required
-            if(!$this->isRequired($rules) && $this->isEmpty($value)){
+            if (!$this->isRequired($rules) && $this->isEmpty($value)) {
                 continue;
             }
 
             // it doesn't make sense to continue and validate the rest of rules on an empty & required value.
             // instead add error, and skip this value.
-            if($this->isRequired($rules) && $this->isEmpty($value)){
+            if ($this->isRequired($rules) && $this->isEmpty($value)) {
                 $this->addError("required", $placeholder, $value);
                 $passed = false;
                 continue;
             }
 
-            foreach($rules as $rule){
+            foreach ($rules as $rule) {
 
                 $method = $rule;
                 $args = [];
 
                 // if it was empty and required or not required,
                 // it would be detected by the previous ifs
-                if($rule === "required") {
+                if ($rule === "required") {
                     continue;
                 }
 
-                if(self::isruleHasArgs($rule)){
+                if (self::isruleHasArgs($rule)) {
 
                     // get arguments for rules like in max(), min(), ..etc.
                     $method = $this->getRuleName($rule);
                     $args   = $this->getRuleArgs($rule);
                 }
 
-                if(!method_exists($this, $method)){
+                if (!method_exists($this, $method)) {
                     throw new Exception("Method doesnt exists: " . $method);
                 }
 
-                if(!call_user_func_array([$this, $method], [$value, $args])) {
+                if (!call_user_func_array([$this, $method], [$value, $args])) {
 
                     $this->addError($method, $placeholder, $value, $args);
                     $passed = false;
 
-                    if($skip){ return false; }
+                    if ($skip) {
+                        return false;
+                    }
                 }
             }
         }
@@ -105,22 +109,20 @@ class Validation {
      * @return bool
      *
      */
-    private function isEmpty($value){
+    private function isEmpty($value)
+    {
 
-        if(is_null($value)) {
+        if (is_null($value)) {
             return true;
-        }
-        else if(is_string($value)){
-            if(trim($value) === '') return true;
-        }
-        else if (empty($value) && $value !== '0' && $value !== false && $value !== 0 && $value !== 0.0){
+        } else if (is_string($value)) {
+            if (trim($value) === '') return true;
+        } else if (empty($value) && $value !== '0' && $value !== false && $value !== 0 && $value !== 0.0) {
             return true;
-        }
-        else if (is_array($value) && isset($value['name'], $value['type'], $value['tmp_name'], $value['error'])) {
+        } else if (is_array($value) && isset($value['name'], $value['type'], $value['tmp_name'], $value['error'])) {
             return (int)$value['error'] === UPLOAD_ERR_NO_FILE;
         }
         return false;
-     }
+    }
 
     /**
      * Determine if a given rules has 'required' rule
@@ -128,7 +130,8 @@ class Validation {
      * @param  array  $rules
      * @return bool
      */
-    private function isRequired($rules){
+    private function isRequired($rules)
+    {
         return in_array("required", $rules, true);
     }
 
@@ -138,7 +141,8 @@ class Validation {
      * @param  string  $rule
      * @return bool
      */
-    private function isruleHasArgs($rule) {
+    private function isruleHasArgs($rule)
+    {
         return isset(explode('(', $rule)[1]);
     }
 
@@ -148,7 +152,8 @@ class Validation {
      * @param  string  $rule
      * @return string
      */
-    private function getRuleName($rule){
+    private function getRuleName($rule)
+    {
         return explode('(', $rule)[0];
     }
 
@@ -158,7 +163,8 @@ class Validation {
      * @param  string  $rule
      * @return array
      */
-    private  function getRuleArgs($rule){
+    private  function getRuleArgs($rule)
+    {
 
         $argsWithBracketAtTheEnd = explode('(', $rule)[1];
         $args = rtrim($argsWithBracketAtTheEnd, ')');
@@ -179,7 +185,8 @@ class Validation {
      * @param  string  $message
      * @return array
      */
-    public function addRuleMessage($rule, $message){
+    public function addRuleMessage($rule, $message)
+    {
         $this->ruleMessages[$rule] = $message;
     }
 
@@ -192,37 +199,35 @@ class Validation {
      * @param  array   $args
      *
      */
-    private function addError($rule, $placeholder, $value, $args = []){
+    private function addError($rule, $placeholder, $value, $args = [])
+    {
 
-        if(isset($this->ruleMessages[$rule])){
+        if (isset($this->ruleMessages[$rule])) {
             $this->errors[] = $this->ruleMessages[$rule];
-        }
-
-        else{
+        } else {
 
             // get the default message for the current $rule
             $message = self::defaultMessages($rule);
 
-            if(isset($message)){
+            if (isset($message)) {
 
                 // if $message is set to empty string,
                 // this means the error will be added inside the validation method itself
                 // check attempts()
-                if(trim($message) !== ""){
+                if (trim($message) !== "") {
 
                     // replace placeholder, value, arguments with their values
                     $replace = ['{placeholder}', '{value}'];
-                    $value   = is_string($value)? $value: "";
+                    $value   = is_string($value) ? $value : "";
                     $with    = array_merge([$placeholder, $value], $args);
                     $count   = count($args);
 
                     // arguments will take the shape of: {0} {1} {2} ...
-                    for($i = 0; $i < $count; $i++) $replace[] = "{{$i}}";
+                    for ($i = 0; $i < $count; $i++) $replace[] = "{{$i}}";
 
                     $this->errors[] = str_replace($replace, $with, $message);
                 }
-
-            } else{
+            } else {
 
                 // if no message defined, then use this one.
                 $this->errors[] = "The value you entered for " . $placeholder . " is invalid";
@@ -235,7 +240,8 @@ class Validation {
      *
      * @return bool
      */
-    public function passes(){
+    public function passes()
+    {
         return empty($this->errors);
     }
 
@@ -244,7 +250,8 @@ class Validation {
      *
      * @return array
      */
-    public function errors(){
+    public function errors()
+    {
         return $this->errors;
     }
 
@@ -253,7 +260,8 @@ class Validation {
      *
      * @return bool
      */
-    public function clearErrors(){
+    public function clearErrors()
+    {
         $this->errors = [];
     }
 
@@ -279,7 +287,8 @@ class Validation {
      *
      * @return bool
      */
-    private function minLen($str, $args){
+    private function minLen($str, $args)
+    {
         return mb_strlen($str, 'UTF-8') >= (int)$args[0];
     }
 
@@ -291,7 +300,8 @@ class Validation {
      *
      * @return bool
      */
-    private function maxLen($str, $args){
+    private function maxLen($str, $args)
+    {
         return mb_strlen($str, 'UTF-8') <= (int)$args[0];
     }
 
@@ -302,7 +312,8 @@ class Validation {
      * @param  array   $args(min,max)
      * @return bool
      */
-    private function rangeNum($num, $args){
+    private function rangeNum($num, $args)
+    {
         return $num >= (int)$args[0] && $num <= (int)$args[1];
     }
 
@@ -312,7 +323,8 @@ class Validation {
      * @param  string|integer  $value
      * @return bool
      */
-    private function integer($value){
+    private function integer($value)
+    {
         return filter_var($value, FILTER_VALIDATE_INT);
     }
 
@@ -323,11 +335,12 @@ class Validation {
      * @param  array         $arr
      * @return bool
      */
-    private function inArray($value, $arr){
+    private function inArray($value, $arr)
+    {
 
-        if(is_array($value)){
-            foreach($value as $val){
-                if(!in_array($val, $arr, true)){
+        if (is_array($value)) {
+            foreach ($value as $val) {
+                if (!in_array($val, $arr, true)) {
                     return false;
                 }
             }
@@ -342,7 +355,8 @@ class Validation {
      * @param  mixed   $value
      * @return bool
      */
-    private function alphaNum($value){
+    private function alphaNum($value)
+    {
         return preg_match('/\A[a-z0-9]+\z/i', $value);
     }
 
@@ -352,7 +366,8 @@ class Validation {
      * @param  mixed   $value
      * @return bool
      */
-    private function alphaNumWithSpaces($value){
+    private function alphaNumWithSpaces($value)
+    {
         return preg_match('/\A[a-z0-9 ]+\z/i', $value);
     }
 
@@ -368,7 +383,8 @@ class Validation {
      * @see http://stackoverflow.com/questions/8141125/regex-for-password-php
      * @see http://code.runnable.com/UmrnTejI6Q4_AAIM/how-to-validate-complex-passwords-using-regular-expressions-for-php-and-pcre
      */
-    private function password($value) {
+    private function password($value)
+    {
         // return preg_match_all('$\S*(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$', $value);
         return preg_match_all('$\S*(?=\S*[a-z])(?=\S*[\d])\S*$', $value);
     }
@@ -380,7 +396,8 @@ class Validation {
      * @param  array   $args(value)
      * @return bool
      */
-    private function equals($value, $args){
+    private function equals($value, $args)
+    {
         return $value === $args[0];
     }
 
@@ -391,7 +408,8 @@ class Validation {
      * @param  array   $args(value)
      * @return bool
      */
-    private function notEqual($value, $args){
+    private function notEqual($value, $args)
+    {
         return $value !== $args[0];
     }
 
@@ -401,7 +419,8 @@ class Validation {
      * @param  string  $email
      * @return bool
      */
-    private function email($email){
+    private function email($email)
+    {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
@@ -416,7 +435,8 @@ class Validation {
      * @param  array   $args(table, column)
      * @return bool
      */
-    private function unique($value, $args){
+    private function unique($value, $args)
+    {
 
         $table = $args[0];
         $col   = $args[1];
@@ -427,7 +447,6 @@ class Validation {
         $database->execute();
 
         return $database->countRows() === 0;
-
     }
 
     /**
@@ -437,7 +456,8 @@ class Validation {
      * @param  string  $email
      * @return bool
      */
-    private function emailUnique($email){
+    private function emailUnique($email)
+    {
 
         $database = Database::openConnection();
 
@@ -449,9 +469,8 @@ class Validation {
 
         if ($database->countRows() === 1) {
 
-            if(!empty($user["is_email_activated"])){
+            if (!empty($user["is_email_activated"])) {
                 return false;
-
             } else {
 
                 $expiry_time = (24 * 60 * 60);
@@ -459,13 +478,12 @@ class Validation {
 
                 // If time elapsed exceeded the expiry time, it worth to reset the token, and the email as well.
                 // This indicates the email of $user hasn't been verified, and token is expired.
-                if($time_elapsed >= $expiry_time) {
+                if ($time_elapsed >= $expiry_time) {
 
                     $login = new Login();
                     $login->resetEmailVerificationToken($user["id"], false);
                     return true;
-
-                }else {
+                } else {
 
                     // TODO check if $email is same as current user's email(not-activated),
                     // then ask the user to verify his email
@@ -487,8 +505,9 @@ class Validation {
      * @return bool
      * @see Login::doLogin()
      */
-    private function credentials($user){
-        if(empty($user["hashed_password"]) || empty($user["user_id"])) {
+    private function credentials($user)
+    {
+        if (empty($user["hashed_password"]) || empty($user["user_id"])) {
             return false;
         }
         return password_verify($user["password"], $user["hashed_password"]);
@@ -500,9 +519,10 @@ class Validation {
      * @param  array   $attempts
      * @return bool
      */
-    private function attempts($attempts){
+    private function attempts($attempts)
+    {
 
-        if(empty($attempts['last_time']) && empty($attempts['count'])) {
+        if (empty($attempts['last_time']) && empty($attempts['count'])) {
             return true;
         }
 
@@ -520,8 +540,7 @@ class Validation {
             $this->errors[] = "You exceeded number of possible attempts, please try again later after " .
                 date("i", $block_time - $time_elapsed) . " minutes";
             return false;
-
-        }else{
+        } else {
 
             return true;
         }
@@ -539,7 +558,8 @@ class Validation {
      *
      * @see
      */
-    private function fileUnique($path){
+    private function fileUnique($path)
+    {
         return !file_exists($path);
     }
 
@@ -549,7 +569,8 @@ class Validation {
      * @param  array   $file
      * @return bool
      */
-    private function fileErrors($file){
+    private function fileErrors($file)
+    {
         return (int)$file['error'] === UPLOAD_ERR_OK;
     }
 
@@ -561,7 +582,8 @@ class Validation {
      *
      * @see
      */
-    private function fileUploaded($file){
+    private function fileUploaded($file)
+    {
         return is_uploaded_file($file["tmp_name"]);
     }
 
@@ -572,19 +594,20 @@ class Validation {
      * @param  array   $args(min,max)
      * @return bool
      */
-    private function fileSize($file, $args){
+    private function fileSize($file, $args)
+    {
 
         // size in bytes,
         // 1 KB = 1024 bytes, and 1 MB = 1048,576 bytes.
-        $size = array ("min" => (int)$args[0], "max" => (int)$args[1]);
+        $size = array("min" => (int)$args[0], "max" => (int)$args[1]);
 
         if ($file['size'] > $size['max']) {
-            $this->errors[] = "File size can't exceed max limit (". ($size['max']/1048576) . " MB)";
+            $this->errors[] = "File size can't exceed max limit (" . ($size['max'] / 1048576) . " MB)";
             return false;
         }
 
         // better not to say the min limits.
-        if($file['size'] < $size['min']){
+        if ($file['size'] < $size['min']) {
             $this->errors[] = "File size either is too small or corrupted";
             return false;
         }
@@ -598,17 +621,18 @@ class Validation {
      * @param  array   $dimensions(width,height)
      * @return bool
      */
-    private function imageSize($file, $dimensions){
+    private function imageSize($file, $dimensions)
+    {
 
         $imageSize  = array('width' => 0, 'height' => 0);
         list($imageSize['width'], $imageSize['height'])   = getimagesize($file["tmp_name"]);
 
-        if($imageSize["width"] < 10 || $imageSize["height"] < 10){
+        if ($imageSize["width"] < 10 || $imageSize["height"] < 10) {
             $this->errors[] = "This image is too small or corrupted";
             return false;
         }
-        if($imageSize["width"] > $dimensions[0] || $imageSize["height"] > $dimensions[1]){
-            $this->errors[] = "Image width & height must be below ". $dimensions[0] ." pixels";
+        if ($imageSize["width"] > $dimensions[0] || $imageSize["height"] > $dimensions[1]) {
+            $this->errors[] = "Image width & height must be below " . $dimensions[0] . " pixels";
             return false;
         }
         return true;
@@ -622,12 +646,13 @@ class Validation {
      * @throws Exception if finfo_open() doesn't exists
      * @return bool
      */
-    private function mimeType($file, $mimeTypes){
+    private function mimeType($file, $mimeTypes)
+    {
 
-        if(!file_exists($file["tmp_name"])){
+        if (!file_exists($file["tmp_name"])) {
             return false;
         }
-        if(!function_exists('finfo_open')) {
+        if (!function_exists('finfo_open')) {
             throw new Exception("Function finfo_open() doesn't exist");
         }
 
@@ -650,9 +675,10 @@ class Validation {
      * @param  array   $extension
      * @return bool
      */
-    private function fileExtension($file, $extension){
+    private function fileExtension($file, $extension)
+    {
 
-        if(isset($extension[0])){
+        if (isset($extension[0])) {
             return $extension[0] === pathinfo($file['name'])['extension'];
         }
         return false;
@@ -674,7 +700,8 @@ class Validation {
      * @param  string  $rule
      * @return mixed
      */
-    private static function defaultMessages($rule){
+    private static function defaultMessages($rule)
+    {
         $messages = [
             "required" => "{placeholder} can't be empty",
             "minLen"   => "{placeholder} can't be less than {0} character",
@@ -701,6 +728,6 @@ class Validation {
             "fileExtension" => "Your file format is invalid"
         ];
 
-        return isset($messages[$rule])? $messages[$rule]: null;
+        return isset($messages[$rule]) ? $messages[$rule] : null;
     }
 }

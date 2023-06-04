@@ -1,7 +1,7 @@
 var account = $("#account").DataTable({
   processing: true,
   serverSide: true,
-  searching: false,
+  searching: true,
   ajax: {
     url: "../elements/acctTable",
     type: "POST",
@@ -254,18 +254,14 @@ $(document).ready(function () {
   })
   function rentBenchMarkCallBack(result) {
     if (result.success === true) {
-      swal(
-        {
-          title: "Berjaya!",
-          text: "Telah berjaya direkodkan, Sila muatnaik dokumen sokongan.",
-          icon: "success",
-          button: true
-        },
-        function () {
-          // benchmark.row.add([counter + ".1", counter + ".2", counter + ".3", counter + ".4", counter + ".5"]).draw()
-          $("#rent-benchmark").DataTable().ajax.reload()
-        }
-      )
+      swal({
+        title: "Berjaya!",
+        text: "Telah berjaya direkodkan, Sila muatnaik dokumen sokongan.",
+        icon: "success",
+        button: true
+      }).then(() => {
+        $("#rent-benchmark").DataTable().ajax.reload()
+      })
     } else {
       swal("Oops...", "Tidak berjaya direkodkan!", "error")
     }
@@ -274,22 +270,30 @@ $(document).ready(function () {
   $("body").on("click", "#remove", function (e) {
     e.preventDefault()
     // console.log($(this).data("id"))
-    ajax.send("Vendor/deleterentbenchmark", { id: $(this).data("id") }, rentBenchMarkCallBack)
+    swal({
+      title: "Anda pasti?",
+      text: "Setelah dipadamkan, maklumat ini akan dihapuskan dalam pangkalan data!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true
+    }).then((willDelete) => {
+      if (willDelete) {
+        ajax.send("Vendor/deleterentbenchmark", { id: $(this).data("id") }, deleterentBenchMarkCallBack)
+      } else {
+        swal("Fail anda selamat!")
+      }
+    })
   })
-  function rentBenchMarkCallBack(result) {
+  function deleterentBenchMarkCallBack(result) {
     if (result.success === true) {
-      swal(
-        {
-          title: "Berjaya!",
-          text: "Telah berjaya dipadamkan.",
-          icon: "success",
-          button: true
-        },
-        function () {
-          // benchmark.row.add([counter + ".1", counter + ".2", counter + ".3", counter + ".4", counter + ".5"]).draw()
-          $("#rent-benchmark").DataTable().ajax.reload()
-        }
-      )
+      swal({
+        title: "Berjaya!",
+        text: "Telah berjaya dipadamkan.",
+        icon: "success",
+        button: true
+      }).then(() => {
+        $("#rent-benchmark").DataTable().ajax.reload()
+      })
     } else {
       swal("Oops...", "Tidak berjaya dipadamkan!", "error")
     }

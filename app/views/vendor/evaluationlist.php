@@ -13,8 +13,7 @@
                 </div>
                 <!--end col-->
                 <div class="col-auto">
-                  <button class="btn btn-default btn-sm mt5 mr15" id="print_submit"><i
-                      class="glyphicon glyphicon-print"></i></button>
+                  <button class="btn btn-default btn-sm mt5 mr15" id="print_submit"><i class="glyphicon glyphicon-print"></i></button>
                 </div>
                 <!--end col-->
               </div>
@@ -31,17 +30,18 @@
                         <th rowspan="2">No Lot</br>No PT</br>Hakmilik</th>
                         <th rowspan="2">Luas Bangunan (mp)</th>
                         <th rowspan="2">Luas Tanah (mp)</th>
-                        <th colspan="2" style="text-align:center;">Nilai Tahunan</th>
-                        <th colspan="2" style="text-align:center;">Cukai Taksiran</th>
-                        <th colspan="2" style="text-align:center;">Kadar</th>
+                        <th colspan="2" style="text-align:center;">Nilai Tahunan (RM)</th>
+                        <th colspan="2" style="text-align:center;">Cukai Taksiran (RM)</th>
+                        <th colspan="2" style="text-align:center;">Kadar (%)</th>
+                        <th rowspan="2"></th>
                       </tr>
                       <tr>
-                        <th>Asal (RM)</th>
-                        <th>Baru (RM)</th>
-                        <th>Asal (RM)</th>
-                        <th>Baru (RM)</th>
-                        <th>Asal (%)</th>
-                        <th>Baru (%)</th>
+                        <th>Asal</th>
+                        <th>Baru</th>
+                        <th>Asal</th>
+                        <th>Baru</th>
+                        <th>Asal</th>
+                        <th>Baru</th>
                       </tr>
                     </thead>
                     <tbody>

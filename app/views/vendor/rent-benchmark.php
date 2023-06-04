@@ -240,7 +240,7 @@
         <h4 class="modal-title">SENARAI AKAUN</h4>
       </div>
       <div class="modal-body">
-        <table id="account" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+        <table id="account" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width:100%">
           <thead>
             <tr>
               <th>No. Akaun</th>

@@ -3,7 +3,7 @@
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
-      <?php $img = $this->controller->Informations->getReviewAcctInfo($reviewId); ?>
+      <?php $img = $this->controller->Informations->getReviewInfoById($reviewId); ?>
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
           <div class="panel panel-primary">
@@ -58,8 +58,7 @@
               <h4>MUATNAIK GAMBAR</h4>
             </div>
             <div class="panel-body">
-              <form class="form-horizontal" id="form-upload-file" role="form" method="post"
-                enctype="multipart/form-data" style="font-size:13px;">
+              <form class="form-horizontal" id="form-upload-file" role="form" method="post" enctype="multipart/form-data" style="font-size:13px;">
                 <input type="hidden" name="no_akaun" value="<?= $img["smk_akaun"] ?>">
                 <div class="row mb5">
                   <div class="col-md-12">

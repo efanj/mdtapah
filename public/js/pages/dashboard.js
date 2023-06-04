@@ -13,12 +13,12 @@ $(document).ready(function () {
     transparent: true,
     maxZoom: 25
   })
-  // var paymentwmsLayer = L.tileLayer.betterWms(api_url, {
-  //   layers: "mdt:v_payment_all",
-  //   format: "image/png",
-  //   transparent: true,
-  //   maxZoom: 25,
-  // })
+  var paymentwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "mdt:v_payment_all",
+    format: "image/png",
+    transparent: true,
+    maxZoom: 25
+  })
   var lotndcdbwmsLayer = L.tileLayer.betterWms(api_url, {
     layers: "mdt:lot_ndcdb",
     format: "image/png",
@@ -47,7 +47,7 @@ $(document).ready(function () {
   })
 
   var layerLegend = L.Geoserver.legend("https://geoserver.mdtapah.gov.my/geoserver", {
-    layers: "perancang:v_payment_all",
+    layers: "mdt:v_payment_all",
     style: `payment_status`
   })
 
@@ -81,6 +81,7 @@ $(document).ready(function () {
         "Lot NDCDB": lotndcdbwmsLayer,
         "Lot komited": lotkomitedwmsLayer,
         "Lot Perancang": lotperancangwmsLayer,
+        "Status Bayaran": paymentwmsLayer,
         Dilawati: visitwmsLayer
       }
     }

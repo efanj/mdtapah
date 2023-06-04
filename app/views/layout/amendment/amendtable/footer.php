@@ -21,6 +21,7 @@
 <!-- Handle responsive view functions -->
 <script src="<?= PUBLIC_ROOT ?>js/jRespond.min.js"></script>
 <!-- Datatables -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables_1.13/DataTables-1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables/dataTables.bootstrap.js"></script>
 <!-- Custom scroll for sidebars,tables and etc. -->
@@ -38,15 +39,16 @@
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
 <script src="<?= PUBLIC_ROOT ?>js/pages/table-amendlists.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT ?>js/pages/print-amendlists.js" type="text/javascript"></script>
 
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->
 <script>
-config = <?= json_encode(Config::getJsConfig()) ?>;
+  config = <?= json_encode(Config::getJsConfig()) ?>;
 </script>
 <!-- Run the application -->
 <script>
-$(document).ready(app.init());
+  $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>

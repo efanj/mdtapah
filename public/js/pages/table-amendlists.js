@@ -67,9 +67,9 @@ $(document).ready(function () {
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
-            data = row.nilth_asal + "<br/>"
-            data += row.kadar_asal + "<br/>"
-            data += row.cukai_asal
+            data = "RM " + row.nilth_asal + "<br/>"
+            data += row.kadar_asal + "%<br/>"
+            data += "RM " + row.cukai_asal
           }
           return data
         }
@@ -80,9 +80,9 @@ $(document).ready(function () {
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
-            data = row.nilth_baru + "<br/>"
-            data += row.kadar_baru + "<br/>"
-            data += row.cukai_baru
+            data = "RM " + row.nilth_baru + "<br/>"
+            data += row.kadar_baru + "%<br/>"
+            data += "RM " + row.cukai_baru
           }
           return data
         }
@@ -93,7 +93,22 @@ $(document).ready(function () {
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
-            data = row.status
+            data = ""
+            if (row.nilth_baru > 0) {
+              data += "RM " + row.beza_nilth + "<br/>"
+            } else {
+              data += "RM " + row.nilth_asal + "<br/>"
+            }
+            if (row.kadar_baru > 0) {
+              data += row.beza_kadar + "%<br/>"
+            } else {
+              data += row.kadar_baru + "%<br/>"
+            }
+            if (row.cukai_baru > 0) {
+              data += "RM " + row.beza_cukai
+            } else {
+              data += "RM " + row.cukai_baru
+            }
           }
           return data
         }
@@ -113,13 +128,14 @@ $(document).ready(function () {
       {
         targets: 8,
         orderable: false,
+        className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
             if (row.vstatus === "0") {
-              data = "Belum Disahkan"
+              data = "<span class='label label-primary'>Belum Disahkan</span>"
             } else if (row.vstatus === "1") {
-              data = "Telah Disahkan"
+              data = "<span class='label label-success'>Telah Disahkan</span>"
             }
           }
           return data
@@ -140,29 +156,33 @@ $(document).ready(function () {
       {
         targets: 10,
         orderable: false,
+        className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
           console.log(row)
           if (type === "display") {
-            data = '<div class="btn-group btn-group-sm" role="group">'
+            data = '<div class="btn-group btn-group-xs" role="group">'
+            data += '<a href="#" class="btn btn-default btn-xs" type="button" title="Cetak" data-sirino="' + row.noSiri + '" id="print"><i class="fa fa-print"></i></a>'
             if (row.form === "A") {
-              data += '<a href="viewamendAdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
+              data += '<a href="viewamendAdetail/' + row.noSiri + '" class="btn btn-default btn-xs" type="button" title="Maklumat Lengkap"><i class="fa fa-eye"></i></a>'
             } else if (row.form === "B") {
-              data += '<a href="viewamendBdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
+              data += '<a href="viewamendBdetail/' + row.noSiri + '" class="btn btn-default btn-xs" type="button" title="Maklumat Lengkap"><i class="fa fa-eye"></i></a>'
             } else if (row.form === "C") {
-              data += '<a href="viewamendCdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
+              data += '<a href="viewamendCdetail/' + row.noSiri + '" class="btn btn-default btn-xs" type="button" title="Maklumat Lengkap"><i class="fa fa-eye"></i></a>'
             } else if (row.form === "PS") {
-              data += '<a href="../vendor/viewreviewPSdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
+              data += '<a href="../vendor/viewreviewPSdetail/' + row.noSiri + '" class="btn btn-default btn-xs" type="button" title="Maklumat Lengkap"><i class="fa fa-eye"></i></a>'
             }
-            if (row.calctype === "1") {
-              data += '<a href="viewcalcland/' + row.noSiri + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
-            } else if (row.calctype === "2") {
-              data += '<a href="viewcalcbuilding/' + row.noSiri + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
-            } else {
-              data += '<a href="#" class="btn btn-default btn-sm" title="Borang Nilaian" disabled><i class="fa fa-calculator color-dark"></i></a>'
+            if (row.form != "A") {
+              if (row.calctype === "1") {
+                data += '<a href="viewcalcland/' + row.noSiri + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+              } else if (row.calctype === "2") {
+                data += '<a href="viewcalcbuilding/' + row.noSiri + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+              } else {
+                data += '<a href="#" class="btn btn-default btn-sm" title="Borang Nilaian" disabled><i class="fa fa-calculator"></i></a>'
+              }
             }
-            data += '<a href="viewimages/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o color-dark"></i></a>'
-            data += '<a href="viewdocuments/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o color-dark"></i></a>'
+            data += '<a href="viewimages/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o"></i></a>'
+            data += '<a href="viewdocuments/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o"></i></a>'
             data += "</div>"
           }
           return data

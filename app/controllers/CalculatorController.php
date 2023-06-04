@@ -14,16 +14,19 @@ class CalculatorController extends Controller
     $this->Security->requirePost($actions);
 
     switch ($action) {
-      case "buildingSubmit":
+      case "costSubmit":
         $this->Security->config("validateForm", false);
         break;
-      case "buildingVendorSubmit":
+      case "vendorcostSubmit":
         $this->Security->config("validateForm", false);
         break;
-      case "buildingEdit":
+      case "costEdit":
         $this->Security->config("validateForm", false);
         break;
-      case "landSubmit":
+      case "rentSubmit":
+        $this->Security->config("validateForm", false);
+        break;
+      case "vendorRentSubmit":
         $this->Security->config("validateForm", false);
         break;
       case "getCalculation":
@@ -65,116 +68,13 @@ class CalculatorController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/calclandvendor/", Config::get("VIEWS_PATH") . "calculator/calclandvendor.php", ["siriNo" => $siriNo]);
   }
 
-  public function calcbuildingvendor($siriNo)
+  public function createRentCalc($siriNo)
   {
     Config::setJsConfig("curPage", "calculator");
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/calcbuildingvendor/", Config::get("VIEWS_PATH") . "calculator/calcbuildingvendor.php", ["siriNo" => $siriNo]);
   }
 
-  public function landindustry($siriNo)
-  {
-    Config::setJsConfig("curPage", "calculator");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/landindustry/", Config::get("VIEWS_PATH") . "calculator/calclandindustry.php", ["siriNo" => $siriNo]);
-  }
-
-  public function landresidence($siriNo)
-  {
-    Config::setJsConfig("curPage", "calculator");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/landresidence/", Config::get("VIEWS_PATH") . "calculator/calclandresidence.php", ["siriNo" => $siriNo]);
-  }
-
-  public function oilstation($siriNo)
-  {
-    Config::setJsConfig("curPage", "calculator");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/oilstation/", Config::get("VIEWS_PATH") . "calculator/calcoilstation.php", ["siriNo" => $siriNo]);
-  }
-
-  public function specialproperty($siriNo)
-  {
-    Config::setJsConfig("curPage", "calculator");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/specialproperty/", Config::get("VIEWS_PATH") . "calculator/specialproperty.php", ["siriNo" => $siriNo]);
-  }
-
-  public function factory($siriNo)
-  {
-    Config::setJsConfig("curPage", "calculator");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/factory/", Config::get("VIEWS_PATH") . "calculator/calcfactory.php", ["siriNo" => $siriNo]);
-  }
-
-  public function telcotower($siriNo)
-  {
-    Config::setJsConfig("curPage", "calculator");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/calculator/telcotower/", Config::get("VIEWS_PATH") . "calculator/telcotower.php", ["siriNo" => $siriNo]);
-  }
-
-  public function buildingSubmit()
-  {
-    $siriNo = $this->request->data("siri_no");
-    $akaun = $this->request->data("akaun");
-    $comparison = $this->request->data("comparison");
-    $breadth_land = $this->request->data("breadth_land");
-    $price_land = $this->request->data("price_land");
-    $section_one = $this->request->data("section_one");
-    // $section_two = $this->request->data("section_two");
-    $discount = $this->request->data("discount");
-    $rental = $this->request->data("rental");
-    $corner = $this->request->data("corner");
-    $even = $this->request->data("even");
-    $yearly = $this->request->data("yearly");
-    $rate = $this->request->data("rate");
-    $tax = $this->request->data("tax");
-
-    $result = $this->calculator->buildingSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one,  $discount, $corner, $rental, $even, $yearly, $rate, $tax);
-
-    if (!$result) {
-      $this->view->renderErrors($this->calculator->errors());
-    } else {
-      $this->view->renderJson($result);
-    }
-  }
-
-  public function buildingVendorSubmit()
-  {
-    // $siriNo = $this->request->data("siri_no");
-    $akaun = $this->request->data("akaun");
-    $comparison = $this->request->data("comparison");
-    $breadth_land = $this->request->data("breadth_land");
-    $price_land = $this->request->data("price_land");
-    $section_one = $this->request->data("section_one");
-    // $section_two = $this->request->data("section_two");
-    $discount = $this->request->data("discount");
-    $rental = $this->request->data("rental");
-    $corner = $this->request->data("corner");
-    $even = $this->request->data("even");
-    $yearly = $this->request->data("yearly");
-    $rate = $this->request->data("rate");
-    $tax = $this->request->data("tax");
-
-    $result = $this->calculator->buildingVendorSubmit(
-      Session::getUserId(),
-      Session::getUserWorkerId(),
-      $akaun,
-      $comparison,
-      $breadth_land,
-      $price_land,
-      $section_one,
-      $discount,
-      $corner,
-      $rental,
-      $even,
-      $yearly,
-      $rate,
-      $tax
-    );
-
-    if (!$result) {
-      $this->view->renderErrors($this->calculator->errors());
-    } else {
-      $this->view->renderJson($result);
-    }
-  }
-
-  public function buildingEdit()
+  public function costSubmit()
   {
     $siriNo = $this->request->data("siri_no");
     $akaun = $this->request->data("akaun");
@@ -190,7 +90,7 @@ class CalculatorController extends Controller
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->calculator->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+    $result = $this->calculator->costSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
 
     if (!$result) {
       $this->view->renderErrors($this->calculator->errors());
@@ -199,7 +99,59 @@ class CalculatorController extends Controller
     }
   }
 
-  public function landSubmit()
+  public function vendorcostSubmit()
+  {
+    $akaun = $this->request->data("akaun");
+    $breadth_land = $this->request->data("breadth_land");
+    $price_land = $this->request->data("price_land");
+    $total_land = $this->request->data("total_land");
+    $adjust_land = $this->request->data("adjust_land");
+    $ttl_land = $this->request->data("ttl_land");
+    $section = $this->request->data("section");
+    $overall = $this->request->data("overall");
+    $capital = $this->request->data("capital");
+    $round = $this->request->data("round");
+    $yearly = $this->request->data("yearly");
+    $rate = $this->request->data("rate");
+    $tax = $this->request->data("tax");
+
+    $result = $this->calculator->vendorcostSubmit(Session::getUserId(), Session::getUserWorkerId(), $akaun, $breadth_land, $price_land, $total_land, $adjust_land, $ttl_land, $section, $overall, $capital, $round, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->calculator->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function costEdit()
+  {
+    $siriNo = $this->request->data("siri_no");
+    $akaun = $this->request->data("akaun");
+    $id_land = $this->request->data("id_land");
+    $breadth_land = $this->request->data("breadth_land");
+    $price_land = $this->request->data("price_land");
+    $total_land = $this->request->data("total_land");
+    $adjust_land = $this->request->data("adjust_land");
+    $ttl_land = $this->request->data("ttl_land");
+    $section = $this->request->data("section");
+    $overall = $this->request->data("overall");
+    $capital = $this->request->data("capital");
+    $round = $this->request->data("round");
+    $yearly = $this->request->data("yearly");
+    $rate = $this->request->data("rate");
+    $tax = $this->request->data("tax");
+
+    $result = $this->calculator->costEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $id_land, $breadth_land, $price_land, $total_land, $adjust_land, $ttl_land, $section, $overall, $capital, $round, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->calculator->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function rentSubmit()
   {
     $siriNo = $this->request->data("siri_no");
     $acctNo = $this->request->data("akaun");
@@ -213,7 +165,34 @@ class CalculatorController extends Controller
     $rate = $this->request->data("rate");
     $tax = $this->request->data("tax");
 
-    $result = $this->calculator->landSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $current, $discount, $even, $yearly, $rate, $tax);
+    $result = $this->calculator->rentSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $current, $discount, $even, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->calculator->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function vendorRentSubmit()
+  {
+    $acctNo = $this->request->data("akaun");
+    $compare = $this->request->data("compare");
+    $breadth_land = $this->request->data("breadth_land");
+    $price_land = $this->request->data("price_land");
+    $total_land = $this->request->data("total_land");
+
+    $main = $this->request->data("main");
+    $out = $this->request->data("out");
+
+    $rental = $this->request->data("rental");
+    $corner = $this->request->data("corner");
+    $round = $this->request->data("round");
+    $yearly = $this->request->data("yearly");
+    $rate = $this->request->data("rate");
+    $tax = $this->request->data("tax");
+
+    $result = $this->calculator->vendorRentSubmit(Session::getUserId(), Session::getUserWorkerId(), $acctNo, $compare, $breadth_land, $price_land, $total_land, $main, $out, $rental, $corner, $round, $yearly, $rate, $tax);
 
     if (!$result) {
       $this->view->renderErrors($this->calculator->errors());

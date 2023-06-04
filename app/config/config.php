@@ -4,6 +4,7 @@ return array(
 
 
   "WEBSITE_NAME" => "Taksiran",
+  "PBT_NAME" => "Majlis Daerah Tapah",
   "COPYRIGHT" => "Hakcipta Terpelihara Majlis Daerah Tapah &copy; ",
   "GOOGLE_KEY" => "AIzaSyDpsnz9ba2HKFHBDbyHyfyxKSMVZqs2Il8",
 

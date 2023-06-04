@@ -199,18 +199,19 @@ var sitereview = $("#sitereview").DataTable({
     {
       targets: 6,
       orderable: false,
+      className: "dt-body-center",
       data: null,
       render: function (data, type, row, meta) {
         // console.log(row.smk_type)
         if (type === "display") {
           if (row.smk_type === 1) {
-            data = "<span class='label label-default'>Akaun Baru</span>"
+            data = "Akaun Baru"
           }
           if (row.smk_type === 2) {
-            data = "<span class='label label-primary'>Pindaan</span>"
+            data = "Pindaan"
           }
           if (row.smk_type === 3) {
-            data = "<span class='label label-success'>KemasKini Data</span>"
+            data = "KemasKini Data"
           }
         }
         return data
@@ -218,22 +219,23 @@ var sitereview = $("#sitereview").DataTable({
     },
     {
       targets: 7,
-      orderable: false,
+      orderable: true,
+      className: "dt-body-center",
       data: null,
       render: function (data, type, row, meta) {
         if (type === "display") {
           if (row.smk_stspn == "0") {
-            data = "Baru"
+            data = "<span class='label label-default'>Baru</span>"
           } else if (row.smk_stspn == "1") {
-            data = "Baca"
+            data = "<span class='label label-info'>Baca</span>"
           } else if (row.smk_stspn == "2") {
-            data = "Serah"
+            data = "<span class='label label-primary'>Serah</span>"
           } else if (row.smk_stspn == "3") {
-            data = "Diterima"
+            data = "<span class='label label-success'>Diterima</span>"
           } else if (row.smk_stspn == "4") {
-            data = "Semak Semula"
+            data = "<span class='label label-warning'>Semak Semula</span>"
           } else if (row.smk_stspn == "5") {
-            data = "Serah Kembali"
+            data = "<span class='label label-primary'>Serah Kembali</span>"
           }
         }
         return data
@@ -271,10 +273,10 @@ var sitereview = $("#sitereview").DataTable({
           data = '<a class="btn btn-danger btn-xs remove" title="Delete" id="remove" data-id="' + row.id + '"><i class="fa fa-trash"></i></a> '
           data += '<div class="btn-group btn-group-xs" role="group">'
           if (row.smk_type === 1) {
-            data += '<a href="JadualcSemak/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">Jadual C</a>'
+            data += '<a href="../Account/jadualcsemak/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">Jadual C</a>'
           }
           if (row.smk_type === 2) {
-            data += '<a href="JadualbSemak/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">Jadual B</a>' + '<a href="../Evaluate/jadualbSemak/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">Jadual B(PS)</a>'
+            data += '<a href="../Account/jadualbsemak/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">Jadual B</a>' + '<a href="../Evaluate/jadualbSemak/' + row.id + '" class="btn btn-primary btn-sm" title="Siasatan Tapak">Jadual B(PS)</a>'
           }
           if (row.smk_type === 3) {
             data += '<a href="kemaskini/' + row.id + '" class="btn btn-primary btn-xs" title="Siasatan Tapak">KemasKini Data</a>'

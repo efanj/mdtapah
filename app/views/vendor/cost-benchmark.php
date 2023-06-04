@@ -68,8 +68,8 @@
                     </div>
                   </form>
                   <hr>
-                  <form class="form-horizontal" role="form" id="form-rent-benchmark" method="post">
-                    <input type="hidden" name="ratetype" value="1">
+                  <form class="form-horizontal" role="form" id="form-cost-benchmark" method="post">
+                    <input type="hidden" name="ratetype" value="2">
                     <div class="row ml2 mr2">
                       <div class="col-md-4">
                         <div class="form-group">

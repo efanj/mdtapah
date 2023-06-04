@@ -424,8 +424,8 @@ class Elements extends Model
 
     $searchQuery = "";
     if ($searchValue != "") {
-      $searchQuery = "v.peg_akaun LIKE '%" . $searchValue . "%' OR v.pmk_nmbil iLIKE '%" . $searchValue . "' OR v.hrt_hnama iLIKE '%" . $searchValue . "' OR ";
-      $searchQuery .= "v.jln_knama iLIKE '%" . $searchValue . "' OR v.jln_jnama iLIKE '%" . $searchValue . "'";
+      $searchQuery = "v.peg_akaun LIKE '%" . $searchValue . "%' OR v.pmk_nmbil LIKE '%" . $searchValue . "%' OR v.hrt_hnama LIKE '%" . $searchValue . "%' OR ";
+      $searchQuery .= "v.jln_knama LIKE '%" . $searchValue . "%' OR v.jln_jnama LIKE '%" . $searchValue . "%'";
     }
 
     ## Total number of records without filtering
