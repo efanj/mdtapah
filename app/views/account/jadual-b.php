@@ -27,7 +27,7 @@
                     </a>
                   </li>
                 </ul>
-                <form class="form-horizontal" role="form" id="jadualB" method="post" style="font-size:14px;">
+                <form class="form-horizontal" role="form" id="jadualB" method="post" style="font-size:12px;">
                   <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                       <div class="row mb5">

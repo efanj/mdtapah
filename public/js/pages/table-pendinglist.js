@@ -147,15 +147,16 @@ var table = $("#pending").DataTable({
     {
       targets: 3,
       orderable: false,
-      data: "jln_jnama"
+      data: null,
+      render: function (data, type, row, meta) {
+        if (type === "display") {
+          data = row.jln_jnama + "<br>" + row.hrt_hnama
+        }
+        return data
+      }
     },
     {
       targets: 4,
-      orderable: false,
-      data: "hrt_hnama"
-    },
-    {
-      targets: 5,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -166,7 +167,7 @@ var table = $("#pending").DataTable({
       }
     },
     {
-      targets: 6,
+      targets: 5,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -177,7 +178,7 @@ var table = $("#pending").DataTable({
       }
     },
     {
-      targets: 7,
+      targets: 6,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -188,7 +189,7 @@ var table = $("#pending").DataTable({
       }
     },
     {
-      targets: 8,
+      targets: 7,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -211,7 +212,7 @@ var table = $("#pending").DataTable({
       }
     },
     {
-      target: 9,
+      target: 8,
       orderable: false,
       data: null,
       render: function (data, type, row, meta) {
@@ -222,7 +223,7 @@ var table = $("#pending").DataTable({
       }
     },
     {
-      targets: 10,
+      targets: 9,
       orderable: false,
       className: "dt-body-center",
       data: null,
@@ -231,9 +232,13 @@ var table = $("#pending").DataTable({
           data = '<div class="btn-group btn-group-xs" role="group">'
           data += '<a href="#" class="btn btn-warning btn-xs edit-area" title="Kemaskini Luas Tambahan"><i class="fa fa-edit color-dark"></i></a>'
           if (row.sirino != "-") {
-            data += '<a href="' + row.calctype + "/" + row.sirino + '" class="btn btn-success btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+            if (row.calc_type == 1) {
+              data += '<a href="editRentCalc/"' + row.sirino + '" class="btn btn-success btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+            } else if (row.calc_type == 2) {
+              data += '<a href="editCostCalc/"' + row.sirino + '" class="btn btn-success btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+            }
           } else {
-            data += '<a href="' + row.calctype + "/" + row.akaun + '" class="btn btn-default btn-xs" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
+            data += '<a href="#" class="btn btn-default btn-xs" data-id="' + row.id + '" id="calc" title="Borang Nilaian"><i class="fa fa-calculator"></i></a>'
           }
           data += '<a href="viewimages/' + row.id + '" class="btn '
           if (row.file != null) {
@@ -259,7 +264,7 @@ var table = $("#pending").DataTable({
   select: {
     style: "multi"
   },
-  order: [[9, "asc"]],
+  order: [[8, "asc"]],
   language: {
     search: "Saring : ",
     lengthMenu: "Paparkan _MENU_ rekod",
@@ -292,7 +297,35 @@ $("#pending tbody").on("click", "td.details-control", function () {
   }
 })
 
-$("#pending").css("font-size", 13)
+$("#pending").css("font-size", 12)
+
+$("#pending tbody").on("click", "#calc", function () {
+  var calc = $(this)
+  var fileId = calc.data("id")
+  console.log(fileId)
+  swal("Sila pilih kaedah pengiraan cukai taksiran.", {
+    buttons: {
+      sewaan: {
+        text: "Kaedah Perbandingan",
+        value: "rent"
+      },
+      kos: {
+        text: "Kaedah Kos",
+        value: "cost"
+      }
+    }
+  }).then((value) => {
+    switch (value) {
+      case "rent":
+        window.location = config.root + "Vendor/createRentCalc/" + fileId
+        break
+
+      case "cost":
+        window.location = config.root + "Vendor/createCostCalc/" + fileId
+        break
+    }
+  })
+})
 
 $(document).ready(function () {
   // table.draw()

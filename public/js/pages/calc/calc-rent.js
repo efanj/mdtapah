@@ -67,6 +67,21 @@ $(document).ready(function () {
   $("#popup_comparison").css("font-size", 13)
   popup_comparison.columns(0).visible(false)
 
+  var lsans = $("#luas_ansolari").val()
+  var lsbgnt = $("#tamb_bangunan").val()
+  var lsanst = $("#tamb_ansolari").val()
+  var kwkod = $("#kwkod").val()
+  var htkod = $("#htkod").val()
+  console.log(kwkod, htkod, lsans, lsbgnt, lsanst)
+  ajax.send("Vendor/getBenchmark", { type: "2", kwkod: kwkod, htkod: htkod }, getBenchmarkCallBack)
+  function getBenchmarkCallBack(result) {
+    if (result.success === true) {
+      addRowBuilding(result, lsans, lsbgnt, lsanst)
+    } else {
+      swal("Maaf, Tiada aras nilaian yang bersesuaian.", "Sila masukkan data aras nilaian.")
+    }
+  }
+
   var maxField = 4
   var maxLevel = 5
   var x = 1
@@ -157,7 +172,6 @@ $(document).ready(function () {
       $(".comparison #nilth").html(data_comparison.peg_nilth)
       $(".comparison #mfa").html(data_comparison.mfa)
       $(".comparison #afa").html(data_comparison.afa)
-      $("section table#zero tbody tr #price").html(data_comparison.mfa)
       $("#comparison_popup").on("hidden.bs.modal", function (e) {
         rowId = ""
       })

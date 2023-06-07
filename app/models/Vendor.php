@@ -778,7 +778,7 @@ class Vendor extends Model
 
     ## Total number of records without filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $sql .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
     $sql .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     // $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
@@ -789,7 +789,7 @@ class Vendor extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $sql .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
     $sql .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     if ($id != "" && !empty($searchValue)) {
@@ -807,7 +807,7 @@ class Vendor extends Model
 
     ## Fetch records
     $query = "SELECT s.*, c.siri_no, cf.file, cd.doc FROM data.v_semak_raw s ";
-    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
     $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     if ($id != "" && !empty($searchValue)) {
@@ -908,7 +908,7 @@ class Vendor extends Model
 
     ## Total number of records without filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $sel = $database->prepare($sql);
     $database->execute($sel);
     $records = $database->fetchAssociative();
@@ -916,7 +916,7 @@ class Vendor extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $sql .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
     $sql .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     if ($area != "" && $street != "" && $searchValue != "") {
@@ -934,7 +934,7 @@ class Vendor extends Model
 
     ## Fetch records
     $query = "SELECT s.*, c.siri_no, cf.file, cd.doc FROM data.v_semak_raw s ";
-    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.smk_akaun = cf.no_akaun ";
     $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.smk_akaun = cd.no_akaun ";
     if ($area != "" && $street != "" && $searchValue != "") {
@@ -1059,7 +1059,7 @@ class Vendor extends Model
 
     ## Total number of records without filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $sel = $database->prepare($sql);
     $database->execute($sel);
     $records = $database->fetchAssociative();
@@ -1067,15 +1067,15 @@ class Vendor extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     if ($area != "" && $street != "" && $searchValue != "") {
-      $sql .= "WHERE s.smk_stspn = '3' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street . " AND " . $searchQuery;
+      $sql .= "WHERE s.smk_stspn = '4' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street . " AND " . $searchQuery;
     } elseif ($area != "" && $street != "" && $searchValue == "") {
-      $sql .= "WHERE s.smk_stspn = '3' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street;
+      $sql .= "WHERE s.smk_stspn = '4' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street;
     } elseif ($area == "" && $street == "" && $searchValue != "") {
-      $sql .= "WHERE s.smk_stspn = '3' AND " . $searchQuery;
+      $sql .= "WHERE s.smk_stspn = '4' AND " . $searchQuery;
     } else {
-      $sql .= "WHERE s.smk_stspn = '3'";
+      $sql .= "WHERE s.smk_stspn = '4'";
     }
     $sel = $database->prepare($sql);
     $database->execute($sel);
@@ -1084,18 +1084,18 @@ class Vendor extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT s.*, c.siri_no, f.file, d.doc FROM data.v_semak_raw s ";
-    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $query = "SELECT s.*, c.siri_no, c.calc_type, f.file, d.doc FROM data.v_semak_raw s ";
+    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) f ON s.smk_akaun = f.no_akaun ";
     $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) d ON s.smk_akaun = d.no_akaun ";
     if ($area != "" && $street != "" && $searchValue != "") {
-      $query .= "WHERE s.smk_stspn = '3' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street . " AND " . $searchQuery;
+      $query .= "WHERE s.smk_stspn = '4' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street . " AND " . $searchQuery;
     } elseif ($area != "" && $street != "" && $searchValue == "") {
-      $query .= "WHERE s.smk_stspn = '3' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street;
+      $query .= "WHERE s.smk_stspn = '4' AND s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street;
     } elseif ($area == "" && $street == "" && $searchValue != "") {
-      $query .= "WHERE s.smk_stspn = '3' AND " . $searchQuery;
+      $query .= "WHERE s.smk_stspn = '4' AND " . $searchQuery;
     } else {
-      $query .= "WHERE s.smk_stspn = '3'";
+      $query .= "WHERE s.smk_stspn = '4'";
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
@@ -1112,17 +1112,17 @@ class Vendor extends Model
       $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["smk_akaun"]);
       $info = $dbOracle->fetchAssociative();
 
-      if ($this->checkEmptyLand($info["peg_htkod"])) {
+      if ($val["calc_type"] == 1) {
         if ($this->checkNull($val["siri_no"]) == "-") {
-          $calcType = "createEmptyLandCalc";
+          $calcType = "createRentCalc";
         } else {
-          $calcType = "editEmptyLandCalc";
+          $calcType = "editRentCalc";
         }
       } else {
         if ($this->checkNull($val["siri_no"]) == "-") {
-          $calcType = "createBuildingCalc";
+          $calcType = "createCostCalc";
         } else {
-          $calcType = "editBuildingCalc";
+          $calcType = "editCostCalc";
         }
       }
 
@@ -1180,6 +1180,7 @@ class Vendor extends Model
       $rowOutput["workerid"] = $val["workerid"];
       $rowOutput["name"] = $val["name"];
       $rowOutput["calctype"] = $calcType;
+      $rowOutput["calc_type"] = $val["calc_type"];
       $rowOutput["file"] = $val["file"];
       $rowOutput["doc"] = $val["doc"];
       $rowOutput["role"] = Session::getUserRole();
@@ -1402,219 +1403,6 @@ class Vendor extends Model
     $file = $this->getDocsById("data.fdocs", $fileId);
     return $file;
   }
-
-  // public function buildingSubmit($userId, $workerId, $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
-  // {
-  //   $comparison = empty($comparison) ? null : $comparison;
-  //   $breadth_land = empty($breadth_land) ? 0 : $breadth_land;
-  //   $price_land = empty($price_land) ? 0 : $price_land;
-  //   $discount = empty($discount) ? 0 : $discount;
-  //   $rental = empty($rental) ? 0 : $rental;
-  //   $even = empty($even) ? 0 : $even;
-  //   $yearly = empty($yearly) ? 0 : $yearly;
-  //   $rate = empty($rate) ? 0 : $rate;
-  //   $tax = empty($tax) ? 0 : $tax;
-  //   $total = $breadth_land * $price_land;
-  //   $corner = $corner == false ? "false" : "true";
-  //   $calcType = 2;
-  //   $capital = 0;
-  //   $sectionsOne_id = 0;
-
-  //   $database = Database::openConnection();
-
-  //   // if (($breadth_land != "" || $breadth_land != "0") || ($price_land != "" || $price_land != "0" || $price_land != "0.0")) {
-  //   $land = "INSERT INTO data.items_land(siri_no, breadth, price, total) values ('" . $siriNo . "', " . $breadth_land . ", " . $price_land . ", " . $total . ")";
-  //   $database->prepare($land);
-  //   $database->execute();
-  //   $land_id = $database->lastInsertedId();
-  //   // }
-
-  //   $itemsOne_id = [];
-  //   $itemsOne_sum = [];
-  //   foreach ($section_one as $val) {
-  //     if ($val["main_title"] != "") {
-  //       $sectionOne = "INSERT INTO data.section(section_type, siri_no, title) values (1,'" . $siriNo . "','" . $val["main_title"] . "')";
-  //       $database->prepare($sectionOne);
-  //       $database->execute();
-  //       $sectionsOne_id = $database->lastInsertedId();
-  //     }
-  //     if ($sectionsOne_id != null || $sectionsOne_id != "") {
-  //       $sectionsOne_id = $sectionsOne_id;
-  //     }
-  //     foreach ($val['item'] as $value) {
-  //       $breadth_one = empty($value["breadth_one"]) ? 0 : $value["breadth_one"];
-  //       $price_one = empty($value["price_one"]) ? 0 : $value["price_one"];
-  //       $total_one = empty($value["total_one"]) ? 0 : $value["total_one"];
-
-  //       $sql = "INSERT INTO data.items_main(section_id, siri_no, title, breadth, breadthtype, price, pricetype, total) values ";
-  //       $sql .= "(" . $sectionsOne_id . ",'" . $siriNo . "','" . $value["title_one"] . "'," . $breadth_one . ",'" . $value["breadthtype_one"] . "'," . $price_one . ",'" . $value["pricetype_one"] . "'," . $total_one . ")";
-  //       $database->prepare($sql);
-  //       $database->execute();
-  //       $itemsOne_id[] = $database->lastInsertedId();
-  //       $itemsOne_sum[] = $value["total_one"];
-  //     }
-  //   }
-
-  //   if ($comparison != null) {
-  //     $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
-  //   } else {
-  //     $comparison = $comparison;
-  //   }
-  //   $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsOne_id)));
-  //   // $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
-
-  //   // $sumItemOne = array_sum($itemsOne_sum);
-  //   // $sumItemTwo = array_sum($itemsTwo_sum);
-
-  //   $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, capital, discount, corner, rental, yearly_price, even, rate, assessment_tax) ";
-  //   $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', ";
-  //   $query .= "'" . $capital . "', " . $discount . ", " . $corner . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
-  //   $database->prepare($query);
-  //   $result = $database->execute();
-
-  //   if ($result) {
-  //     $activity = "Pengiraan Nilaian : No Siri - " . $siriNo;
-  //     $database->logActivity($userId, $activity);
-  //   }
-
-  //   return true;
-  // }
-
-  // public function buildingEdit($userId, $workerId, $siriNo, $akaun, $comparison, $landId, $breadth_land, $price_land, $section_one, $discount, $corner, $rental, $even, $yearly, $rate, $tax)
-  // {
-
-
-  //   $comparison = empty($comparison) ? null : $comparison;
-  //   $discount = empty($discount) ? 0 : $discount;
-  //   $capital = 0;
-
-  //   $database = Database::openConnection();
-
-  //   $curLand = $this->getLandInfo($landId);
-  //   $breadth = (!empty($breadth_land) && $breadth_land !== $curLand["breadth"]) ? $breadth_land : null;
-  //   $price = (!empty($price_land) && $price_land !== $curLand["price"]) ? $price_land : null;
-  //   $total = (!empty($total) && $total !== $curLand["total"]) ? $total : null;
-
-  //   $landUpdated = ($breadth || $price || $total) ? true : false;
-  //   if ($landUpdated) {
-  //     $landOpt = [
-  //       $breadth => "breadth = :breadth ",
-  //       $price => "price = :price ",
-  //       $total => "total = :total "
-  //     ];
-  //     $query = "UPDATE data.items_land SET ";
-  //     $query .= $this->applyOptions($landOpt, ", ");
-  //     $query .= "WHERE siri_no = :siri_no AND id = :id ";
-  //     $database->prepare($query);
-
-  //     if ($breadth) {
-  //       $database->bindValue(':breadth', $breadth);
-  //     }
-  //     if ($price) {
-  //       $database->bindValue(':price', $price);
-  //     }
-  //     if ($total) {
-  //       $database->bindValue(':total', $total);
-  //     }
-  //     $database->bindValue(':siri_no', $siriNo);
-  //     $database->bindValue(':id', $curLand["id"]);
-  //     $database->execute();
-  //   }
-
-  //   foreach ($section_one as $val) {
-  //     if ($val["main_title"] !== "") {
-  //       $curSection = $this->getSectionInfo($val["id"]);
-  //       $title = (!empty($val["main_title"]) && $val["main_title"] !== $curSection["title"]) ? $val["main_title"] : null;
-
-  //       $sectionUpdated = ($title) ? true : false;
-  //       if ($sectionUpdated) {
-  //         $sectionId = $val["id"];
-
-  //         $sectionOpt = [
-  //           $val["main_title"] => "title = :title "
-  //         ];
-
-  //         $query = "UPDATE data.section SET ";
-  //         $query .= $this->applyOptions($sectionOpt, ", ");
-  //         $query .= "WHERE siri_no = :siri_no AND id = :id ";
-  //         $database->prepare($query);
-
-  //         if ($title) {
-  //           $database->bindValue(':title', $title);
-  //         }
-  //         $database->bindValue(':siri_no', $siriNo);
-  //         $database->bindValue(':id', $sectionId);
-  //         $database->execute();
-  //       }
-  //     }
-
-  //     foreach ($val['item'] as $value) {
-  //       $curBuilding = $this->getBuildingInfo($value["id"]);
-  //       $title = (!empty($value["title_one"]) && $value["title_one"] !== $curBuilding["title"]) ? $value["title_one"] : null;
-  //       $breadth = (!empty($value["breadth_one"]) && $value["breadth_one"] !== $curBuilding["breadth"]) ? $value["breadth_one"] : 0;
-  //       $breadthtype = (!empty($value["breadthtype_one"]) && $value["breadthtype_one"] !== $curBuilding["breadthtype"]) ? $value["breadthtype_one"] : null;
-  //       $price = (!empty($value["price_one"]) && $value["price_one"] !== $curBuilding["price"]) ? $value["price_one"] : 0;
-  //       $pricetype = (!empty($value["pricetype_one"]) && $value["pricetype_one"] !== $curBuilding["pricetype"]) ? $value["pricetype_one"] : null;
-  //       $total = (!empty($value["total_one"]) && $value["total_one"] !== $curBuilding["total"]) ? $value["total_one"] : 0;
-
-  //       $buildingUpdated = ($title || $breadth !== 0 || $breadthtype || $price !== 0 || $pricetype || $total !== 0) ? true : false;
-  //       if ($buildingUpdated) {
-  //         $buildingOpt = [
-  //           $title => "title = :title ",
-  //           $breadth => "breadth = :breadth ",
-  //           $breadthtype => "breadthtype = :breadthtype ",
-  //           $price => "price = :price ",
-  //           $pricetype => "pricetype = :pricetype ",
-  //           $total => "total = :total "
-  //         ];
-  //         $query = "UPDATE data.items_main SET ";
-  //         $query .= $this->applyOptions($buildingOpt, ", ");
-  //         $query .= "WHERE siri_no = :siri_no AND id = :id ";
-  //         $database->prepare($query);
-
-  //         if ($title) {
-  //           $database->bindValue(':title', $title);
-  //         }
-  //         if ($breadth !== 0) {
-  //           $database->bindValue(':breadth', $breadth);
-  //         }
-  //         if ($breadthtype) {
-  //           $database->bindValue(':breadthtype', $breadthtype);
-  //         }
-  //         if ($price !== 0) {
-  //           $database->bindValue(':price', $price);
-  //         }
-  //         if ($pricetype) {
-  //           $database->bindValue(':pricetype', $pricetype);
-  //         }
-  //         if ($total !== 0) {
-  //           $database->bindValue(':total', $total);
-  //         }
-  //         $database->bindValue(':siri_no', $siriNo);
-  //         $database->bindValue(':id', $value["id"]);
-  //         $database->execute();
-  //       }
-  //     }
-  //   }
-
-  //   if ($comparison != null) {
-  //     $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
-  //   } else {
-  //     $comparison = "{}";
-  //   }
-
-  //   $query = "UPDATE data.calculator SET comparison = '" . $comparison . "', capital = '" . $capital . "', discount = " . $discount . ", rental = '" . $rental . "', yearly_price = " . $yearly . ", even = " . $even . ", rate = " . $rate . ", assessment_tax = " . $tax;
-  //   $query .= " WHERE siri_no = '" . $siriNo . "'";
-  //   $database->prepare($query);
-  //   $result = $database->execute();
-
-  //   if ($result) {
-  //     $activity = "Kemas kini Pengiraan Nilaian : No Siri - " . $siriNo;
-  //     $database->logActivity($userId, $activity);
-  //   }
-
-  //   return true;
-  // }
 
   public function getChildsBenchMark($id)
   {

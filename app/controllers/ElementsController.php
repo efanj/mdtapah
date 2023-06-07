@@ -41,6 +41,9 @@ class ElementsController extends Controller
       case "hbangn":
         $this->Security->config("validateForm", false);
         break;
+      case "getrate":
+        $this->Security->config("validateForm", false);
+        break;
       case "updateRate":
         $this->Security->config("validateForm", false);
         break;
@@ -187,6 +190,18 @@ class ElementsController extends Controller
     }
   }
 
+  public function getrate()
+  {
+    $kwkod = $this->request->data("kwkod");
+    $htkod = $this->request->data("htkod");
+    $result = $this->elements->getrate($kwkod, $htkod);
+    if (!$result) {
+      $this->view->renderErrors($this->elements->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function updateRate()
   {
     $rate = $this->request->data("rate");
@@ -230,8 +245,8 @@ class ElementsController extends Controller
     //only for admin
     Permission::allow("administrator", $resource, "*");
 
-    //only for user
-    Permission::allow("user", $resource, "*");
+    //only for penilaian
+    Permission::allow("penilaian", $resource, "*");
 
     //only for normal vendor
     Permission::allow("vendor", $resource, ["reference", "street", "acctTable", "streettable", "customertable", "customeraddtable"]);

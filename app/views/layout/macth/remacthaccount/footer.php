@@ -29,6 +29,7 @@
 <!-- Custom scroll for sidebars,tables and etc. -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
 <!-- Remove click delay in touch -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/fastclick/fastclick.js"></script>
 <!-- Increase jquery animation speed -->
@@ -37,8 +38,7 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/ui/bootbox/bootbox.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/main.js"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?v=3.52&key=<?= Config::get('GOOGLE_KEY') ?>&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.52&key=<?= Config::get('GOOGLE_KEY') ?>&libraries=places"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/styledLayerControl.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet-google.js" type="text/javascript"></script>
@@ -47,18 +47,18 @@
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet.setLegend.js" type="text/javascript"></script>
 
 <script src="<?= PUBLIC_ROOT ?>js/pages/remacthing-map.js" type="text/javascript"></script>
-<script src="<?= PUBLIC_ROOT; ?>js/jquery.dynamic.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/jquery.Dynamic.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>
 
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->
 <script>
-config = <?= json_encode(Config::getJsConfig()) ?>;
+  config = <?= json_encode(Config::getJsConfig()) ?>;
 </script>
 <!-- Run the application -->
 <script>
-$(document).ready(app.init());
+  $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>

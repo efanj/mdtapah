@@ -14,7 +14,7 @@
   <meta name="keywords" content="" />
   <meta name="application-name" content="" />
   <!-- Import google fonts - Heading first/ text second -->
-  <link href='https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'>
+  <!-- <link href='https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'> -->
   <!-- Css files -->
   <!-- Icons -->
   <link href="<?= PUBLIC_ROOT ?>css/icons.css" rel="stylesheet" />

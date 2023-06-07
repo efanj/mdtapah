@@ -151,7 +151,7 @@ class Informations extends Model
 
     ## Total number of records without filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $sel = $database->prepare($sql);
     $database->execute($sel);
     $records = $database->fetchAssociative();
@@ -159,7 +159,7 @@ class Informations extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
-    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $sql .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     if ($area != "" && $street != "" && $searchValue != "") {
       $sql .= "WHERE s.smk_kodkws = " . $area . " AND s.smk_jalan = " . $street . " AND " . $searchQuery;
     } elseif ($area != "" && $street != "" && $searchValue == "") {
@@ -175,7 +175,7 @@ class Informations extends Model
 
     ## Fetch records
     $query = "SELECT s.*, c.siri_no, f.file, d.doc FROM data.v_semak_raw s ";
-    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.account_no ";
+    $query .= "LEFT JOIN data.calculator c ON s.smk_akaun = c.acct_no ";
     $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) f ON s.smk_akaun = f.no_akaun ";
     $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) d ON s.smk_akaun = d.no_akaun ";
     if ($area != "" && $street != "" && $searchValue != "") {
@@ -1190,71 +1190,93 @@ class Informations extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $query = "SELECT vs.*, vsr.smk_lsbgn as lsbgn, vsr.smk_lstnh as lstnh, vsr.smk_lsans as lsans, ";
+    $noSiri = Encryption::decryptId($siriNo);
+
+    $query = "SELECT vs.*, vsr.smk_lsbgn, vsr.smk_lstnh, vsr.smk_lsans, ";
     $query .= "vsr.smk_lsbgn_tmbh as lsbgnt, vsr.smk_lsans_tmbh as lsanst FROM data.v_submitioninfo vs ";
     $query .= "LEFT JOIN data.v_semak_raw vsr ON vs.no_akaun = vsr.smk_akaun ";
-    $query .= "WHERE vs.no_siri = :no_siri";
+    $query .= "WHERE vs.no_siri = '" . $noSiri . "'";
     $database->prepare($query);
-    $database->bindValue(":no_siri", Encryption::decryptId($siriNo));
     $database->execute();
 
     $rows = $database->fetchAllAssociative();
     $rowOutput = [];
     foreach ($rows as $val) {
-      $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["no_akaun"]);
-      $row = $dboracle->fetchAssociative();
 
-      $rowOutput["no_siri"] = $val["no_siri"];
-      $rowOutput["no_akaun"] = $val["no_akaun"];
-      $rowOutput["no_lot"] = $row["peg_nolot"];
-      $rowOutput["tkhpl"] = $val["tkhpl"];
-      $rowOutput["tkhtk"] = $val["tkhtk"];
-      $rowOutput["nmbil"] = $row["pmk_nmbil"];
-      $rowOutput["plgid"] = $row["pmk_plgid"];
-      $rowOutput["adpg1"] = $row["adpg1"];
-      $rowOutput["adpg2"] = $row["adpg2"];
-      $rowOutput["adpg3"] = $row["adpg3"];
-      $rowOutput["adpg4"] = $row["adpg4"];
-      $rowOutput["jlkod"] = $row["peg_jlkod"];
-      if ($row["peg_thkod"] != 0) {
-        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $row["peg_thkod"]);
-      } else {
-        $rowOutput["tnama"] = $val["thkod"];
-      }
-      if ($row["peg_htkod"] != 0) {
-        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $row["peg_htkod"]);
-      } else {
-        $rowOutput["hnama"] = $val["htkod"];
-      }
-      if ($row["peg_bgkod"] != 0) {
-        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $row["peg_bgkod"]);
-      } else {
-        $rowOutput["bnama"] = $val["bgkod"];
-      }
-      if ($row["peg_stkod"] != 0) {
-        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $row["peg_stkod"]);
-      } else {
-        $rowOutput["snama"] = $val["stkod"];
-      }
-      $rowOutput["htkod"] = $val["htkod"];
-      if (!empty($row["peg_lsbgn"])) {
-        $rowOutput["lsbgn"] = $row["peg_lsbgn"];
-      } else {
+      if ($val["form"] == "C") {
+        $dboracle->getInfoByTwoColumn("V_PLNGAN", "pid_plgid", "val_amtid", $val["plgid"], $val["amtid"]);
+        $almt = $dboracle->fetchAssociative();
+
+        $rowOutput["no_siri"] = $val["no_siri"];
+        $rowOutput["no_akaun"] = $val["no_akaun"];
+        $rowOutput["tkhpl"] = $val["tkhpl"];
+        $rowOutput["tkhtk"] = $val["tkhtk"];
+        $rowOutput["htkod"] = $val["htkod"];
+        $rowOutput["no_lot"] = $val["no_lot"];
+        $rowOutput["nmbil"] = $val["nmbil"];
+        $rowOutput["plgid"] = $val["plgid"];
+        $rowOutput["adpg1"] = $val["adpg1"];
+        $rowOutput["adpg2"] = $val["adpg2"];
+        $rowOutput["adpg3"] = "";
+        $rowOutput["adpg4"] = "";
+        $rowOutput["almt1"] = $almt["val_almt1"];
+        $rowOutput["almt2"] = $almt["val_almt2"];
+        $rowOutput["almt3"] = $almt["val_almt3"];
+        $rowOutput["almt4"] = $almt["val_almt4"];
+        $rowOutput["almt5"] = $almt["val_almt5"];
+        $rowOutput["jlkod"] = $val["jlkod"];
         $rowOutput["lsbgn"] = $val["lsbgn"];
-      }
-      if (!empty($row["peg_lstnh"])) {
-        $rowOutput["lstnh"] = $row["peg_lstnh"];
-      } else {
         $rowOutput["lstnh"] = $val["lstnh"];
-      }
-      if (!empty($row["peg_lsans"])) {
-        $rowOutput["lsans"] = $row["peg_lsans"];
-      } else {
         $rowOutput["lsans"] = $val["lsans"];
+        $rowOutput["kwkod"] = $dboracle->getElementById("SPMC.V_MKWJLN", "kws_kwkod", "jln_jlkod", $val["jlkod"]);
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["thkod"]);
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $val["htkod"]);
+        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["bgkod"]);
+        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $val["stkod"]);
+        $rowOutput["nilth_asal"] = 0;
+        $rowOutput["kadar_asal"] = 0;
+        $rowOutput["nilth_baru"] = $val["new_nilth"];
+      } else {
+        $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["no_akaun"]);
+        $row = $dboracle->fetchAssociative();
+
+        $rowOutput["no_siri"] = $val["no_siri"];
+        $rowOutput["no_akaun"] = $val["no_akaun"];
+        $rowOutput["tkhpl"] = $val["tkhpl"];
+        $rowOutput["tkhtk"] = $val["tkhtk"];
+        $rowOutput["htkod"] = $val["htkod"];
+        $rowOutput["no_lot"] = $row["peg_nolot"];
+        $rowOutput["nmbil"] = $row["pmk_nmbil"];
+        $rowOutput["plgid"] = $row["pmk_plgid"];
+        $rowOutput["adpg1"] = $row["adpg1"];
+        $rowOutput["adpg2"] = $row["adpg2"];
+        $rowOutput["adpg3"] = $row["adpg3"];
+        $rowOutput["adpg4"] = $row["adpg4"];
+        $rowOutput["almt1"] = $row["pvd_almt1"];
+        $rowOutput["almt2"] = $row["pvd_almt2"];
+        $rowOutput["almt3"] = $row["pvd_almt3"];
+        $rowOutput["almt4"] = $row["pvd_almt4"];
+        $rowOutput["almt5"] = $row["pvd_almt5"];
+        $rowOutput["jlkod"] = $row["peg_jlkod"];
+        $rowOutput["jnama"] = $row["jln_jnama"];
+        $rowOutput["kwkod"] = $row["kaw_kwkod"];
+        $rowOutput["knama"] = $row["jln_knama"];
+        $rowOutput["lsbgn"] = $row["peg_lsbgn"];
+        $rowOutput["lstnh"] = $row["peg_lstnh"];
+        $rowOutput["lsans"] = $row["peg_lsans"];
+        $rowOutput["nilth_asal"] = $row["peg_nilth"];
+        $rowOutput["kadar_asal"] = $row["kaw_kadar"];
+        $rowOutput["nilth_baru"] = $val["new_nilth"];
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $row["peg_thkod"]);
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $row["peg_htkod"]);
+        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $row["peg_bgkod"]);
+        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $row["peg_stkod"]);
       }
+      $rowOutput["smk_lsbgn"] = $val["smk_lsbgn"];
+      $rowOutput["smk_lstnh"] = $val["smk_lstnh"];
+      $rowOutput["smk_lsans"] = $val["smk_lsans"];
       $rowOutput["lsbgnt"] = $val["lsbgnt"];
       $rowOutput["lsanst"] = $val["lsanst"];
-      $rowOutput["nilth_baru"] = $val["new_nilth"];
       $rowOutput["sebab"] = $val["sebab"];
       $rowOutput["mesej"] = $val["mesej"];
       // $rowOutput["status"] = $val["status"];
@@ -1867,7 +1889,7 @@ class Informations extends Model
     $query .= "vs.smk_jstnh, vs.smk_jsbgn, vs.smk_kgtnh, vs.smk_stbgn, vs.smk_lsbgn, vs.smk_lstnh, vs.smk_lsans, vs.smk_lsbgn_tmbh, vs.smk_lsans_tmbh, ";
     $query .= "vs.smk_codex, vs.smk_codey, vs.smk_onama, vs.smk_type, vs.smk_stspn, vs.smk_nota, vs.smk_stsen, vs.smk_datevisit, vs.hadapan, vs.belakang, c.siri_no ";
     $query .= "FROM data.v_semak_raw vs ";
-    $query .= "LEFT JOIN data.calculator c ON vs.smk_akaun = c.account_no ";
+    $query .= "LEFT JOIN data.calculator c ON vs.smk_akaun = c.acct_no ";
     $query .= "WHERE vs.smk_akaun = :akaun ";
     $database->prepare($query);
     $database->bindValue(":akaun", Encryption::decryptId($fileId));

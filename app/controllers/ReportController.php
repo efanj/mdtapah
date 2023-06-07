@@ -65,7 +65,7 @@ class ReportController extends Controller
     Permission::allow("administrator", $resource, "*");
 
     //only for user
-    Permission::allow("user", $resource, "*");
+    Permission::allow("penilaian", $resource, "*");
 
     //only for vendor
     Permission::allow("vendor", $resource, ["sitereview", "approved", "pending", "sitereviewtable"]);

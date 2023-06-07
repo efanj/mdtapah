@@ -6,7 +6,7 @@ class MacthingController extends Controller
   {
     parent::beforeAction();
 
-    Config::setJsConfig("curPage", "amendment");
+    Config::setJsConfig("curPage", "macthing");
 
     $action = $this->request->param("action");
     $actions = ["create", "delete"];
@@ -24,6 +24,9 @@ class MacthingController extends Controller
         $this->Security->config("validateForm", false);
         break;
       case "vendorinfotable":
+        $this->Security->config("validateForm", false);
+        break;
+      case "editcoords":
         $this->Security->config("validateForm", false);
         break;
     }
@@ -99,6 +102,22 @@ class MacthingController extends Controller
     }
   }
 
+  public function editcoords()
+  {
+    $nolot = $this->request->data("nolot");
+    $no_akaun = $this->request->data("no_akaun");
+    $codex = $this->request->data("codex");
+    $codey = $this->request->data("codey");
+
+    $result = $this->macthing->editcoords(Session::getUserId(), $no_akaun, $nolot, $codex, $codey);
+
+    if (!$result) {
+      $this->view->renderErrors($this->macthing->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function isAuthorized()
   {
     $action = $this->request->param("action");
@@ -109,7 +128,7 @@ class MacthingController extends Controller
     Permission::allow("administrator", $resource, "*");
 
     //only for user
-    Permission::allow("user", $resource, "*");
+    Permission::allow("penilaian", $resource, "*");
 
     return Permission::check($role, $resource, $action);
   }

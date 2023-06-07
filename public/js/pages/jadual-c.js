@@ -442,25 +442,28 @@ $(document).ready(function () {
     }).done(function (result) {
       console.log(result.success)
       if (result.success === true) {
-        swal(
-          {
-            title: "Berjaya!",
-            text: "Jadual C, Telah berjaya direkodkan.",
-            icon: "success",
-            confirmButtonClass: "btn-primary",
-            confirmButtonText: "Ok",
-            closeOnConfirm: false
-          },
-          function () {
-            var calctype
-            if (result.calctype === 1) {
-              calctype = "calcland"
-            } else {
-              calctype = "calcbuilding"
+        swal("Sila pilih kaedah pengiraan cukai taksiran.", {
+          buttons: {
+            sewaan: {
+              text: "Kaedah Perbandingan",
+              value: "rent"
+            },
+            kos: {
+              text: "Kaedah Kos",
+              value: "cost"
             }
-            window.location = config.root + "calculator/" + calctype + "/" + result.sirino
           }
-        )
+        }).then((value) => {
+          switch (value) {
+            case "rent":
+              window.location = config.root + "calculator/calcrent/" + result.sirino
+              break
+
+            case "cost":
+              window.location = config.root + "calculator/calccost/" + result.sirino
+              break
+          }
+        })
       } else {
         swal("Oops...", "Jadual C, tidak berjaya direkodkan!", "error")
       }

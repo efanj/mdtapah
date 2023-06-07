@@ -93,22 +93,24 @@ $(document).ready(function () {
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
-            data = ""
-            if (row.nilth_baru > 0) {
-              data += "RM " + row.beza_nilth + "<br/>"
-            } else {
-              data += "RM " + row.nilth_asal + "<br/>"
-            }
-            if (row.kadar_baru > 0) {
-              data += row.beza_kadar + "%<br/>"
-            } else {
-              data += row.kadar_baru + "%<br/>"
-            }
-            if (row.cukai_baru > 0) {
-              data += "RM " + row.beza_cukai
-            } else {
-              data += "RM " + row.cukai_baru
-            }
+            data = "RM " + row.beza_nilth + "<br/>"
+            data += row.beza_kadar + "%<br/>"
+            data += "RM " + row.beza_cukai
+            // if (row.nilth_baru > 0) {
+            //   data += "RM " + row.beza_nilth + "<br/>"
+            // } else {
+            //   data += "RM " + row.nilth_asal + "<br/>"
+            // }
+            // if (row.kadar_baru > 0) {
+            //   data += row.beza_kadar + "%<br/>"
+            // } else {
+            //   data += row.kadar_baru + "%<br/>"
+            // }
+            // if (row.cukai_baru > 0) {
+            //   data += "RM " + row.beza_cukai
+            // } else {
+            //   data += "RM " + row.cukai_baru
+            // }
           }
           return data
         }
@@ -180,9 +182,10 @@ $(document).ready(function () {
               } else {
                 data += '<a href="#" class="btn btn-default btn-sm" title="Borang Nilaian" disabled><i class="fa fa-calculator"></i></a>'
               }
+
+              data += '<a href="viewimages/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o"></i></a>'
+              data += '<a href="viewdocuments/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o"></i></a>'
             }
-            data += '<a href="viewimages/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o"></i></a>'
-            data += '<a href="viewdocuments/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o"></i></a>'
             data += "</div>"
           }
           return data

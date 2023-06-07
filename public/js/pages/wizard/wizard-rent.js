@@ -1,4 +1,19 @@
 $(document).ready(function () {
+  var $form = $("#form").val()
+  if ($form === "C") {
+    getRate()
+  }
+  function getRate() {
+    var $kwkod = $("#kwkod").val()
+    var $htkod = $("#htkod").val()
+    ajax.send("Elements/getrate", { kwkod: $kwkod, htkod: $htkod }, getRateCallBack)
+  }
+
+  function getRateCallBack(result) {
+    $("#rate").val(result)
+    console.log(result)
+  }
+
   var $validator = $("#calc-rent form").validate({
     errorPlacement: function (error, element) {
       var place = element.closest(".input-group")
@@ -102,7 +117,7 @@ $(document).ready(function () {
     e.preventDefault()
     var data = $("#calcRent").serialize()
     $.ajax({
-      url: config.root + "calculator/vendorRentSubmit",
+      url: config.root + "calculator/rentSubmit",
       type: "post",
       dataType: "json",
       data: data

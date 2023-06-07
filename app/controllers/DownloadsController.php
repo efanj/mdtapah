@@ -83,8 +83,8 @@ class DownloadsController extends Controller
     //only for admin
     Permission::allow("administrator", $resource, "*");
 
-    //only for normal users
-    Permission::allow("user", $resource, "download");
+    //only for normal penilaian
+    Permission::allow("penilaian", $resource, "download");
 
     //only for normal vendor
     Permission::allow("vendor", $resource, "download");

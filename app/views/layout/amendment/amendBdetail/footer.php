@@ -46,7 +46,7 @@
 <script src="<?= PUBLIC_ROOT ?>js/leaflet/L.TileLayer.BetterWMS.js" type="text/javascript"></script>
 
 <script src="<?= PUBLIC_ROOT ?>js/pages/amend-b.js" type="text/javascript"></script>
-<script src="<?= PUBLIC_ROOT ?>js/pages/mapview_b.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT ?>js/pages/mapview_popup.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/jquery.Dynamic.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>

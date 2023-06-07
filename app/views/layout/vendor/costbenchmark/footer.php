@@ -32,7 +32,7 @@
 <script src="<?= PUBLIC_ROOT; ?>plugins/core/velocity/jquery.velocity.min.js"></script>
 <!-- Bootbox fast bootstrap modals -->
 <script src="<?= PUBLIC_ROOT; ?>plugins/ui/bootbox/bootbox.js"></script>
-<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweetalert.min.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/libs/main.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/jquery.Dynamic.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/main.js"></script>

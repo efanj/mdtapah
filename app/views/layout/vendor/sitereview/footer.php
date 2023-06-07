@@ -22,6 +22,7 @@
 <script src="<?= PUBLIC_ROOT ?>js/jRespond.min.js"></script>
 <!-- Datatables -->
 <script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables_1.13/DataTables-1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables/dataTables.bootstrap.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/tables/datatables/dataTables.checkboxes.min.js"></script>
 <!-- Custom scroll for sidebars,tables and etc. -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/slimscroll/jquery.slimscroll.min.js"></script>

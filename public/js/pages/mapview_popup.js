@@ -37,7 +37,6 @@ var lotperancangwmsLayer = L.tileLayer.betterWms(api_url, {
   transparent: true,
   maxZoom: 25
 })
-
 var sempadanwmsLayer = L.tileLayer.wms(api_url, {
   layers: "mdt:daerah",
   format: "image/png",
@@ -45,13 +44,20 @@ var sempadanwmsLayer = L.tileLayer.wms(api_url, {
   maxZoom: 25
 })
 
-var map = L.map("mapView", {
+var map = L.map("mapViewEdit", {
   center: [4.0943935, 101.2823129],
   zoom: 10.5,
   markerZoomAnimation: false,
   zoomControl: false,
   maxZoom: 25
 })
+
+$("#peta_popup").on("show.bs.modal", function () {
+  setTimeout(function () {
+    map.invalidateSize()
+  }, 10)
+})
+
 var zoomControl = new L.Control.Zoom({ position: "topright" })
 zoomControl.addTo(map)
 
@@ -75,7 +81,7 @@ var overlays = [
       "Lot NDCDB": lotndcdbwmsLayer,
       "Lot komited": lotkomitedwmsLayer,
       "Lot Perancang": lotperancangwmsLayer
-      // Dilawati: visitwmsLayer
+      // Dilawati: visitwmsLayer,
     }
   }
 ]
@@ -95,41 +101,6 @@ control.selectLayer(lotndcdbwmsLayer)
 control.selectLayer(lotkomitedwmsLayer)
 control.selectLayer(lotperancangwmsLayer)
 
-var bounds = map.getBounds()
-var southWest = bounds.getSouthWest()
-var northEast = bounds.getNorthEast()
-var input = document.getElementById("google_term")
-var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(southWest), new google.maps.LatLng(northEast))
-var options = {
-  bounds: bounds,
-  // location: new google.maps.LatLng(4.265604, 100.9320657),
-  radius: 15000, // (in meters; this is 15Km)
-  types: ["establishment"],
-  strictBounds: true,
-  componentRestrictions: {
-    country: ["my"]
-  }
-}
-var autocomplete = new google.maps.places.Autocomplete(input, options)
-autocomplete.addListener("place_changed", function () {
-  // clearOverlayVector();
-  var places = autocomplete.getPlace()
-
-  if (!places.geometry) {
-    window.alert("No details available for input: '" + places.name + "'")
-    return
-  }
-
-  var group = L.featureGroup()
-
-  // Create a marker for each place.
-  var marker = L.marker([places.geometry.location.lat(), places.geometry.location.lng()])
-  group.addLayer(marker)
-
-  group.addTo(map)
-  map.fitBounds(group.getBounds())
-})
-
 map.on("overlayadd", function (eventLayer) {
   if (eventLayer.name === "Bayaran") {
     layerLegend.addTo(this)
@@ -142,6 +113,20 @@ map.on("overlayremove", function (eventLayer) {
 })
 
 map.on("click", function (e) {
-  $("#mjc_codex").val(e.latlng.lat)
-  $("#mjc_codey").val(e.latlng.lng)
+  $("#codex").val(e.latlng.lat)
+  $("#codey").val(e.latlng.lng)
 })
+
+function addMarker() {
+  var lat, lng
+  if ($("#codex").html() === "") {
+    map.setView(new L.LatLng(4.0943935, 101.2823129), 11)
+  } else {
+    lat = $("#codex").html()
+    lng = $("#codey").html()
+    L.marker([lat, lng]).addTo(map)
+    map.setView(new L.LatLng(lat, lng), 16)
+  }
+}
+
+addMarker()

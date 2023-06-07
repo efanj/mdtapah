@@ -1,18 +1,32 @@
 $(document).ready(function () {
+  var $form = $("#form").val()
+  if ($form === "C") {
+    getRate()
+  }
+  function getRate() {
+    var $kwkod = $("#kwkod").val()
+    var $htkod = $("#htkod").val()
+    ajax.send("Elements/getrate", { kwkod: $kwkod, htkod: $htkod }, getRateCallBack)
+  }
+
+  function getRateCallBack(result) {
+    $("#rate").val(result)
+    console.log(result)
+  }
   var lsans = $("#luas_ansolari").val()
   var lsbgnt = $("#tamb_bangunan").val()
   var lsanst = $("#tamb_ansolari").val()
   var kwkod = $("#kwkod").val()
   var htkod = $("#htkod").val()
   console.log(kwkod, htkod, lsans, lsbgnt, lsanst)
-  ajax.send("Vendor/getBenchmark", { type: "2", kwkod: kwkod, htkod: htkod }, getBenchmarkCallBack)
-  function getBenchmarkCallBack(result) {
-    if (result.success === true) {
-      addRowBuilding(result, lsans, lsbgnt, lsanst)
-    } else {
-      swal("Maaf, Tiada aras nilaian bersesuaian.", "Sila masukkan data aras nilaian.")
-    }
-  }
+  // ajax.send("Vendor/getBenchmark", { type: "2", kwkod: kwkod, htkod: htkod }, getBenchmarkCallBack)
+  // function getBenchmarkCallBack(result) {
+  //   if (result.success === true) {
+  //     addRowBuilding(result, lsans, lsbgnt, lsanst)
+  //   } else {
+  //     swal("Maaf, Tiada aras nilaian bersesuaian.", "Sila masukkan data aras nilaian.")
+  //   }
+  // }
 
   var maxField = 4
   var x = 1
@@ -225,11 +239,13 @@ $("body").on("keyup", "#breadth_land, #price_land", function () {
   var total_land = parseFloat(breadth_land * price_land)
   row.find("#total_land").val(total_land.toFixed(2))
   $("#sub_land").val(total_land.toFixed(2))
-  adjustmentLand()
+  land(0)
 })
 
 $("body").on("keyup", "#adjust_land", function () {
-  adjustmentLand()
+  var row = $(this).closest("tr")
+  var adjust = parseFloat(row.find("#adjust_land").val())
+  land(adjust)
 })
 
 $("body").on("keyup", "#breadth, #price", function () {
@@ -265,21 +281,6 @@ $("body").on("keyup", "#rate", function () {
   generateTax()
 })
 
-function adjustmentLand() {
-  var ttl_adjust
-  var adjust_land = $("#adjust_land").val()
-  var total_land = $("#total_land").val()
-  if (adjust_land != "" && adjust_land > 0) {
-    ttl_adjust = parseFloat(total_land) - (parseFloat(total_land) / 100) * adjust_land
-  } else {
-    ttl_adjust = total_land
-  }
-  $("#ttl_adjust").val(ttl_adjust.toFixed(2))
-  $("#ttl_land").val(ttl_adjust.toFixed(2))
-  console.log(total_land, ttl_adjust)
-  land()
-}
-
 function adjustmentBuilding(id) {
   var building = 0
   var ttl_adjustment
@@ -312,8 +313,9 @@ function adjustmentBuilding(id) {
   // console.log(building, adjust, ttl_adjustment)
 }
 
-function land() {
+function land(adjust) {
   var land = 0
+  var ttl_adjust
   $(".land").each(function () {
     $(this)
       .find("tr")
@@ -326,8 +328,13 @@ function land() {
           })
       })
   })
-  $("#ttl_land").val(land.toFixed(2))
-  $("#ttl_adjust").val(land.toFixed(2))
+  if (adjust != "" && adjust > 0) {
+    ttl_adjust = parseFloat(land) - (parseFloat(land) / 100) * adjust
+  } else {
+    ttl_adjust = land
+  }
+  $("#ttl_adjust").val(ttl_adjust.toFixed(2))
+  $("#ttl_land").val(ttl_adjust.toFixed(2))
   sum()
 }
 

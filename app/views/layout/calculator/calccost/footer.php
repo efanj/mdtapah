@@ -29,7 +29,7 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/validation/jquery.validate.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/validation/additional-methods.min.js"></script>
-<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweetalert.min.js"></script>
 <!-- Remove click delay in touch -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/fastclick/fastclick.js"></script>
 <!-- Increase jquery animation speed -->
@@ -41,8 +41,8 @@
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
-<script src="<?= PUBLIC_ROOT ?>js/pages/wizard/wizard-building.js" type="text/javascript"></script>
-<script src="<?= PUBLIC_ROOT ?>js/pages/calc/calc-building.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT ?>js/pages/wizard/wizard-cost.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT ?>js/pages/calc/calc-cost.js" type="text/javascript"></script>
 
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->

@@ -20,7 +20,7 @@
                       <select class="form-control input-sm" name="area" id="area">
                         <option selected value="">Sila Pilih Kawasan</option>
                         <?php foreach ($kws as $row) { ?>
-                        <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
+                          <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="table-responsive">
-                <form role="form" id="form-verifylists">
+                <form role="form" id="form-checkagainlists">
                   <table id="pending" class="display" style="width:100%;">
                     <thead>
                       <tr>
@@ -48,8 +48,10 @@
                           No. Akaun <br />
                           No. Lot
                         </th>
-                        <th>Nama Jalan</th>
-                        <th>Jenis Hartanah</th>
+                        <th>
+                          Nama Jalan<br />
+                          Jenis Hartanah
+                        </th>
                         <th>
                           Luas Bangunan(mp) <br />
                           Luas Tanah(mp) <br />

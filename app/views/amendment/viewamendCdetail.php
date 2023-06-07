@@ -4,8 +4,10 @@
     <div class="page-content-inner">
       <!-- Start .row -->
       <div class="row">
-        <div class="col-lg-8 col-sm-8 col-md-8">
-          <div class="panel panel-default">
+        <div class="col-lg-6 col-sm-6 col-md-6">
+          <?php $hacmjb = $this->controller->account->viewamendCdetail($siriNo); ?>
+          <?php $cals = $this->controller->account->getCalculationInfo($siriNo); ?>
+          <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>PEGANGAN YANG PERTAMA KALI DINILAI - JADUAL C</h4>
             </div>
@@ -28,7 +30,7 @@
                   <li>
                     <a href="#tab3" data-toggle="tab">
                       <span class="step-number">3</span>
-                      <span class="step-text">Pemilikan & Pemegang Harta</span>
+                      <span class="step-text">Pemilikan & Alamat Harta</span>
                     </a>
                   </li>
                 </ul>
@@ -37,154 +39,85 @@
                     <div class="tab-pane active" id="tab1">
                       <div class="row mb5">
                         <div class="col-md-2">
-                          <label class="control-label">Tarikh MJP :</label>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="input-group input-group-sm">
-                            <input type="text" class="form-control input-sm" id="mjc_tkhpl" name="mjcTkhpl" required>
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#mesyuarat_popup">
-                                <i class="fa fa-book"></i>
-                              </button>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                          <label class="control-label">Tarikh K/Kuasa :</label>
-                        </div>
-                        <div class="col-md-1 tal">
-                          <div class="control-label tal" id="mjc_tkhtk"></div>
-                          <input type="hidden" name="mjcTkhtk" value="" id="mjcTkhtk" />
-                        </div>
-                        <div class="col-md-2">
-                          <label class="control-label">Tarikh OC :</label>
-                        </div>
-                        <div class="col-md-2">
-                          <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input type="text" class="form-control input-sm" data-language="en"
-                              data-date-Format="dd/mm/yyyy" id="mjc_tkhoc" name="mjcTkhoc">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row mb5">
-                        <div class="col-md-2">
                           <label class="control-label">No. Akaun :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input type="hidden" name="mjcAkaun" id="mjcAkaun" class="form-control input-sm" />
-                          <input type="hidden" name="mjcDigit" id="mjcDigit" class="form-control input-sm" />
+                        <div class="col-md-4 control-label tal">
                         </div>
                         <div class="col-md-2">
                           <label class="control-label">No. Siri :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input type="hidden" name="mjcHsiri" id="mjcHsiri" class="form-control input-sm" />
-                        </div>
-                        <div class="col-md-3">
-                          <label class="control-label">Sumbangan Membantu Kadar :</label>
-                        </div>
-                        <div class="col-md-1">
-                          <div class="checkbox-custom">
-                            <input type="checkbox" id="dummy_mjc_Stcbk" disabled>
-                            <label for="dummy_mjc_Stcbk"></label>
-                          </div>
-                          <input type="hidden" id="mjc_Stcbk" name="mjcStcbk">
-                        </div>
+                        <div class="col-md-4 control-label tal"><?= $hacmjb["mjc_nsiri"] ?></div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">No. Akaun Lama :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcOldac">
+                        <div class="col-md-4 control-label tal"></div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-3">
+                          <label class="control-label tal">Sumbangan Membantu Kadar :</label>
                         </div>
-                        <div class="col-md-2">
-                          <label class="control-label">No. Bil :</label>
-                        </div>
-                        <div class="col-md-2">
-                          <input type="hidden" name="mjcNobil" id="mjcNobil" class="form-control input-sm" />
+                        <div class="col-md-1">
+                          <div class="checkbox-custom">
+                            <input type="checkbox" id="dummy_mjc_Stcbk" <?php if ($hacmjb["mjc_stcbk"] === "Y") {
+                                                                          echo "checked";
+                                                                        } ?>disabled>
+                            <label for="dummy_mjc_Stcbk"></label>
+                          </div>
                         </div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">No. lot :</label>
                         </div>
-                        <div class="col-md-4">
-                          <input class="form-control input-sm" type="text" name="mjcNolot" id="mjc_nolot">
-                        </div>
-                        <div class="col-md-2"></div>
-                        <div class="col-md-2">
-                          <label class="control-label">Bil. Lot :</label>
-                        </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="number" name="mjcBllot" maxlength="2">
-                        </div>
-                      </div>
-
-                      <div class="row mb5">
+                        <div class="col-md-4 control-label tal"><?= $hacmjb["mjc_nolot"] ?></div>
                         <div class="col-md-2">
                           <label class="control-label">Jalan :</label>
                         </div>
-                        <div class="col-md-4">
-                          <div class="input-group input-group-sm">
-                            <input type="hidden" class="form-control input-sm" id="mjc_jlkod" name="mjcJlkod">
-                            <input type="text" class="form-control input-sm" id="dummy_mjc_jlkod">
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#street_popup"><i class="fa fa-book"></i></button>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-md-2"></div>
-                        <div class="col-md-2">
-                          <label class="control-label">Kawasan :</label>
-                        </div>
-                        <div class="col-md-2">
-                          <input type="hidden" name="kawKwkod" id="kawKwkod">
-                          <div class="control-label fl" id="mjc_kwkod"></div>
-                        </div>
+                        <div class="col-md-4 control-label tal"><?= $hacmjb["jln_nama"] ?></div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">Alamat :</label>
                         </div>
-                        <div class="col-md-4">
-                          <input class="form-control input-sm" type="text" name="mjcAdpg1" maxlength="50">
+                        <div class="col-md-4 control-label tal"><?= $hacmjb["mjc_adpg1"] ?></div>
+                        <div class="col-md-2">
+                          <label class="control-label">Kawasan :</label>
+                        </div>
+                        <div class="col-md-4 control-label tal">
+                          <?= $hacmjb["kws_nama"] ?>
                         </div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
+                          <label class="control-label"></label>
                         </div>
-                        <div class="col-md-4">
-                          <input class="form-control input-sm" type="text" name="mjcAdpg2" maxlength="50">
+                        <div class="col-md-4 control-label tal"><?= $hacmjb["mjc_adpg2"] ?></div>
+                      </div>
+                      <div class="row mb5">
+                        <div class="col-md-2">
+                          <label class="control-label"></label>
                         </div>
+                        <div class="col-md-4 control-label tal"></div>
+                      </div>
+                      <div class="row mb5">
+                        <div class="col-md-2">
+                          <label class="control-label"></label>
+                        </div>
+                        <div class="col-md-4 control-label tal"></div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">Kegunaan Tanah :</label>
                         </div>
                         <div class="col-md-4">
-                          <?php $htanah = $this->controller->elements->htanah(); ?>
-                          <select class="form-control input-sm" name="mjcThkod" required>
-                            <option value="" selected>Sila Pilih</option>
-                            <?php foreach ($htanah as $row) { ?>
-                            <option value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
-                            <?php } ?>
-                          </select>
+                          <?= $hacmjb["tnama"] ?>
                         </div>
                         <div class="col-md-2">
                           <label class="control-label">Jenis Bangunan :</label>
                         </div>
                         <div class="col-md-4">
-                          <?php $hbangn = $this->controller->elements->hbangn(); ?>
-                          <select class="form-control input-sm" name="mjcBgkod">
-                            <option value="" selected>Sila Pilih</option>
-                            <?php foreach ($hbangn as $row) { ?>
-                            <option value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
-                            <?php } ?>
-                          </select>
+                          <?= $hacmjb["bnama"] ?>
                         </div>
                       </div>
                       <div class="row mb5">
@@ -192,242 +125,156 @@
                           <label class="control-label">Kegunaan Hartanah :</label>
                         </div>
                         <div class="col-md-4">
-                          <?php $hharta = $this->controller->elements->hharta(); ?>
-                          <select class="form-control input-sm" name="mjcHtkod" id="mjcHtkod" required>
-                            <option value="" selected>Sila Pilih</option>
-                            <?php foreach ($hharta as $row) { ?>
-                            <option value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
-                            <?php } ?>
-                          </select>
+                          <?= $hacmjb["hnama"] ?>
                         </div>
                         <div class="col-md-2">
                           <label class="control-label">Struktur Bangunan :</label>
                         </div>
                         <div class="col-md-4">
-                          <?php $hstbgn = $this->controller->elements->hstbgn(); ?>
-                          <select class="form-control input-sm" name="mjcStkod">
-                            <option value="" selected>Sila Pilih</option>
-                            <?php foreach ($hstbgn as $row) { ?>
-                            <option value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
-                            <?php } ?>
-                          </select>
+                          <?= $hacmjb["snama"] ?>
                         </div>
                       </div>
-                      <div class="row mb5">
+
+                      <div class="row mb10">
                         <div class="col-md-2">
                           <label class="control-label">Jenis Pemilik :</label>
                         </div>
-                        <div class="col-md-4">
-                          <?php $hjenpk = $this->controller->elements->hjenpk(); ?>
-                          <select class="form-control input-sm" name="mjcJpkod" onchange="semakSumbangan(this.value)">
-                            <option value="" selected>Sila Pilih</option>
-                            <?php foreach ($hjenpk as $row) { ?>
-                            <option value="<?= $row["jpk_jpkod"] ?>"><?= $row["jpk_jnama"] ?></option>
-                            <?php } ?>
-                          </select>
+                        <div class="col-md-4 control-label tal">
+                          <?= $hacmjb["jnama"] ?>
                         </div>
                       </div>
-                      <div class="row mb10">
+                      <div class="row mb15">
                         <div class="col-md-2">
-                          <label class="control-label">Koordinat GPS (X) :</label>
+                          <label class="control-label">Koordinat (X) :</label>
                         </div>
-                        <div class="col-md-4">
-                          <input class="form-control input-sm" type="text" name="mjcCodex" id="mjc_codex" required>
+                        <div class="col-md-4 control-label tal">
+                          <div id="codex"><?= $hacmjb["mjc_codex"] ?></div>
                         </div>
                         <div class="col-md-2">
-                          <label class="control-label">Koordinat GPS (Y) :</label>
+                          <label class="control-label">Koordinat (Y) :</label>
                         </div>
-                        <div class="col-md-4">
-                          <input class="form-control input-sm" type="text" name="mjcCodey" id="mjc_codey" required>
+                        <div class="col-md-4 control-label tal">
+                          <div id="codey"><?= $hacmjb["mjc_codey"] ?></div>
+                          <button class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#peta_popup">Lokasi</button>
                         </div>
                       </div>
-                      <!-- End .control-group  -->
                     </div>
                     <div class="tab-pane" id="tab2">
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">Diskaun :</label>
                         </div>
-                        <div class="col-md-2">
-                          <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_diskn" name="mjcDiskn"
-                              maxlength="3">
-                            <span class="input-group-addon">%</span>
-                          </div>
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_diskn"] ?>%</div>
                         <div class="col-md-2">
                           <label class="control-label">Caj Sampah :</label>
                         </div>
-                        <div class="col-md-2">
-                          <div class="input-group input-group-sm">
-                            <span class="input-group-addon">RM</span>
-                            <input type="number" class="form-control input-sm" name="mjcSmpah" maxlength="9">
-                          </div>
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_smpah"] ?>%</div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">No. PT :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcNompt" id="mjc_nompt">
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_nompt"] ?></div>
                         <div class="col-md-2">
                           <label class="control-label">Rujukan Fail :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcRjfil">
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_rjfil"] ?></div>
                         <div class="col-md-2">
                           <label class="control-label">No. Pelan :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcPelan" id="mjc_pelan"
-                            maxlength="10">
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_pelan"] ?></div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">No. Hak Milik :</label>
                         </div>
+                        <div class="col-md-2 control-label tal"></div>
                         <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcHkmlk">
+                          <label class="control-label">Bil.Pemilik :</label>
                         </div>
-                        <div class="col-md-2">
-                          <label class="control-label">Bil. Pemilik :</label>
-                        </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="number" name="mjcBilpk" maxlength="16">
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_bilpk"] ?></div>
                         <div class="col-md-2">
                           <label class="control-label">Rujukan MMK :</label>
                         </div>
-                        <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcRjmmk" maxlength="15">
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_rjmmk"] ?></div>
                       </div>
-                      <div class="row mb5">
+                      <div class="row mb15">
                         <div class="col-md-2">
                           <label class="control-label">Luas Bangunan :</label>
                         </div>
-                        <div class="col-md-2">
-                          <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_lsbgn" name="mjcLsbgn" min="0"
-                              value="0" step=".01">
-                            <span class="input-group-addon">m&sup2;</span>
-                          </div>
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_lsbgn"] ?> m&sup2;</div>
                         <div class="col-md-2">
                           <label class="control-label">Luas Tanah :</label>
                         </div>
-                        <div class="col-md-2">
-                          <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_lstnh" name="mjcLstnh" min="0"
-                              value="0" step=".01">
-                            <span class="input-group-addon">m&sup2;</span>
-                          </div>
+                        <div class="col-md-2 control-label tal">
+                          <span id="mjb_lsbgntb"><?= $hacmjb["mjc_lstnh"] ?></span> m&sup2;
                         </div>
                         <div class="col-md-2">
                           <label class="control-label">Luas Ansolari :</label>
                         </div>
-                        <div class="col-md-2">
-                          <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_lsans" name="mjcLsans" min="0"
-                              value="0" step=".01">
-                            <span class="input-group-addon">m&sup2;</span>
-                          </div>
-                        </div>
+                        <div class="col-md-2 control-label tal"><?= $hacmjb["mjc_lsans"] ?> m&sup2;</div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">Sebab-sebab :</label>
                         </div>
-                        <div class="col-md-6">
-                          <div class="input-group input-group-sm">
-                            <input type="hidden" id="mjc_sbkod" name="mjcSbkod">
-                            <input type="text" class="form-control input-sm" id="dummy_mjc_sbkod">
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#reason_popup"><i class="fa fa-book"></i></button>
-                            </span>
-                          </div>
+                        <div class="col-md-10">
+                          <?= $hacmjb["acm_sbktr"] ?>
                         </div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
-                          <label class="form-label">Catatan :</label>
+                          <label class="control-label">Catatan :</label>
                         </div>
                         <div class="col-md-10">
-                          <input class="form-control input-sm" type="text" name="mjcMesej">
-                        </div>
-                      </div>
-                      <div class="row mt10 mb10">
-                        <div class="col-md-2">
-                          <label class="control-label tal">Pegawai Pendaftar :</label>
-                        </div>
-                        <div class="col-md-4 tal"><label class="control-label"><b><?= $info["workerid"] ?> -
-                              <?= $info["name"] ?></b></label>
+                          <?= $hacmjb["mjc_mesej"] ?>
+
                         </div>
                       </div>
                     </div>
                     <div class="tab-pane" id="tab3">
-                      <div class="page-header">
-                        <h4><strong>Pemilikan</strong></h4>
-                      </div>
                       <div class="row mb15">
-                        <div class="col-md-2">
-                          <label class="control-label">Nama Di Bil :</label>
-                        </div>
-                        <div class="col-md-10">
-                          <input class="form-control input-sm" type="text" name="mjcNmbil" id="mjc_nmbil">
-                        </div>
-                      </div>
-                      <div class="page-header">
-                        <h4><strong>Pemegang Harta</strong></h4>
-                      </div>
-                      <div class="row mb5">
-                        <div class="col-md-2">
-                          <label class="control-label">ID Pelanggan :</label>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="input-group input-group-sm">
-                            <input type="text" class="form-control input-sm" id="mjc_plgid" name="mjcPlgid" readonly>
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#customer_popup"><i class="fa fa-book"></i></button>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                        </div>
-                        <div class="col-md-2">
-                          <label class="control-label">ID Alamat :</label>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="input-group input-group-sm">
-                            <input type="text" class="form-control input-sm" id="mjc_amtid" name="mjcAmtid" readonly>
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#customeraddress_popup"><i class="fa fa-book"></i></button>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">Nama Pemilik :</label>
                         </div>
-                        <div class="col-md-10 control-label tal" id="nama_pemilik"></div>
+                        <div class="col-md-4">
+                          <div class="control-label tal"><?= $hacmjb["mjc_nmbil"] ?></div>
+                        </div>
+                        <div class="col-md-2">
+                          <label class="control-label">ID Pemilik :</label>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="control-label tal"><?= $hacmjb["mjc_plgid"] ?></div>
+                        </div>
                       </div>
                       <div class="row mb10">
                         <div class="col-md-2">
                           <label class="control-label">Alamat Pemilik :</label>
                         </div>
-                        <div class="col-md-10 control-label tal" id="alamat_pemilik"></div>
-                        <div class="row">
-                          <div class="col-md-2">
-                            <input type="hidden" name="csrf_token" value="<?= Session::generateCsrfToken() ?>" />
-                          </div>
+                        <div class="col-md-10 control-label tal">
+                          <?php
+                          if ($hacmjb["almt1"] != "" || $hacmjb["almt1"] != null) {
+                            echo $hacmjb["almt1"] . ", ";
+                          }
+                          if ($hacmjb["almt2"] != "" || $hacmjb["almt2"] != null) {
+                            echo $hacmjb["almt2"] . ", ";
+                          }
+                          if ($hacmjb["almt3"] != "" || $hacmjb["almt3"] != null) {
+                            echo $hacmjb["almt3"] . ", ";
+                          }
+                          if ($hacmjb["almt4"] != "" || $hacmjb["almt4"] != null) {
+                            echo $hacmjb["almt4"];
+                          }
+                          ?>
+                        </div>
+                      </div>
+                      <div class="row mt10 mb10">
+                        <div class="col-md-2">
+                          <label class="control-label tal"></label>
+                        </div>
+                        <div class="col-md-4 tal"></div>
+                        <div class="col-md-2">
+                          <input type="hidden" name="csrf_token" value="<?= Session::generateCsrfToken() ?>" />
                         </div>
                       </div>
                     </div>
@@ -438,15 +285,319 @@
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#">Simpan</a>
+                  <li class="next finish" style="display:none;"><a href="#">Kemaskini</a>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-4 col-md-4">
-          <div id="mapView" class="mapView"></div>
+        <div class="col-lg-6 col-sm-6 col-md-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h4>MAKLUMAT KIRA-KIRA</h4>
+            </div>
+            <div class="panel-body">
+
+              <?php if (empty($cals)) { ?>
+                <div class='col-xs-12 col-md-12 tac no-data'>Tiada Maklumat</div>
+              <?php } else { ?>
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="6">PERBANDINGAN</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if (empty($cals['comparison'])) { ?>
+                      <tr>
+                        <td colspan="6" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <?php foreach ($cals['comparison'] as $row) { ?>
+                        <tr>
+                          <td><?= $row['jln_jnama'] ?></td>
+                          <td><?= $row['bgn_bnama'] ?></td>
+                          <td><?= $row['peg_lsbgn'] ?></td>
+                          <td><?php echo "RM " . $row['peg_nilth'] ?></td>
+                          <td><?php echo "RM " . $row['mfa'] ?></td>
+                          <td><?php echo "RM " . $row['afa'] ?></td>
+                        </tr>
+                    <?php }
+                    } ?>
+                  </tbody>
+                </table>
+
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="7">TANAH</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if ($cals['land']["breadth"] == "0" || $cals['land']["breadth"] == "0.00") { ?>
+                      <tr>
+                        <td colspan="7" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <tr>
+                        <td style="width:30%"></td>
+                        <td style="text-align: right;width:15%"><?= $cals['land']["breadth"] ?></td>
+                        <td style="width:10%">mp</td>
+                        <td style="text-align: center;width:2%">X</td>
+                        <td style="text-align: right;width:15%">RM <?= $cals['land']["price"] ?></td>
+                        <td style="width:10%">smp</td>
+                        <td style="text-align: right;width:18%" class="control-label tal bold">
+                          <?= "RM " . number_format($cals['land']["total"], 2); ?></td>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="7">BANGUNAN <?php if ($cals['calc_type'] == 1) {
+                                                  echo "UTAMA";
+                                                } ?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if ($cals['main'][0]['id'] == 0) { ?>
+                      <tr>
+                        <td colspan="7" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <?php if ($cals['calc_type'] == 1) { ?>
+                        <?php foreach ($cals['main'] as $row) { ?>
+                          <tr>
+                            <td style="width:30%"><?= $row['title'] ?></td>
+                            <td style="text-align: right;width:15%"><?= $row["breadth"] ?></td>
+                            <td style="width:10%">
+                              <?php if ($row["breadthtype"] == "mp") {
+                                echo "mp";
+                              } elseif ($row["breadthtype"] == "ft") {
+                                echo "ft";
+                              } elseif ($row["breadthtype"] == "unit") {
+                                echo "unit";
+                              } elseif ($row["breadthtype"] == "petak") {
+                                echo "petak";
+                              }  ?>
+                            </td>
+                            <td style="text-align: center;width:2%">X</td>
+                            <td style="text-align: right;width:15%">RM <?= $row['price'] ?></td>
+                            <td style="width:10%">
+                              <?php if ($row["pricetype"] == "smp") {
+                                echo "smp";
+                              } elseif ($row["pricetype"] == "sft") {
+                                echo "sft";
+                              } elseif ($row["pricetype"] == "p/unit") {
+                                echo "p/unit";
+                              } elseif ($row["pricetype"] == "sepetak") {
+                                echo "sepetak";
+                              }  ?>
+                            </td>
+                            <td style="text-align: right;width:18%" class="control-label tal bold">
+                              <?= "RM " . number_format($row['total'], 2); ?></td>
+                          </tr>
+                        <?php }
+                      } else { ?>
+                        <?php foreach ($cals['main'] as $section) { ?>
+                          <?php if (!empty($section['title'])) { ?>
+                            <tr>
+                              <td colspan="7"><strong><?= $section['title'] ?></strong></td>
+                            </tr>
+                          <?php } ?>
+                          <?php foreach ($section['items'] as $row) { ?>
+                            <tr>
+                              <td style="width:30%"><?= $row['title'] ?></td>
+                              <td style="text-align: right;width:15%"><?= $row["breadth"] ?></td>
+                              <td style="width:10%">
+                                <?php if ($row["breadthtype"] == "mp") {
+                                  echo "mp";
+                                } elseif ($row["breadthtype"] == "ft") {
+                                  echo "ft";
+                                } elseif ($row["breadthtype"] == "unit") {
+                                  echo "unit";
+                                } elseif ($row["breadthtype"] == "petak") {
+                                  echo "petak";
+                                }  ?>
+                              </td>
+                              <td style="text-align: center;width:2%">X</td>
+                              <td style="text-align: right;width:15%">RM <?= $row['price'] ?></td>
+                              <td style="width:10%">
+                                <?php if ($row["pricetype"] == "smp") {
+                                  echo "smp";
+                                } elseif ($row["pricetype"] == "sft") {
+                                  echo "sft";
+                                } elseif ($row["pricetype"] == "p/unit") {
+                                  echo "p/unit";
+                                } elseif ($row["pricetype"] == "sepetak") {
+                                  echo "sepetak";
+                                }  ?>
+                              </td>
+                              <td style="text-align: right;width:18%" class="control-label tal bold">
+                                <?= "RM " . number_format($row['total'], 2); ?></td>
+                            </tr>
+                    <?php }
+                        }
+                      }
+                    } ?>
+
+                  </tbody>
+                </table>
+                <?php if ($cals['calc_type'] == 1) { ?>
+                  <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                    <thead>
+                      <tr style="background: #ddd;">
+                        <th colspan="7">BANGUNAN LUAR</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php if ($cals['main'][0]['id'] == 0) { ?>
+                        <tr>
+                          <td colspan="7" class="tac">Tiada Maklumat</td>
+                        </tr>
+                      <?php } else { ?>
+                        <?php if ($cals['calc_type'] == 1) { ?>
+                          <?php foreach ($cals['out'] as $row) { ?>
+                            <tr>
+                              <td style="width:30%"><?= $row['title'] ?></td>
+                              <td style="text-align: right;width:15%"><?= $row["breadth"] ?></td>
+                              <td style="width:10%">
+                                <?php if ($row["breadthtype"] == "mp") {
+                                  echo "mp";
+                                } elseif ($row["breadthtype"] == "ft") {
+                                  echo "ft";
+                                } elseif ($row["breadthtype"] == "unit") {
+                                  echo "unit";
+                                } elseif ($row["breadthtype"] == "petak") {
+                                  echo "petak";
+                                }  ?>
+                              </td>
+                              <td style="text-align: center;width:2%">X</td>
+                              <td style="text-align: right;width:15%">RM <?= $row['price'] ?></td>
+                              <td style="width:10%">
+                                <?php if ($row["pricetype"] == "smp") {
+                                  echo "smp";
+                                } elseif ($row["pricetype"] == "sft") {
+                                  echo "sft";
+                                } elseif ($row["pricetype"] == "p/unit") {
+                                  echo "p/unit";
+                                } elseif ($row["pricetype"] == "sepetak") {
+                                  echo "sepetak";
+                                }  ?>
+                              </td>
+                              <td style="text-align: right;width:18%" class="control-label tal bold">
+                                <?= "RM " . number_format($row['total'], 2); ?></td>
+                            </tr>
+                      <?php }
+                        }
+                      }  ?>
+                    </tbody>
+                  </table>
+                <?php } ?>
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="6">PENGIRAAN</th>
+                    </tr>
+                  </thead>
+                  <?php if ($cals['calc_type'] == 1) { ?>
+                    <tbody>
+                      <tr>
+                        <td style="width:80%" colspan="2"><strong>ANGGARAN SEWA BULANAN</strong></td>
+                        <td style="width:18%">
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['capital_rental'], 2); ?>
+                          </div>
+                        </td>
+                      </tr>
+                      <?php if ($cals['corner'] == true) { ?>
+                        <tr>
+                          <td style="width:65%"><strong>CORNER LOT</strong></td>
+                          <td>10%</td>
+                          <td style="width:18%">
+                            <div class="control-label tal bold">
+                              <?php
+                              echo "RM " . number_format($cals['capital_rental'] + ($cals['capital_rental'] / 100 * 10), 2);
+                              ?>
+                            </div>
+                          </td>
+                        </tr>
+                      <?php } ?>
+                      <tr>
+                        <td colspan="2"><strong>SEWA BULANAN DIGENAPKAN</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['round'], 2); ?></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>NILAI TAHUNAN</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['yearly'], 2); ?></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>KADAR</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= $cals["rate"] . " %" ?></div>
+                        </td>
+                      </tr>
+                      <tr style="background: #ebebeb;">
+                        <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['tax'], 2); ?></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  <?php } else { ?>
+                    <tbody>
+                      <tr>
+                        <td style="width:80%" colspan="2"><strong>NILAI MODAL</strong></td>
+                        <td style="width:18%">
+                          <div class="control-label tal bold">
+                            <?= "RM " . number_format($cals['capital_rental'], 2); ?>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><strong>(SEKSYEN 2 AKTA 171, 10%)</strong></td>
+                        <td style="width: 2%; text-align:center;">
+                          <strong>X</strong>
+                        </td>
+                        <td class="control-label tal bold">
+                          10%
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>NILAI TAHUNAN</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['yearly'], 2); ?></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>NILAI TAHUNAN (DIGENABKAN)</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['round'], 2); ?></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>KADAR</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= $cals["rate"] . " %" ?></div>
+                        </td>
+                      </tr>
+                      <tr style="background: #ebebeb;">
+                        <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
+                        <td>
+                          <div class="control-label tal bold"><?= "RM " . number_format($cals['tax'], 2); ?></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  <?php } ?>
+                </table>
+              <?php } ?>
+            </div>
+          </div>
         </div>
       </div>
       <!-- End .row -->
@@ -456,126 +607,11 @@
   <!-- / page-content-wrapper -->
 </div>
 
-<div class="modal fade" id="mesyuarat_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="street_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI JALAN</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->streettable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/street.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="reason_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="customer_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI PELANGGAN</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered" id="popup_customer" width="100%">
-          <thead>
-            <tr>
-              <th>Pelanggan ID</th>
-              <th>Nama Pelanggan</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="customeraddress_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI ALAMAT</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered" id="popup_customeraddress" width="100%">
-          <thead>
-            <tr>
-              <th>Pelanggan ID</th>
-              <th>Nama Pelanggan</th>
-              <th>Alamat</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="calc_button_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+<div class="modal" id="peta_popup">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="btn-group">
-              <button type="button" class="btn btn-default">Left</button>
-              <button type="button" class="btn btn-default">Middle</button>
-              <button type="button" class="btn btn-default">Right</button>
-              <button type="button" class="btn btn-default">Left</button>
-              <button type="button" class="btn btn-default">Middle</button>
-              <button type="button" class="btn btn-default">Right</button>
-            </div>
-          </div>
-        </div>
+        <div id="mapViewEdit" class="mapView"></div>
       </div>
     </div>
   </div>

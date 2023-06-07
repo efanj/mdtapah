@@ -17,23 +17,13 @@
                     <label class="control-label">Tarikh MJP :</label>
                   </div>
                   <div class="col-md-3">
-                    <div class="input-group input-group-sm">
-                      <input type="text" class="form-control input-sm" id="mja_tkhpl" name="mjaTkhpl"
-                        value="<?= $hacmja["mja_tkhpl"] ?>" required>
-                      <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-toggle="modal"
-                          data-target="#mesyuarat_popup">
-                          <i class="fa fa-book"></i>
-                        </button>
-                      </span>
-                    </div>
+                    <div class="control-label tal"><?= $hacmja["mja_tkhpl"] ?></div>
                   </div>
                   <div class="col-md-2">
                     <label class="control-label">Tarikh K/Kuasa :</label>
                   </div>
                   <div class="col-md-1 tal">
-                    <div class="control-label tal" id="mja_tkhtk"><?= $hacmja["mja_tkhtk"] ?></div>
-                    <input type="hidden" name="mjaTkhtk" id="mjaTkhtk" value="<?= $hacmja["mja_tkhtk"] ?>" />
+                    <div class="control-label tal"><?= $hacmja["mja_tkhtk"] ?></div>
                   </div>
                   <div class="col-md-3">
                     <label class="control-label">Tarikh OC :</label>
@@ -42,24 +32,21 @@
                     <div class="control-label tal" id="mja_tkhoc"></div>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">No. Akaun :</label>
                   </div>
                   <div class="col-md-4 control-label tal">
                     <?= $hacmja["mja_akaun"] ?>
-                    <input type="hidden" name="mjaAkaun" id="mjaAkaun" value="<?= $hacmja["mja_akaun"] ?>" />
-                    <input type="hidden" name="mjaDigit" id="mjaDigit" value="<?= $hacmja["mja_digit"] ?>" />
                   </div>
                   <div class="col-md-2"></div>
                   <div class="col-md-3">
                     <label class="control-label">No. Siri :</label>
                   </div>
                   <div class="col-md-1 control-label tal">
-                    <input type="hidden" name="mjaStatf" id="mjaStatf" value="" />
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">Nama Di Bil :</label>
                   </div>
@@ -75,10 +62,9 @@
                                                                   } ?>disabled>
                       <label for="dummy_mja_Stcbk"></label>
                     </div>
-                    <input type="hidden" id="mja_Stcbk" name="mjaStcbk" value="<?= $hacmja["mja_stcbk"] ?>">
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">No. lot :</label>
                   </div>
@@ -88,7 +74,7 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["jln_jnama"] ?></div>
                 </div>
-                <div class="row mb3">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Alamat :</label>
                   </div>
@@ -98,24 +84,24 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["jln_knama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["adpg2"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["adpg3"] ?>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["adpg4"] ?>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Kegunaan Tanah :</label>
                   </div>
@@ -125,7 +111,7 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["bgn_bnama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Kegunaan Hartanah :</label>
                   </div>
@@ -135,13 +121,13 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["stb_snama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Jenis Pemilik :</label>
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["jpk_jnama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Koordinat GPS (X) :</label>
                   </div>
@@ -155,7 +141,7 @@
                     <div id="codey"><?= $hacmja["peg_codey"] ?></div>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Nilai Tahunan :</label>
                   </div>
@@ -170,13 +156,13 @@
                   <div class="col-md-2 control-label tal">RM
                     <?= number_format(($hacmja["peg_nilth"] * $hacmja["kaw_kadar"]) / 100, 2) ?> </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Diskaun :</label>
                   </div>
                   <div class="col-md-4"><label class="control-label tal"> %</label></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">No. PT :</label>
                   </div>
@@ -190,7 +176,7 @@
                   </div>
                   <div class="col-md-2 control-label tal"><?= $hacmja["peg_pelan"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">No. Hak Milik :</label>
                   </div>
@@ -223,24 +209,15 @@
                     <label class="control-label">Sebab-sebab :</label>
                   </div>
                   <div class="col-md-6">
-                    <div class="input-group input-group-sm">
-                      <input type="hidden" id="mja_sbkod" name="mjaSbkod" value="<?= $hacmja["mja_sbkod"] ?>">
-                      <input type="text" class="form-control input-sm" id="dummy_mja_sbkod"
-                        value="<?= $hacmja["acm_sbktr"] ?>">
-                      <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i
-                            class="fa fa-book"></i></button>
-                      </span>
-                    </div>
+                    <div class="control-label tal"><?= $hacmja["acm_sbktr"] ?></div>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">Catatan :</label>
                   </div>
                   <div class="col-md-10">
-                    <input class="form-control input-sm" type="text" name="mjaMesej"
-                      value="<?= $hacmja["mja_mesej"] ?>">
+                    <div class="control-label tal"><?= $hacmja["mja_mesej"] ?></div>
                   </div>
                 </div>
                 <div class="row mb5">
@@ -252,9 +229,6 @@
                   </div>
                 </div>
                 <hr>
-                <div class="row mb5 tar">
-                  <button type="submit" class="btn btn-primary btn-sm mr15"><i class="fa fa-save"></i> Simpan</button>
-                </div>
               </form>
             </div>
           </div>
@@ -281,10 +255,18 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_meeting">
+          <thead>
+            <tr>
+              <th>Bilangan</th>
+              <th>Bulan</th>
+              <th>Tarikh Mesyuarat</th>
+              <th>Tarikh Kuatkuasa</th>
+              <th>No. Kertas Kerja</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -300,10 +282,16 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_reason" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

@@ -26,6 +26,9 @@ class AmendmentController extends Controller
       case "getReviewTable":
         $this->Security->config("validateForm", false);
         break;
+      case "checkagain":
+        $this->Security->config("validateForm", false);
+        break;
     }
   }
 
@@ -89,16 +92,16 @@ class AmendmentController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/reviewlist/", Config::get("VIEWS_PATH") . "amendment/review_list.php");
   }
 
-  public function viewimages($fileId)
+  public function viewimages($siriNo)
   {
     Config::setJsConfig("curPage", "amendment");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/viewimages/", Config::get("VIEWS_PATH") . "amendment/viewimages.php", ["fileId" => $fileId]);
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/viewimages/", Config::get("VIEWS_PATH") . "amendment/viewimages.php", ["siriNo" => $siriNo]);
   }
 
-  public function viewdocuments($fileId)
+  public function viewdocuments($siriNo)
   {
     Config::setJsConfig("curPage", "amendment");
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/viewdocuments/", Config::get("VIEWS_PATH") . "amendment/viewdocuments.php", ["fileId" => $fileId]);
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/amendment/viewdocuments/", Config::get("VIEWS_PATH") . "amendment/viewdocuments.php", ["siriNo" => $siriNo]);
   }
 
   public function viewpsdetails($fileId)
@@ -183,6 +186,20 @@ class AmendmentController extends Controller
     $search = $this->request->data("search");
     $searchValue = strtoupper($search["value"]);
     $result = $this->amendment->getReviewTable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
+
+    if (!$result) {
+      $this->view->renderErrors($this->amendment->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function checkagain()
+  {
+    $id = $this->request->data("id");
+    $catatan = $this->request->data("catatan");
+
+    $result = $this->amendment->checkagain(Session::getUserId(), $id, $catatan);
 
     if (!$result) {
       $this->view->renderErrors($this->amendment->errors());

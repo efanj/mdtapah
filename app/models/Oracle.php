@@ -362,6 +362,12 @@ class Oracle
         }
     }
 
+    public function getInfoByTwoColumn($table, $column1, $column2, $val1, $val2)
+    {
+        $this->statement = $this->connection->prepare("SELECT * FROM SPMC." . $table . " WHERE " . $column1 . " = '" . $val1 . "' AND " . $column2 . " = '" . $val2 . "'");
+        $this->execute();
+    }
+
     /**
      * Delete all rows from a table
      *

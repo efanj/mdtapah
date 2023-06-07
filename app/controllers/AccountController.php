@@ -332,7 +332,7 @@ class AccountController extends Controller
     Permission::allow("administrator", $resource, "*");
 
     //only for normal users
-    Permission::allow("user", $resource, ["newaccount", "getSumbangan"]);
+    Permission::allow("penilaian", $resource, "*");
 
     return Permission::check($role, $resource, $action);
   }

@@ -137,6 +137,48 @@ img.logolg {
   border-color: #e6edef;
 }
 
+.pager .next>a,
+.pager .next>span {
+  color: #ffffff;
+  background-color: #57a6fa;
+  border: 1px solid #c7c7c7;
+}
+
+.pager .next>a:hover,
+.pager .next>a:focus {
+  color: #2b2a2a;
+}
+
+.pager .next.disabled>a,
+.pager .next.disabled>a:hover,
+.pager .next.disabled>a:focus,
+.pager .next.disabled>span {
+  color: #777777;
+  background-color: #cacaca;
+  cursor: not-allowed;
+}
+
+.pager .previous>a,
+.pager .previous>span {
+  color: #ffffff;
+  background-color: #57a6fa;
+  border: 1px solid #c7c7c7;
+}
+
+.pager .previous>a:hover,
+.pager .previous>a:focus {
+  color: #2b2a2a;
+}
+
+.pager .previous.disabled>a,
+.pager .previous.disabled>a:hover,
+.pager .previous.disabled>a:focus,
+.pager .previous.disabled>span {
+  color: #777777;
+  background-color: #cacaca;
+  cursor: not-allowed;
+}
+
 table.info thead,
 table.info tbody,
 table.info tfoot,
@@ -175,16 +217,16 @@ table.acct_info thead th {
 }
 
 table.dataTable th {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 table.dataTable td {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
 }
 
 table.dataTable tr.dtrg-level-0 td {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
 }
 
@@ -208,13 +250,17 @@ div.dataTables_wrapper span.select-item {
   margin-left: 0.5em;
 }
 
+.pagination>li a {
+  padding: 4px 10px;
+}
+
 .pager .finish>a.submit {
   background-color: #054f90;
   color: #ffffff;
 }
 
 .pager .finish>a.pending {
-  background-color: #f50303;
+  background-color: #ee4343;
   color: #ffffff;
 }
 
@@ -354,7 +400,7 @@ div.checkbox-custom.checkbox-inline {
 } */
 
 .google {
-  z-index: 100;
+  z-index: 1000;
   position: absolute;
   top: 10px;
   left: 20px;

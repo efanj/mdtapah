@@ -589,6 +589,17 @@ class Elements extends Model
     return $rows;
   }
 
+  public function getrate($kwkod, $htkod)
+  {
+    $dbOracle = new Oracle();
+
+    $query = "SELECT KAW_KADAR FROM SPMC.V_HKADAR WHERE KWS_KWKOD = " . $kwkod . " AND HRT_HTKOD = " . $htkod;
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
+
+    return $dbOracle->fetchAssociative()["kaw_kadar"];
+  }
+
   public function updateRate($rate, $kwkod, $htkod)
   {
     $database = Database::openConnection();

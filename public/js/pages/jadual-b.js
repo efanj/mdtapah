@@ -225,11 +225,11 @@ $(document).ready(function () {
         }).then((value) => {
           switch (value) {
             case "rent":
-              window.location = config.root + "calculator/" + result.calcUrl + "/" + result.sirino
+              window.location = config.root + "calculator/calcrent/" + result.sirino
               break
 
             case "cost":
-              window.location = config.root + "calculator/" + result.calcUrl + "/" + result.sirino
+              window.location = config.root + "calculator/calccost/" + result.sirino
               break
           }
         })

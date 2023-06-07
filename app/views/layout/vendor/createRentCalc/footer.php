@@ -32,7 +32,7 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/validation/jquery.validate.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/validation/additional-methods.min.js"></script>
-<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweetalert.min.js"></script>
 <!-- Remove click delay in touch -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/fastclick/fastclick.js"></script>
 <!-- Increase jquery animation speed -->

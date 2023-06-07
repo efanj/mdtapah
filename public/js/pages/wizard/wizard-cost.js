@@ -57,7 +57,7 @@ $(document).ready(function () {
   })
 
   //init first wizard
-  $("#calc-building").bootstrapWizard({
+  $("#calc-cost").bootstrapWizard({
     tabClass: "bwizard-steps",
     nextSelector: "ul.pager li.next",
     previousSelector: "ul.pager li.previous",
@@ -87,22 +87,22 @@ $(document).ready(function () {
       var $current = index + 1
       // If it's the last tab then hide the last button and show the finish instead
       if ($current >= $total) {
-        $("#calc-building").find(".pager .next").hide()
-        $("#calc-building").find(".pager .finish").show()
-        $("#calc-building").find(".pager .finish").removeClass("disabled")
+        $("#calc-cost").find(".pager .next").hide()
+        $("#calc-cost").find(".pager .finish").show()
+        $("#calc-cost").find(".pager .finish").removeClass("disabled")
       } else {
-        $("#calc-building").find(".pager .next").show()
-        $("#calc-building").find(".pager .finish").hide()
+        $("#calc-cost").find(".pager .next").show()
+        $("#calc-cost").find(".pager .finish").hide()
       }
     }
   })
 
   //wizard is finish
-  $("#calc-building .finish").click(function (e) {
+  $("#calc-cost .finish").click(function (e) {
     e.preventDefault()
-    var data = $("#calcBuilding").serialize()
+    var data = $("#calcCost").serialize()
     $.ajax({
-      url: config.root + "calculator/buildingSubmit",
+      url: config.root + "calculator/costSubmit",
       type: "post",
       dataType: "json",
       data: data

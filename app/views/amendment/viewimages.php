@@ -3,7 +3,7 @@
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
-      <?php $img = $this->controller->Informations->getSubmitionInfo($fileId); ?>
+      <?php $img = $this->controller->Informations->getSubmitionInfo($siriNo); ?>
 
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
@@ -15,7 +15,7 @@
               <div class="row gallery sortable-layout">
                 <!-- Start .row -->
                 <?php
-                $filesData = $this->controller->Informations->getAllImgs($fileId);
+                $filesData = $this->controller->Informations->getAllImgs($img['no_akaun']);
                 echo $this->render(Config::get("VIEWS_PATH") . "amendment/files.php", ["files" => $filesData]);
                 ?>
               </div>

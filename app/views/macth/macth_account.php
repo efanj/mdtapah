@@ -5,20 +5,19 @@
       <!-- Start .row -->
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
-          <div class="panel panel-default">
+          <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>PADANAN DATA</h4>
             </div>
             <div class="panel-body">
               <?php $info = $this->controller->macthing->getAccountInfo($fileId); ?>
-              <form method="POST" role="form" id="macth-account">
+              <form method="POST" role="form" id="form-macth-account" style="font-size: 12px;">
                 <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">No. Lot :</label>
                   </div>
                   <div class="col-md-2">
-                    <input class="form-control input-sm" name="nolot" type="text" value="<?= $info["peg_nolot"] ?>"
-                      id="nolot">
+                    <input class="form-control input-xs" name="nolot" type="text" value="<?= $info["peg_nolot"] ?>" id="nolot">
                   </div>
                   <div class="col-md-2">
                     <input name="no_akaun" type="hidden" value="<?= $info["peg_akaun"] ?>" id="no_akaun">
@@ -111,14 +110,12 @@
                   <div class="col-md-2">
                     <label class="control-label">Koordinat X :</label>
                   </div>
-                  <div class="col-md-2"><input class="form-control input-sm" name="codex" type="text"
-                      value="<?= $info["peg_codex"] ?>" id="codex"></div>
+                  <div class="col-md-2"><input class="form-control input-xs" name="codex" type="text" value="<?= $info["peg_codex"] ?>" id="codex"></div>
                   <div class="col-md-2"></div>
                   <div class="col-md-2">
                     <label class="control-label">Koordinat Y :</label>
                   </div>
-                  <div class="col-md-2"><input class="form-control input-sm" name="codey" type="text"
-                      value="<?= $info["peg_codey"] ?>" id="codey"></div>
+                  <div class="col-md-2"><input class="form-control input-xs" name="codey" type="text" value="<?= $info["peg_codey"] ?>" id="codey"></div>
                   <div class="col-md-2"></div>
                 </div>
                 <div class="row mb5">
@@ -180,9 +177,9 @@
         </div>
         <div class="col-lg-4 col-sm-4 col-md-4">
           <div id="mapView" class="mapView">
-            <!-- <div class="google" width="30%">
+            <div class="google" width="50%">
               <input type="text" class="form-control input-sm" id="google_term">
-            </div> -->
+            </div>
           </div>
         </div>
       </div>

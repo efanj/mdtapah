@@ -707,6 +707,44 @@ var events = {
   },
 
   /*
+   * Macthing
+   */
+  macthing: {
+    init: function () {
+      events.macthing.macthing()
+      events.macthing.remacthing()
+    },
+    macthing: function () {
+      $("#form-macth-account").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Macthing/editcoords", helpers.serialize(this), submitMacthingCallBack)
+      })
+
+      function submitMacthingCallBack(result) {
+        if (result.success === true) {
+          swal("Berjaya!", "Akaun, Telah berjaya direkodkan.", "success")
+        } else {
+          swal("Oops...!", "Akaun tidak berjaya.", "info")
+        }
+      }
+    },
+    remacthing: function () {
+      $("#form-remacth-account").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Macthing/editcoords", helpers.serialize(this), submitReMacthingCallBack)
+      })
+
+      function submitReMacthingCallBack(result) {
+        if (result.success === true) {
+          swal("Berjaya!", "Akaun, Telah berjaya direkodkan.", "success")
+        } else {
+          swal("Oops...!", "Akaun tidak berjaya.", "info")
+        }
+      }
+    }
+  },
+
+  /*
    * Informations
    */
   // informations: {

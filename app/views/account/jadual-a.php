@@ -5,13 +5,13 @@
       <!-- Start .row -->
       <div class="row">
         <div class="col-lg-8 col-sm-8 col-md-8">
-          <?php $hacmja = $this->controller->account->getAccountInfo($fileId); ?>
-          <div class="panel panel-default">
+          <?php $hacmja = $this->controller->account->getAccountInfoByAcct($fileId); ?>
+          <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>PEGANGAN YANG DIHAPUS - JADUAL A</h4>
             </div>
             <div class="panel-body">
-              <form class="form-horizontal" role="form" id="form-jadualA" method="post" style="font-size:13px;">
+              <form class="form-horizontal" role="form" id="form-jadualA" method="post" style="font-size:12px;">
                 <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">Tarikh MJP :</label>
@@ -20,8 +20,7 @@
                     <div class="input-group input-group-sm">
                       <input type="text" class="form-control input-sm" id="mja_tkhpl" name="mjaTkhpl" required>
                       <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-toggle="modal"
-                          data-target="#mesyuarat_popup">
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#mesyuarat_popup">
                           <i class="fa fa-book"></i>
                         </button>
                       </span>
@@ -41,7 +40,7 @@
                     <div class="control-label tal" id="mja_tkhoc"></div>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">No. Akaun :</label>
                   </div>
@@ -58,7 +57,7 @@
                     <input type="hidden" name="mjaStatf" id="mjaStatf" value="" />
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label">Nama Di Bil :</label>
                   </div>
@@ -77,7 +76,7 @@
                     <input type="hidden" id="mja_Stcbk" name="mjaStcbk" value="<?= $hacmja["peg_stcbk"] ?>">
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">No. lot :</label>
                   </div>
@@ -87,7 +86,7 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["jln_jnama"] ?></div>
                 </div>
-                <div class="row mb3">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Alamat :</label>
                   </div>
@@ -97,24 +96,24 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["jln_knama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["adpg2"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["adpg3"] ?>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["adpg4"] ?>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Kegunaan Tanah :</label>
                   </div>
@@ -124,7 +123,7 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["bgn_bnama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Kegunaan Hartanah :</label>
                   </div>
@@ -134,13 +133,13 @@
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["stb_snama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Jenis Pemilik :</label>
                   </div>
                   <div class="col-md-4 control-label tal"><?= $hacmja["jpk_jnama"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Koordinat GPS (X) :</label>
                   </div>
@@ -154,7 +153,7 @@
                     <div id="codey"><?= $hacmja["peg_codey"] ?></div>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Nilai Tahunan :</label>
                   </div>
@@ -169,13 +168,13 @@
                   <div class="col-md-2 control-label tal">RM
                     <?= number_format(($hacmja["peg_nilth"] * $hacmja["kaw_kadar"]) / 100, 2) ?> </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">Diskaun :</label>
                   </div>
                   <div class="col-md-4"><label class="control-label tal"> %</label></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">No. PT :</label>
                   </div>
@@ -189,7 +188,7 @@
                   </div>
                   <div class="col-md-2 control-label tal"><?= $hacmja["peg_pelan"] ?></div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb5">
                   <div class="col-md-2">
                     <label class="control-label tal">No. Hak Milik :</label>
                   </div>
@@ -226,13 +225,12 @@
                       <input type="hidden" id="mja_sbkod" name="mjaSbkod">
                       <input type="text" class="form-control input-sm" id="dummy_mja_sbkod">
                       <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i
-                            class="fa fa-book"></i></button>
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i class="fa fa-book"></i></button>
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="row mb2">
+                <div class="row mb10">
                   <div class="col-md-2">
                     <label class="control-label">Catatan :</label>
                   </div>

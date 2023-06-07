@@ -128,7 +128,7 @@ $(document).ready(function () {
     })
   })
 
-  $("#calc-building #update_rate").click(function (e) {
+  $("#calc-rent #update_rate").click(function (e) {
     e.preventDefault()
     var rate = $("#rate").val()
     var kwkod = $("#kwkod").val()

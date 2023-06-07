@@ -165,7 +165,7 @@ $(document).ready(function () {
   })
 
   //wizard is finish
-  $("#reviewps .finish").click(function (e) {
+  $("#reviewps .finish .submit").click(function (e) {
     e.preventDefault()
     var data = $("#reviewPS").serialize()
     $.ajax({
@@ -200,6 +200,31 @@ $(document).ready(function () {
       }
     })
   })
+
+  $("#form-check-again").submit(function (e) {
+    e.preventDefault()
+    ajax.send("Amendment/checkagain", helpers.serialize(this), submitCheckAgainCallBack)
+  })
+
+  function submitCheckAgainCallBack(result) {
+    if (result.success === true) {
+      swal(
+        {
+          title: "Berjaya!",
+          text: "Telah berjaya direkodkan.",
+          icon: "success",
+          confirmButtonClass: "btn-primary",
+          confirmButtonText: "Ok",
+          closeOnConfirm: false
+        },
+        function () {
+          window.location = config.root + "vendor/pbtsubmissionlist"
+        }
+      )
+    } else {
+      swal("Oops...!", "Tidak berjaya.", "info")
+    }
+  }
 })
 
 function semakSumbangan(value) {

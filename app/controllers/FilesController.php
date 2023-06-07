@@ -1,8 +1,10 @@
 <?php
 
-class FilesController extends Controller {
+class FilesController extends Controller
+{
 
-    public function beforeAction(){
+    public function beforeAction()
+    {
 
         parent::beforeAction();
 
@@ -13,17 +15,18 @@ class FilesController extends Controller {
         $this->Security->requireAjax($actions);
         $this->Security->requirePost($actions);
 
-        switch($action){
+        switch ($action) {
             case "create":
-                $this->Security->config("form", [ 'fields' => ['file']]);
+                $this->Security->config("form", ['fields' => ['file']]);
                 break;
             case "delete":
-                $this->Security->config("form", [ 'fields' => ['file_id']]);
+                $this->Security->config("form", ['fields' => ['file_id']]);
                 break;
         }
     }
 
-    public function index(){
+    public function index()
+    {
 
         // clear all notifications whenever you hit 'files' in the navigation bar
         $this->user->clearNotifications(Session::getUserId(), $this->file->table);
@@ -33,26 +36,28 @@ class FilesController extends Controller {
         $this->view->renderWithLayouts(Config::get('VIEWS_PATH') . "layout/default/", Config::get('VIEWS_PATH') . 'files/index.php', ['pageNum' => $pageNum]);
     }
 
-    public function create(){
+    public function create()
+    {
 
         $fileData  = $this->request->data("file");
 
         $file = $this->file->create(Session::getUserId(), $fileData);
 
-        if(!$file){
+        if (!$file) {
             $this->view->renderErrors($this->file->errors());
-        }else{
+        } else {
 
             $fileHTML = $this->view->render(Config::get('VIEWS_PATH') . 'files/files.php', array("files" => $file));
             $this->view->renderJson(array("data" => $fileHTML));
         }
     }
 
-    public function delete(){
+    public function delete()
+    {
 
         $fileId = Encryption::decryptIdWithDash($this->request->data("file_id"));
 
-        if(!$this->file->exists($fileId)){
+        if (!$this->file->exists($fileId)) {
             return $this->error(404);
         }
 
@@ -61,7 +66,8 @@ class FilesController extends Controller {
         $this->view->renderJson(array("success" => true));
     }
 
-    public function isAuthorized(){
+    public function isAuthorized()
+    {
 
         $action = $this->request->param('action');
         $role = Session::getUserRole();
@@ -71,11 +77,11 @@ class FilesController extends Controller {
         Permission::allow('administrator', $resource, ['*']);
 
         // only for normal users
-        Permission::allow('user', $resource, ['index', 'create']);
-        Permission::allow('user', $resource, ['delete'], 'owner');
+        Permission::allow('penilaian', $resource, ['index', 'create']);
+        Permission::allow('penilaian', $resource, ['delete'], 'owner');
 
         $fileId = $this->request->data("file_id");
-        if(!empty($fileId)){
+        if (!empty($fileId)) {
             $fileId = Encryption::decryptIdWithDash($fileId);
         }
 

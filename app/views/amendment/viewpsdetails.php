@@ -8,12 +8,12 @@
           <?php $hacmjb = $this->controller->informations->getReviewSubmitInfo($fileId); ?>
           <?php $imgs = $this->controller->informations->getAllImgs($fileId); ?>
           <?php $docs = $this->controller->informations->getAllDocs($fileId); ?>
-          <?php $cals = $this->controller->informations->getCalcInfo(Encryption::encryptId($hacmjb['siriNo'])); ?>
+          <?php $cals = $this->controller->informations->getCalculationInfo(Encryption::encryptId($hacmjb['siriNo'])); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT NILAIAN SEMULA PEGANGAN</h4>
             </div>
-            <div class="panel-body" style="font-size:13px;">
+            <div class="panel-body" style="font-size:12px;">
               <div id="reviewps" class="bwizard">
                 <!-- Start .bwizard -->
                 <ul class="bwizard-steps">
@@ -132,10 +132,10 @@
                         </div>
                         <div class="col-md-4">
                           <?php $htanah = $this->controller->elements->htanah(); ?>
-                          <select class="form-control input-sm select2" name="mjbThkod">
+                          <select class="form-control input-xs" name="mjbThkod">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($htanah as $row) { ?>
-                            <option <?php if ($row["tnh_thkod"] == $hacmjb["thkod"]) {
+                              <option <?php if ($row["tnh_thkod"] == $hacmjb["thkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
                             <?php } ?>
@@ -146,10 +146,10 @@
                         </div>
                         <div class="col-md-4">
                           <?php $hbangn = $this->controller->elements->hbangn(); ?>
-                          <select class="form-control input-sm select2" name="mjbBgkod">
+                          <select class="form-control input-xs" name="mjbBgkod">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hbangn as $row) { ?>
-                            <option <?php if ($row["bgn_bgkod"] == $hacmjb["bgkod"]) {
+                              <option <?php if ($row["bgn_bgkod"] == $hacmjb["bgkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                             <?php } ?>
@@ -162,11 +162,10 @@
                         </div>
                         <div class="col-md-4">
                           <?php $hharta = $this->controller->elements->hharta(); ?>
-                          <select class="form-control input-sm select2" id="mjb_htkod" name="mjbHtkod"
-                            onchange="semakKadar(this.value)">
+                          <select class="form-control input-xs" id="mjb_htkod" name="mjbHtkod" onchange="semakKadar(this.value)">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hharta as $row) { ?>
-                            <option <?php if ($row["hrt_htkod"] == $hacmjb["htkod"]) {
+                              <option <?php if ($row["hrt_htkod"] == $hacmjb["htkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
                             <?php } ?>
@@ -177,10 +176,10 @@
                         </div>
                         <div class="col-md-4">
                           <?php $hstbgn = $this->controller->elements->hstbgn(); ?>
-                          <select class="form-control input-sm select2" name="mjbStkod">
+                          <select class="form-control input-xs" name="mjbStkod">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hstbgn as $row) { ?>
-                            <option <?php if ($row["stb_stkod"] == $hacmjb["stkod"]) {
+                              <option <?php if ($row["stb_stkod"] == $hacmjb["stkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
                             <?php } ?>
@@ -209,8 +208,7 @@
                         </div>
                         <div class="col-md-4 control-label tal">
                           <div id="codey"><?= $hacmjb["codey"] ?></div>
-                          <button class="btn btn-primary btn-xs" type="button" data-toggle="modal"
-                            data-target="#peta_popup">Lokasi</button>
+                          <button class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#peta_popup">Lokasi</button>
                         </div>
                       </div>
                     </div>
@@ -249,41 +247,28 @@
                         </div>
                         <div class="col-md-2 control-label tal"><?= $hacmjb["peg_rjmmk"] ?></div>
                       </div>
-                      <div class="row mb5">
+                      <div class="row mb15">
                         <div class="col-md-2">
                           <label class="control-label">Luas Bangunan :</label>
                         </div>
                         <div class="col-md-2 control-label tal"><?= $hacmjb["peg_lsbgn"] ?> m&sup2;</div>
                         <div class="col-md-2">
-                          <label class="control-label">Luas Bangunan Tamb. :</label>
-                        </div>
-                        <div class="col-md-2 control-label tal">
-                          <span id="mjb_lsbgntb"><?= $hacmjb["lsbgnt"] ?></span> m&sup2;
-                        </div>
-                        <div class="col-md-2">
                           <label class="control-label">Luas Tanah :</label>
                         </div>
-                        <div class="col-md-2 control-label tal"><?= $hacmjb["peg_lstnh"] ?> m&sup2;</div>
-                      </div>
-                      <div class="row mb10">
+                        <div class="col-md-2 control-label tal">
+                          <span id="mjb_lsbgntb"><?= $hacmjb["peg_lstnh"] ?></span> m&sup2;
+                        </div>
                         <div class="col-md-2">
                           <label class="control-label">Luas Ansolari :</label>
                         </div>
                         <div class="col-md-2 control-label tal"><?= $hacmjb["peg_lsans"] ?> m&sup2;</div>
-                        <div class="col-md-2">
-                          <label class="control-label">Luas Ansolari Tamb. :</label>
-                        </div>
-                        <div class="col-md-2 control-label tal">
-                          <span id="mjb_lsanstb"><?= $hacmjb["lsanst"] ?></span> m&sup2;
-                        </div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
                           <label class="control-label">Catatan :</label>
                         </div>
                         <div class="col-md-10">
-                          <textarea class="form-control" name="mjbMesej" cols="30"
-                            rows="3"><?= $hacmjb["catatan"] ?></textarea>
+                          <textarea class="form-control" name="mjbMesej" cols="30" rows="3"><?= $hacmjb["catatan"] ?></textarea>
                         </div>
                       </div>
                       <div class="row mt10 mb10">
@@ -299,58 +284,48 @@
                     <div class="tab-pane" id="tab3">
                       <div class="row gallery sortable-layout">
                         <?php foreach ($imgs as $file) { ?>
-                        <div class="col-xs-12 col-md-4 imagePanel">
-                          <div class="panel panel-default plain">
-                            <div class="panel-heading">
-                              <h4 class="panel-title"><strong><?= $file["filename"] ?></strong><br>
-                                <small><?= $file["description"] ?></small>
-                              </h4>
-                            </div>
-                            <div class="panel-body">
-                              <a href="<?= PUBLIC_ROOT ?>img/big-lightgallry/<?= $file["hashed_filename"] ?>"
-                                data-toggle="lightbox" data-gallery="gallerymode" data-title="<?= $file["filename"] ?>"
-                                data-parrent>
-                                <img class="img-responsive"
-                                  src="<?= PUBLIC_ROOT ?>img/thumb-lightgallry/<?= $file["hashed_filename"] ?>"
-                                  alt="<?= $file["filename"] ?>"
-                                  style="height:auto; width: 100%; max-height:250px; max-width:250px">
-                              </a>
+                          <div class="col-xs-12 col-md-4 imagePanel">
+                            <div class="panel panel-default plain">
+                              <div class="panel-heading">
+                                <h4 class="panel-title"><strong><?= $file["filename"] ?></strong><br>
+                                  <small><?= $file["description"] ?></small>
+                                </h4>
+                              </div>
+                              <div class="panel-body">
+                                <a href="<?= PUBLIC_ROOT ?>img/big-lightgallry/<?= $file["hashed_filename"] ?>" data-toggle="lightbox" data-gallery="gallerymode" data-title="<?= $file["filename"] ?>" data-parrent>
+                                  <img class="img-responsive" src="<?= PUBLIC_ROOT ?>img/thumb-lightgallry/<?= $file["hashed_filename"] ?>" alt="<?= $file["filename"] ?>" style="height:auto; width: 100%; max-height:250px; max-width:250px">
+                                </a>
+                              </div>
                             </div>
                           </div>
-                        </div>
                         <?php } ?>
                       </div>
                     </div>
                     <div class="tab-pane" id="tab4">
                       <div class="row gallery sortable-layout">
                         <?php foreach ($docs as $doc) { ?>
-                        <div class="col-xs-12 col-md-4 docPanel">
-                          <div class="panel panel-default plain">
-                            <div class="panel-heading">
-                              <h4 class="panel-title"><strong><?= $doc["filename"] ?></strong><br>
-                                <small><?= $doc["description"] ?></small>
-                              </h4>
-                              <?php if ($doc["extension"] == "pdf") { ?>
-                              <div class="btn-group" role="group">
-                                <a href="<?= PUBLIC_ROOT ?>img/documents/<?= $doc["hashed_filename"] . "." . $doc["extension"] ?>"
-                                  class="btn btn-primary btn-sm view-pdf"><i class="fa fa-eye"></i> Papar
-                                </a>
+                          <div class="col-xs-12 col-md-4 docPanel">
+                            <div class="panel panel-default plain">
+                              <div class="panel-heading">
+                                <h4 class="panel-title"><strong><?= $doc["filename"] ?></strong><br>
+                                  <small><?= $doc["description"] ?></small>
+                                </h4>
+                                <?php if ($doc["extension"] == "pdf") { ?>
+                                  <div class="btn-group" role="group">
+                                    <a href="<?= PUBLIC_ROOT ?>img/documents/<?= $doc["hashed_filename"] . "." . $doc["extension"] ?>" class="btn btn-primary btn-sm view-pdf"><i class="fa fa-eye"></i> Papar
+                                    </a>
+                                  </div>
+                                <?php } ?>
                               </div>
-                              <?php } ?>
-                            </div>
-                            <div class="panel-body">
-                              <?php if ($doc["extension"] == "pdf") { ?>
-                              <embed
-                                src="<?= PUBLIC_ROOT ?>img/documents/<?= $doc["hashed_filename"] . "." . $doc["extension"] ?>"
-                                type="application/pdf" width='100%' height='250px'>
-                              <?php } elseif ($doc["extension"] == "doc" || $doc["extension"] == "docx" || $doc["extension"] == "ppt" || $doc["extension"] == "pptx") { ?>
-                              <iframe
-                                src='https://view.officeapps.live.com/op/embed.aspx?src=<?= PUBLIC_ROOT ?>img/documents/<?= $doc["hashed_filename"] . "." . $doc["extension"] ?>'
-                                frameborder='0' width='100%' height='250px'></iframe>
-                              <?php } ?>
+                              <div class="panel-body">
+                                <?php if ($doc["extension"] == "pdf") { ?>
+                                  <embed src="<?= PUBLIC_ROOT ?>img/documents/<?= $doc["hashed_filename"] . "." . $doc["extension"] ?>" type="application/pdf" width='100%' height='250px'>
+                                <?php } elseif ($doc["extension"] == "doc" || $doc["extension"] == "docx" || $doc["extension"] == "ppt" || $doc["extension"] == "pptx") { ?>
+                                  <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?= PUBLIC_ROOT ?>img/documents/<?= $doc["hashed_filename"] . "." . $doc["extension"] ?>' frameborder='0' width='100%' height='250px'></iframe>
+                                <?php } ?>
+                              </div>
                             </div>
                           </div>
-                        </div>
                         <?php } ?>
                       </div>
                     </div>
@@ -361,8 +336,7 @@
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#" class="submit">Jadual B</a> <a href="#"
-                      class="pending">Semak Semula</a>
+                  <li class="next finish" style="display:none;"><a href="#" class="submit">Jadual B</a><a href="#" class="pending" data-toggle="modal" data-target="#message_popup">Semak Semula</a>
                   </li>
                 </ul>
               </div>
@@ -377,81 +351,81 @@
             <div class="panel-body">
 
               <?php if (empty($cals)) { ?>
-              <div class='col-xs-12 col-md-12 tac no-data'>Tiada Maklumat</div>
+                <div class='col-xs-12 col-md-12 tac no-data'>Tiada Maklumat</div>
               <?php } else { ?>
-              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                <thead>
-                  <tr style="background: #ddd;">
-                    <th colspan="6">PERBANDINGAN</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if (empty($cals['comparison'])) { ?>
-                  <tr>
-                    <td colspan="6" class="tac">Tiada Maklumat</td>
-                  </tr>
-                  <?php } else { ?>
-                  <?php foreach ($cals['comparison'] as $row) { ?>
-                  <tr>
-                    <td><?= $row['jln_jnama'] ?></td>
-                    <td><?= $row['bgn_bnama'] ?></td>
-                    <td><?= $row['peg_lsbgn'] ?></td>
-                    <td><?php echo "RM " . $row['peg_nilth'] ?></td>
-                    <td><?php echo "RM " . $row['mfa'] ?></td>
-                    <td><?php echo "RM " . $row['afa'] ?></td>
-                  </tr>
-                  <?php }
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="6">PERBANDINGAN</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if (empty($cals['comparison'])) { ?>
+                      <tr>
+                        <td colspan="6" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <?php foreach ($cals['comparison'] as $row) { ?>
+                        <tr>
+                          <td><?= $row['jln_jnama'] ?></td>
+                          <td><?= $row['bgn_bnama'] ?></td>
+                          <td><?= $row['peg_lsbgn'] ?></td>
+                          <td><?php echo "RM " . $row['peg_nilth'] ?></td>
+                          <td><?php echo "RM " . $row['mfa'] ?></td>
+                          <td><?php echo "RM " . $row['afa'] ?></td>
+                        </tr>
+                    <?php }
                     } ?>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
 
-              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                <thead>
-                  <tr style="background: #ddd;">
-                    <th colspan="6">TANAH</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if ($cals['land']["total"] == "0" || $cals['land']["total"] == "0.00") { ?>
-                  <tr>
-                    <td colspan="6" class="tac">Tiada Maklumat</td>
-                  </tr>
-                  <?php } else { ?>
-                  <tr>
-                    <td><?= $cals['land']["breadth"] ?></td>
-                    <td>mp</td>
-                    <td>X</td>
-                    <td><?= $cals['land']["price"] ?></td>
-                    <td>smp</td>
-                    <td><?= $cals['land']["total"] ?></td>
-                  </tr>
-                  <?php } ?>
-                </tbody>
-              </table>
-              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                <thead>
-                  <tr style="background: #ddd;">
-                    <th colspan="7">BANGUNAN UTAMA</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if ($cals['mfa'][0]['id'] == 0) { ?>
-                  <tr>
-                    <td colspan="7" class="tac">Tiada Maklumat</td>
-                  </tr>
-                  <?php } else { ?>
-                  <?php foreach ($cals['mfa'] as $section) { ?>
-                  <?php if (!empty($section['title'])) { ?>
-                  <tr>
-                    <td colspan="7"><?= $section['title'] ?></td>
-                  </tr>
-                  <?php } ?>
-                  <?php foreach ($section['items'] as $row) { ?>
-                  <tr>
-                    <td><?= $row['title'] ?></td>
-                    <td><?= $row["breadth"] ?></td>
-                    <td>
-                      <?php if ($row["breadthtype"] == "mp") {
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="6">TANAH</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if ($cals['land']["total"] == "0" || $cals['land']["total"] == "0.00") { ?>
+                      <tr>
+                        <td colspan="6" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <tr>
+                        <td><?= $cals['land']["breadth"] ?></td>
+                        <td>mp</td>
+                        <td>X</td>
+                        <td><?= $cals['land']["price"] ?></td>
+                        <td>smp</td>
+                        <td><?= $cals['land']["total"] ?></td>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="7">BANGUNAN UTAMA</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if ($cals['mfa'][0]['id'] == 0) { ?>
+                      <tr>
+                        <td colspan="7" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <?php foreach ($cals['mfa'] as $section) { ?>
+                        <?php if (!empty($section['title'])) { ?>
+                          <tr>
+                            <td colspan="7"><?= $section['title'] ?></td>
+                          </tr>
+                        <?php } ?>
+                        <?php foreach ($section['items'] as $row) { ?>
+                          <tr>
+                            <td><?= $row['title'] ?></td>
+                            <td><?= $row["breadth"] ?></td>
+                            <td>
+                              <?php if ($row["breadthtype"] == "mp") {
                                 echo "mp";
                               } elseif ($row["breadthtype"] == "ft") {
                                 echo "ft";
@@ -460,10 +434,10 @@
                               } elseif ($row["breadthtype"] == "petak") {
                                 echo "petak";
                               }  ?>
-                    </td>
-                    <td><?= $row['price'] ?>"></td>
-                    <td>
-                      <?php if ($row["breadthtype"] == "smp") {
+                            </td>
+                            <td><?= $row['price'] ?>"></td>
+                            <td>
+                              <?php if ($row["breadthtype"] == "smp") {
                                 echo "smp";
                               } elseif ($row["breadthtype"] == "sft") {
                                 echo "sft";
@@ -472,38 +446,38 @@
                               } elseif ($row["breadthtype"] == "sepetak") {
                                 echo "sepetak";
                               }  ?>
-                    </td>
-                    <td><?= $row['total'] ?></td>
-                  </tr>
-                  <?php }
+                            </td>
+                            <td><?= $row['total'] ?></td>
+                          </tr>
+                    <?php }
                       }
                     } ?>
-                </tbody>
-              </table>
-              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                <thead>
-                  <tr style="background: #ddd;">
-                    <th colspan="7">BANGUNAN LUAR</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if ($cals['afa'][0]['id'] == 0) { ?>
-                  <tr>
-                    <td colspan="7" class="tac">Tiada Maklumat</td>
-                  </tr>
-                  <?php } else { ?>
-                  <?php foreach ($cals['afa'] as $section2) { ?>
-                  <?php if (!empty($section2['title'])) { ?>
-                  <tr>
-                    <td colspan="7"><?= $section2['title'] ?></td>
-                  </tr>
-                  <?php } ?>
-                  <?php foreach ($section2['items'] as $row) { ?>
-                  <tr>
-                    <td><?= $row['title'] ?></td>
-                    <td><?= $row["breadth"] ?></td>
-                    <td>
-                      <?php if ($row["breadthtype"] == "mp") {
+                  </tbody>
+                </table>
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="7">BANGUNAN LUAR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if ($cals['afa'][0]['id'] == 0) { ?>
+                      <tr>
+                        <td colspan="7" class="tac">Tiada Maklumat</td>
+                      </tr>
+                    <?php } else { ?>
+                      <?php foreach ($cals['afa'] as $section2) { ?>
+                        <?php if (!empty($section2['title'])) { ?>
+                          <tr>
+                            <td colspan="7"><?= $section2['title'] ?></td>
+                          </tr>
+                        <?php } ?>
+                        <?php foreach ($section2['items'] as $row) { ?>
+                          <tr>
+                            <td><?= $row['title'] ?></td>
+                            <td><?= $row["breadth"] ?></td>
+                            <td>
+                              <?php if ($row["breadthtype"] == "mp") {
                                 echo "mp";
                               } elseif ($row["breadthtype"] == "ft") {
                                 echo "ft";
@@ -512,10 +486,10 @@
                               } elseif ($row["breadthtype"] == "petak") {
                                 echo "petak";
                               }  ?>
-                    </td>
-                    <td><?= $row['price'] ?>"></td>
-                    <td>
-                      <?php if ($row["breadthtype"] == "smp") {
+                            </td>
+                            <td><?= $row['price'] ?>"></td>
+                            <td>
+                              <?php if ($row["breadthtype"] == "smp") {
                                 echo "smp";
                               } elseif ($row["breadthtype"] == "sft") {
                                 echo "sft";
@@ -524,58 +498,58 @@
                               } elseif ($row["breadthtype"] == "sepetak") {
                                 echo "sepetak";
                               }  ?>
-                    </td>
-                    <td><?= $row['total'] ?></td>
-                  </tr>
-                  <?php }
+                            </td>
+                            <td><?= $row['total'] ?></td>
+                          </tr>
+                    <?php }
                       }
                     } ?>
-                </tbody>
-              </table>
-              <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
-                <thead>
-                  <tr style="background: #ddd;">
-                    <th colspan="6">PENGIRAAN</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="width:80%" colspan="2"><strong>ANGGARAN SEWA BULANAN</strong></td>
-                    <td style="width:20%"><?= "RM " . $cals['rental']; ?></td>
-                  </tr>
-                  <tr>
-                    <td style="width:65%"><strong>CORNER LOT</strong></td>
-                    <td><?= $cals['discount'] . " %"; ?></td>
-                    <td><?php if ($cals['discount'] < 1) {
+                  </tbody>
+                </table>
+                <table class="table table-bordered mb20" style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr style="background: #ddd;">
+                      <th colspan="6">PENGIRAAN</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="width:80%" colspan="2"><strong>ANGGARAN SEWA BULANAN</strong></td>
+                      <td style="width:20%"><?= "RM " . $cals['rental']; ?></td>
+                    </tr>
+                    <tr>
+                      <td style="width:65%"><strong>CORNER LOT</strong></td>
+                      <td><?= $cals['discount'] . " %"; ?></td>
+                      <td><?php if ($cals['discount'] < 1) {
                             echo "RM " . $cals['rental'];
                           } else if ($cals['discount'] == "" || $cals['discount'] == 0 || $cals['discount'] >= 1) {
                             echo "RM " . $cals['rental'] - ($cals['rental'] * ($cals['discount'] / 100));
                           }
                           ?>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>SEWA BULANAN DIGENAPKAN</strong></td>
-                    <td><?= "RM " . $cals['even']; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>TEMPOH TAHUNAN</strong></td>
-                    <td>X 12 BULAN</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>NILAI TAHUNAN</strong></td>
-                    <td>RM <?= $cals['yearly_price']; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>KADAR</strong></td>
-                    <td><?= $cals["rate"] . " %" ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
-                    <td><strong>RM</strong> <?= $cals["assessment_tax"] ?></td>
-                  </tr>
-                </tbody>
-              </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><strong>SEWA BULANAN DIGENAPKAN</strong></td>
+                      <td><?= "RM " . $cals['even']; ?></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><strong>TEMPOH TAHUNAN</strong></td>
+                      <td>X 12 BULAN</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><strong>NILAI TAHUNAN</strong></td>
+                      <td>RM <?= $cals['yearly_price']; ?></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><strong>KADAR</strong></td>
+                      <td><?= $cals["rate"] . " %" ?></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
+                      <td><strong>RM</strong> <?= $cals["assessment_tax"] ?></td>
+                    </tr>
+                  </tbody>
+                </table>
               <?php } ?>
             </div>
           </div>
@@ -593,6 +567,35 @@
     <div class="modal-content">
       <div class="modal-body">
         <div id="mapViewEdit" class="mapView"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="message_popup">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header"><button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Semak Semula</h4>
+      </div>
+      <div class="modal-body">
+        <form id="form-check-again" method="post">
+          <div class="row">
+            <div class="col-md-12">
+              <input type="hidden" name="id" value="<?= $hacmjb['id']; ?>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <textarea class="form-control" name="catatan" style="width: 100%; height:100px;"></textarea>
+            </div>
+          </div>
+          <div class="row mt10">
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

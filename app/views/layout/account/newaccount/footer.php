@@ -36,11 +36,10 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/validation/jquery.validate.js"></script>
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/validation/additional-methods.min.js"></script>
-<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweetalert.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/main.js"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?v=3.52&key=<?= Config::get('GOOGLE_KEY') ?>&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.52&key=<?= Config::get('GOOGLE_KEY') ?>&libraries=places"></script>
 <script src="<?= PUBLIC_ROOT ?>js/leaflet/leaflet.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT ?>js/leaflet/styledLayerControl.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT ?>js/leaflet/leaflet-google.js" type="text/javascript"></script>
@@ -55,11 +54,11 @@
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->
 <script>
-config = <?= json_encode(Config::getJsConfig()) ?>;
+  config = <?= json_encode(Config::getJsConfig()) ?>;
 </script>
 <!-- Run the application -->
 <script>
-$(document).ready(app.init());
+  $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>

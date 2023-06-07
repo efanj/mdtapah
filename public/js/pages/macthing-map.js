@@ -90,12 +90,15 @@ $(document).ready(function () {
   control.selectLayer(lotkomitedwmsLayer)
   control.selectLayer(lotperancangwmsLayer)
 
+  var bounds = map.getBounds()
+  var southWest = bounds.getSouthWest()
+  var northEast = bounds.getNorthEast()
   var input = document.getElementById("google_term")
-  var mdptBounds = new google.maps.LatLngBounds(new google.maps.LatLng(4.584785, 100.699578))
+  var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(southWest), new google.maps.LatLng(northEast))
   var options = {
-    bounds: mdptBounds,
+    bounds: bounds,
     // location: new google.maps.LatLng(4.265604, 100.9320657),
-    // radius: 15000, // (in meters; this is 15Km)
+    radius: 15000, // (in meters; this is 15Km)
     types: ["establishment"],
     strictBounds: true,
     componentRestrictions: {

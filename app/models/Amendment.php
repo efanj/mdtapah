@@ -325,15 +325,48 @@ class Amendment extends Model
       } else {
         $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $info["peg_stkod"]);
       }
-      $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
-      $rowOutput["kadar_asal"] = $info["kaw_kadar"];
-      $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
-      $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
-      $rowOutput["kadar_baru"] = $val["new_rate"];
-      $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
-      $rowOutput["beza_nilth"] = number_format($this->checkDigitNull($info["peg_nilth"]) - $this->checkDigitNull($val["new_nilth"]), 2, '.', '');
-      $rowOutput["beza_kadar"] = $info["kaw_kadar"] - $val["new_rate"];
-      $rowOutput["beza_cukai"] = number_format($this->checkDigitNull($info["peg_tksir"]) - $this->checkDigitNull($val["new_tax"]), 2, '.', '');
+
+      if ($val["form"] == "A") {
+        $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
+        $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+        $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+        $rowOutput["nilth_baru"] = 0;
+        $rowOutput["kadar_baru"] = 0;
+        $rowOutput["cukai_baru"] = 0;
+        $rowOutput["beza_nilth"] = 0;
+        $rowOutput["beza_kadar"] = 0;
+        $rowOutput["beza_cukai"] = 0;
+      } elseif ($val["form"] == "B") {
+        $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
+        $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+        $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+        $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["kadar_baru"] = $val["new_rate"];
+        $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+        $rowOutput["beza_nilth"] = number_format($this->checkDigitNull($val["new_nilth"]) - $this->checkDigitNull($info["peg_nilth"]), 2);
+        $rowOutput["beza_kadar"] = $info["kaw_kadar"] - $val["new_rate"];
+        $rowOutput["beza_cukai"] = number_format($this->checkDigitNull($val["new_tax"]) - $this->checkDigitNull($info["peg_tksir"]), 2);
+      } elseif ($val["form"] == "C") {
+        $rowOutput["nilth_asal"] = 0;
+        $rowOutput["kadar_asal"] = 0;
+        $rowOutput["cukai_asal"] = 0;
+        $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["kadar_baru"] = $val["new_rate"];
+        $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+        $rowOutput["beza_nilth"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["beza_kadar"] = $val["new_rate"];
+        $rowOutput["beza_cukai"] = $this->checkDigitNull($val["new_tax"]);
+      } elseif ($val["form"] == "PS") {
+        $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
+        $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+        $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+        $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["kadar_baru"] = $val["new_rate"];
+        $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+        $rowOutput["beza_nilth"] = number_format($this->checkDigitNull($val["new_nilth"]) - $this->checkDigitNull($info["peg_nilth"]), 2);
+        $rowOutput["beza_kadar"] = $info["kaw_kadar"] - $val["new_rate"];
+        $rowOutput["beza_cukai"] = number_format($this->checkDigitNull($val["new_tax"]) - $this->checkDigitNull($info["peg_tksir"]), 2);
+      }
       $rowOutput["sebab"] = $dboracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $val["sebab"]);
       $rowOutput["mesej"] = $val["mesej"];
       // $rowOutput["status"] = $val["status"];
@@ -358,6 +391,7 @@ class Amendment extends Model
   public function getVerifyTable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
+    $dboracle = new Oracle();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -399,25 +433,81 @@ class Amendment extends Model
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
+      $dboracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["no_akaun"]);
+      $info = $dboracle->fetchAssociative();
+
       $rowOutput["noSiri"] = Encryption::encryptId($val["no_siri"]);
       $rowOutput["noAcct"] = Encryption::encryptId($val["no_akaun"]);
       $rowOutput["no_siri"] = $val["no_siri"];
       $rowOutput["no_akaun"] = $val["no_akaun"];
-      $rowOutput["tkhpl"] = $val["tkhpl"];
-      $rowOutput["tkhtk"] = $val["tkhtk"];
-      $rowOutput["tnama"] = $val["tnama"];
-      $rowOutput["hnama"] = $val["hnama"];
-      $rowOutput["bnama"] = $val["bnama"];
-      $rowOutput["snama"] = $val["snama"];
-      $rowOutput["nilth_asal"] = $val["nilth_asal"];
-      $rowOutput["kadar_asal"] = $val["kadar_asal"];
-      $rowOutput["cukai_asal"] = $val["cukai_asal"];
-      $rowOutput["nilth_baru"] = $val["nilth_baru"];
-      $rowOutput["kadar_baru"] = $val["kadar_baru"];
-      $rowOutput["cukai_baru"] = $val["cukai_baru"];
-      $rowOutput["sebab"] = $val["sebab"];
+      $rowOutput["tkhpl"] = date("d/m/Y", strtotime($val["tkhpl"]));
+      $rowOutput["tkhtk"] = date("d/m/Y", strtotime($val["tkhtk"]));
+      if ($val["thkod"] != 0) {
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $val["thkod"]);
+      } else {
+        $rowOutput["tnama"] = $dboracle->getElementById("SPMC.V_HTANAH", "tnh_tnama", "tnh_thkod", $info["peg_thkod"]);
+      }
+      if ($val["htkod"] != 0) {
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $val["htkod"]);
+      } else {
+        $rowOutput["hnama"] = $dboracle->getElementById("SPMC.V_HHARTA", "hrt_hnama", "hrt_htkod", $info["peg_htkod"]);
+      }
+      if ($val["bgkod"] != 0) {
+        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $val["bgkod"]);
+      } else {
+        $rowOutput["bnama"] = $dboracle->getElementById("SPMC.V_HBANGN", "bgn_bnama", "bgn_bgkod", $info["peg_bgkod"]);
+      }
+      if ($val["stkod"] != 0) {
+        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $val["stkod"]);
+      } else {
+        $rowOutput["snama"] = $dboracle->getElementById("SPMC.V_HSTBGN", "stb_snama", "stb_stkod", $info["peg_stkod"]);
+      }
+
+      if ($val["form"] == "A") {
+        $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
+        $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+        $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+        $rowOutput["nilth_baru"] = 0;
+        $rowOutput["kadar_baru"] = 0;
+        $rowOutput["cukai_baru"] = 0;
+        $rowOutput["beza_nilth"] = 0;
+        $rowOutput["beza_kadar"] = 0;
+        $rowOutput["beza_cukai"] = 0;
+      } elseif ($val["form"] == "B") {
+        $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
+        $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+        $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+        $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["kadar_baru"] = $val["new_rate"];
+        $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+        $rowOutput["beza_nilth"] = number_format($this->checkDigitNull($val["new_nilth"]) - $this->checkDigitNull($info["peg_nilth"]), 2);
+        $rowOutput["beza_kadar"] = $info["kaw_kadar"] - $val["new_rate"];
+        $rowOutput["beza_cukai"] = number_format($this->checkDigitNull($val["new_tax"]) - $this->checkDigitNull($info["peg_tksir"]), 2);
+      } elseif ($val["form"] == "C") {
+        $rowOutput["nilth_asal"] = 0;
+        $rowOutput["kadar_asal"] = 0;
+        $rowOutput["cukai_asal"] = 0;
+        $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["kadar_baru"] = $val["new_rate"];
+        $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+        $rowOutput["beza_nilth"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["beza_kadar"] = $val["new_rate"];
+        $rowOutput["beza_cukai"] = $this->checkDigitNull($val["new_tax"]);
+      } elseif ($val["form"] == "PS") {
+        $rowOutput["nilth_asal"] = $this->checkDigitNull($info["peg_nilth"]);
+        $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+        $rowOutput["cukai_asal"] = $this->checkDigitNull($info["peg_tksir"]);
+        $rowOutput["nilth_baru"] = $this->checkDigitNull($val["new_nilth"]);
+        $rowOutput["kadar_baru"] = $val["new_rate"];
+        $rowOutput["cukai_baru"] = $this->checkDigitNull($val["new_tax"]);
+        $rowOutput["beza_nilth"] = number_format($this->checkDigitNull($val["new_nilth"]) - $this->checkDigitNull($info["peg_nilth"]), 2);
+        $rowOutput["beza_kadar"] = $info["kaw_kadar"] - $val["new_rate"];
+        $rowOutput["beza_cukai"] = number_format($this->checkDigitNull($val["new_tax"]) - $this->checkDigitNull($info["peg_tksir"]), 2);
+      }
+      $rowOutput["sebab"] = $dboracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $val["sebab"]);
       $rowOutput["mesej"] = $val["mesej"];
-      $rowOutput["status"] = $val["status"];
+      // $rowOutput["status"] = $val["status"];
+      $rowOutput["vstatus"] = $val["vstatus"];
       $rowOutput["entry"] = $val["entry"];
       $rowOutput["verifier"] = $val["verifier"];
       $rowOutput["form"] = $val["form"];
@@ -632,5 +722,19 @@ class Amendment extends Model
     ];
 
     return $response;
+  }
+
+  public function checkagain($userId, $id, $catatan)
+  {
+    $database = Database::openConnection();
+
+    $query = "UPDATE data.smktpk SET smk_stspn = 4, smk_nota=:catatan WHERE id=:id ";
+
+    $database->prepare($query);
+    $database->bindValue(":catatan", $catatan);
+    $database->bindValue(":id", Encryption::decryptId($id));
+    $database->execute();
+
+    return ["success" => true];
   }
 }

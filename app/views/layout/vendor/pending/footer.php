@@ -29,7 +29,7 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js"></script>
 <!-- Remove click delay in touch -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/fastclick/fastclick.js"></script>
-<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweetalert.min.js"></script>
 <!-- Increase jquery animation speed -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/velocity/jquery.velocity.min.js"></script>
 <!-- Bootbox fast bootstrap modals -->
@@ -44,11 +44,11 @@
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->
 <script>
-config = <?= json_encode(Config::getJsConfig()) ?>;
+  config = <?= json_encode(Config::getJsConfig()) ?>;
 </script>
 <!-- Run the application -->
 <script>
-$(document).ready(app.init());
+  $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>
