@@ -13,6 +13,49 @@ $(document).ready(function () {
     return false
   })
 
+  var popup_reason = $("#popup_reason").DataTable({
+    processing: true,
+    serverSide: true,
+    select: "single",
+    searching: false,
+    serverMethod: "post",
+    ajax: config.root + "elements/reasontable",
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        data: "acm_sbkod"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "acm_sbktr"
+      }
+    ],
+    language: {
+      search: "Saring:",
+      lengthMenu: "Paparkan _MENU_ rekod",
+      zeroRecords: "Tiada maklumat yang dijumpai",
+      info: "Memaparkan _START_ sehingga _END_ rekod daripada _TOTAL_ rekod",
+      infoEmpty: "Tiada rekod",
+      paginate: {
+        first: "Pertama",
+        last: "Terakhir",
+        next: "Seterusnya",
+        previous: "Sebelumnya"
+      }
+    }
+  })
+  $("#popup_reason").css("font-size", 13)
+
+  $("#popup_reason tbody").on("click", "tr", function () {
+    var data_reason = popup_reason.row(this).data()
+    console.log(data_reason)
+    $("#mjb_sbkod").val(data_reason.acm_sbkod)
+    $("#dummy_mjb_sbkod").val(data_reason.acm_sbktr)
+    $("#reason_popup").modal("toggle")
+  })
+
   var $validator = $("#reviewPS form").validate({
     errorPlacement: function (error, element) {
       var place = element.closest(".input-group")
@@ -169,7 +212,7 @@ $(document).ready(function () {
     e.preventDefault()
     var data = $("#reviewPS").serialize()
     $.ajax({
-      url: config.root + "account/createAcct",
+      url: config.root + "Amendment/createJadualBPS",
       type: "post",
       dataType: "json",
       data: data
@@ -179,20 +222,14 @@ $(document).ready(function () {
         swal(
           {
             title: "Berjaya!",
-            text: "Jadual C, Telah berjaya direkodkan.",
+            text: "Telah berjaya direkodkan.",
             icon: "success",
             confirmButtonClass: "btn-primary",
             confirmButtonText: "Ok",
             closeOnConfirm: false
           },
           function () {
-            var calctype
-            if (result.calctype === 1) {
-              calctype = "calcland"
-            } else {
-              calctype = "calcbuilding"
-            }
-            window.location = config.root + "calculator/" + calctype + "/" + result.sirino
+            window.location = config.root + "Amendment/evaluationlist"
           }
         )
       } else {

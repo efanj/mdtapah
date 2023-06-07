@@ -29,6 +29,9 @@ class AmendmentController extends Controller
       case "checkagain":
         $this->Security->config("validateForm", false);
         break;
+      case "createJadualBPS":
+        $this->Security->config("validateForm", false);
+        break;
     }
   }
 
@@ -200,6 +203,31 @@ class AmendmentController extends Controller
     $catatan = $this->request->data("catatan");
 
     $result = $this->amendment->checkagain(Session::getUserId(), $id, $catatan);
+
+    if (!$result) {
+      $this->view->renderErrors($this->amendment->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function createJadualBPS()
+  {
+    $mjbNsiri = $this->request->data("mjbNsiri");
+    $mjbAkaun = $this->request->data("mjbAkaun");
+    $mjbDigit = $this->request->data("mjbDigit");
+    $mjbCalty = $this->request->data("mjbCalty");
+    $mjbStcbk = $this->request->data("mjbStcbk");
+    $kawKwkod = $this->request->data("kawKwkod");
+    $mjbThkod = $this->request->data("mjbThkod");
+    $mjbBgkod = $this->request->data("mjbBgkod");
+    $mjbHtkod = $this->request->data("mjbHtkod");
+    $mjbStkod = $this->request->data("mjbStkod");
+    $mjbJpkod = $this->request->data("mjbJpkod");
+    $mjbSbkod = $this->request->data("mjbSbkod");
+    $mjbMesej = $this->request->data("mjbMesej");
+
+    $result = $this->amendment->createJadualBPS(Session::getUserId(), Session::getUserWorkerId(), $mjbNsiri, $mjbAkaun, $mjbDigit, $mjbStcbk, $kawKwkod, $mjbThkod, $mjbBgkod, $mjbHtkod, $mjbStkod, $mjbJpkod, $mjbSbkod, $mjbMesej, $mjbCalty);
 
     if (!$result) {
       $this->view->renderErrors($this->amendment->errors());

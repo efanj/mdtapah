@@ -702,6 +702,9 @@ class Vendor extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_submitioninfops s ";
+    $sql .= "LEFT JOIN data.calculator c ON s.no_akaun = c.acct_no ";
+    $sql .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.no_akaun = cf.no_akaun ";
+    $sql .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.no_akaun = cd.no_akaun ";
     $sel = $database->prepare($sql);
     $database->execute($sel);
 
@@ -709,7 +712,10 @@ class Vendor extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT * FROM data.v_submitioninfops s ";
+    $query = "SELECT s.*, cf.file, cd.doc FROM data.v_submitioninfops s ";
+    $query .= "LEFT JOIN data.calculator c ON s.no_akaun = c.acct_no ";
+    $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON s.no_akaun = cf.no_akaun ";
+    $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON s.no_akaun = cd.no_akaun ";
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
     }
@@ -722,36 +728,69 @@ class Vendor extends Model
     $rowOutput = [];
     foreach ($row as $val) {
 
-      $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["no_akaun"]);
-      $info = $dbOracle->fetchAssociative();
+      $qry  = "SELECT vh.peg_nilth, vh.kaw_kadar, vh.peg_tksir, vb.bgn_bnama, vc.hrt_hnama, vd.tnh_tnama, ve.stb_snama FROM SPMC.V_HVNDUK vh ";
+      $qry  .= "LEFT JOIN SPMC.V_HBANGN vb ON vh.peg_bgkod = vb.bgn_bgkod ";
+      $qry  .= "LEFT JOIN SPMC.V_HHARTA vc ON vh.peg_htkod = vc.hrt_htkod ";
+      $qry  .= "LEFT JOIN SPMC.V_HTANAH vd ON vh.peg_thkod = vd.tnh_thkod ";
+      $qry  .= "LEFT JOIN SPMC.V_HSTBGN ve ON vh.peg_bgkod = ve.stb_stkod ";
+      $qry  .= "WHERE vh.peg_akaun = " . $val['no_akaun'];
+      $dbOracle->prepare($qry);
+      $dbOracle->execute();
+      $res = $dbOracle->fetchAssociative();
 
-      $rowOutput["encryp_nosiri"] = Encryption::encryptId($val["no_siri"]);
+      if ($res) {
+        $nilth_asal = $res["peg_nilth"];
+        $kadar_asal = $res["kaw_kadar"];
+        $cukai_asal = $res["peg_tksir"];
+        $tnama = $res["tnh_tnama"];
+        $hnama = $res["hrt_hnama"];
+        $bnama = $res["bgn_bnama"];
+        $snama = $res["stb_snama"];
+      } else {
+        $nilth_asal = 0;
+        $kadar_asal = 0;
+        $cukai_asal = 0;
+        $tnama = "-";
+        $hnama = "-";
+        $bnama = "-";
+        $snama = "-";
+      }
+
+      $rowOutput["noSiri"] = empty($val["no_siri"]) ? null : Encryption::encryptId($val["no_siri"]);
+      $rowOutput["noAcct"] = Encryption::encryptId($val["no_akaun"]);
       $rowOutput["no_siri"] = $val["no_siri"];
       $rowOutput["no_akaun"] = $val["no_akaun"];
-      $rowOutput["pmk_nmbil"] = $info["pmk_nmbil"];
-      $rowOutput["pmk_plgid"] = $info["pmk_plgid"];
-      $rowOutput["pmk_hkmlk"] = $info["pmk_hkmlk"];
-      $rowOutput["peg_pelan"] = $info["peg_pelan"];
-      $rowOutput["peg_rjmmk"] = $info["peg_rjmmk"];
-      $rowOutput["peg_nilth"] = $info["peg_nilth"];
-      $rowOutput["kaw_kadar"] = $info["kaw_kadar"];
-      $rowOutput["peg_tksir"] = $info["peg_tksir"];
-      $rowOutput["adpg1"] = $info["adpg1"];
-      $rowOutput["adpg2"] = $info["adpg2"];
-      $rowOutput["adpg3"] = $info["adpg3"];
-      $rowOutput["adpg4"] = $info["adpg4"];
-      $rowOutput["peg_nolot"] = $info["peg_nolot"];
-      $rowOutput["peg_nompt"] = $info["peg_nompt"];
-      $rowOutput["peg_lsbgn"] = $info["peg_lsbgn"];
-      $rowOutput["peg_lstnh"] = $info["peg_lstnh"];
       $rowOutput["tkhpl"] = $val["tkhpl"];
       $rowOutput["tkhtk"] = $val["tkhtk"];
-      $rowOutput["nilth_baru"] = $this->checkNullNumber($val["nilth_baru"]);
-      $rowOutput["kadar_baru"] = $this->checkNullNumber($val["kadar_baru"]);
-      $rowOutput["cukai_baru"] = $this->checkNullNumber($val["cukai_baru"]);
-      $rowOutput["sebab"] = $dbOracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $val["sebab"]);
+      $rowOutput["tnama"] = $tnama;
+      $rowOutput["hnama"] = $hnama;
+      $rowOutput["bnama"] = $bnama;
+      $rowOutput["snama"] = $snama;
+      $rowOutput["nilth_asal"] = number_format($nilth_asal, "2");
+      $rowOutput["kadar_asal"] = $kadar_asal;
+      $rowOutput["cukai_asal"] = number_format($cukai_asal, "2");
+      $rowOutput["nilth_baru"] = number_format($val["new_nilth"], "2");
+      $rowOutput["kadar_baru"] = $val["new_rate"];
+      $rowOutput["cukai_baru"] = number_format($val["new_tax"], "2");
+      $rowOutput["nilth_beza"] = number_format($val["new_nilth"] - $nilth_asal, "2");
+      $rowOutput["kadar_beza"] = $val["new_rate"] - $kadar_asal;
+      $rowOutput["cukai_beza"] = number_format($val["new_tax"] - $cukai_asal, "2");
+      if ($val["sebab"] != null) {
+        $rowOutput["sebab"] = $dbOracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $val["sebab"]);
+      } else {
+        $rowOutput["sebab"] = $this->checkNull($val["sebab"]);
+      }
       $rowOutput["mesej"] = $val["mesej"];
-      $rowOutput["role"] = Session::getUserRole();
+      $rowOutput["status"] = $val["vstatus"];
+      $rowOutput["entry"] = $val["entry"];
+      $rowOutput["verifier"] = $val["verifier"];
+      $rowOutput["form"] = $val["form"];
+      $rowOutput["calctype"] = $val["calctype"];
+      $rowOutput["file"] = $val["file"];
+      $rowOutput["doc"] = $val["doc"];
+
+      $rowOutput["files"] = $this->getAllImgs($val["no_akaun"]);
+      $rowOutput["docs"] = $this->getAllDocs($val["no_akaun"]);
       array_push($output, $rowOutput);
     }
 

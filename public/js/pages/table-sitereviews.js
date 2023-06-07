@@ -112,10 +112,10 @@ function format(d) {
 var table = $("#sitereviews").DataTable({
   scrollY: "50vh",
   scrollCollapse: true,
-  pageLength: 50,
+  pageLength: 100,
   lengthMenu: [
-    [50, 100, 500, 1000, 2000],
-    [50, 100, 500, 1000, 2000]
+    [50, 100, 200, 500],
+    [50, 100, 200, 500]
   ],
   processing: true,
   serverSide: true,

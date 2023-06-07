@@ -51,8 +51,10 @@
                         </div>
                         <div class="col-md-4 control-label tal">
                           <?= $hacmjb["smk_akaun"] ?>
+                          <input type="hidden" name="mjbNsiri" id="mjbNsiri" value="<?= $hacmjb["siriNo"] ?>" />
                           <input type="hidden" name="mjbAkaun" id="mjbAkaun" value="<?= $hacmjb["smk_akaun"] ?>" />
                           <input type="hidden" name="mjbDigit" id="mjbDigit" value="" />
+                          <input type="hidden" name="mjbCalty" id="mjbCalty" value="<?php echo empty($cals["calc_type"]) ? "0" : $cals["calc_type"]; ?>" />
                         </div>
                         <div class="col-md-2"></div>
                         <div class="col-md-3">
@@ -262,6 +264,20 @@
                           <label class="control-label">Luas Ansolari :</label>
                         </div>
                         <div class="col-md-2 control-label tal"><?= $hacmjb["peg_lsans"] ?> m&sup2;</div>
+                      </div>
+                      <div class="row mb5">
+                        <div class="col-md-2">
+                          <label class="control-label">Sebab-sebab :</label>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="input-group input-group-sm">
+                            <input type="hidden" id="mjb_sbkod" name="mjbSbkod">
+                            <input type="text" class="form-control input-sm" id="dummy_mjb_sbkod">
+                            <span class="input-group-btn">
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i class="fa fa-book"></i></button>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                       <div class="row mb5">
                         <div class="col-md-2">
@@ -596,6 +612,31 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="reason_popup" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered" id="popup_reason" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

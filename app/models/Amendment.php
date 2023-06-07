@@ -528,6 +528,7 @@ class Amendment extends Model
   public function getVerifyPsTable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -569,25 +570,60 @@ class Amendment extends Model
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
-      $rowOutput["noSiri"] = Encryption::encryptId($val["no_siri"]);
+      $qry  = "SELECT vh.peg_nilth, vh.kaw_kadar, vh.peg_tksir, vb.bgn_bnama, vc.hrt_hnama, vd.tnh_tnama, ve.stb_snama FROM SPMC.V_HVNDUK vh ";
+      $qry  .= "LEFT JOIN SPMC.V_HBANGN vb ON vh.peg_bgkod = vb.bgn_bgkod ";
+      $qry  .= "LEFT JOIN SPMC.V_HHARTA vc ON vh.peg_htkod = vc.hrt_htkod ";
+      $qry  .= "LEFT JOIN SPMC.V_HTANAH vd ON vh.peg_thkod = vd.tnh_thkod ";
+      $qry  .= "LEFT JOIN SPMC.V_HSTBGN ve ON vh.peg_bgkod = ve.stb_stkod ";
+      $qry  .= "WHERE vh.peg_akaun = " . $val['no_akaun'];
+      $dbOracle->prepare($qry);
+      $dbOracle->execute();
+      $res = $dbOracle->fetchAssociative();
+
+      if ($res) {
+        $nilth_asal = $res["peg_nilth"];
+        $kadar_asal = $res["kaw_kadar"];
+        $cukai_asal = $res["peg_tksir"];
+        $tnama = $res["tnh_tnama"];
+        $hnama = $res["hrt_hnama"];
+        $bnama = $res["bgn_bnama"];
+        $snama = $res["stb_snama"];
+      } else {
+        $nilth_asal = 0;
+        $kadar_asal = 0;
+        $cukai_asal = 0;
+        $tnama = "-";
+        $hnama = "-";
+        $bnama = "-";
+        $snama = "-";
+      }
+
+      $rowOutput["noSiri"] = empty($val["no_siri"]) ? null : Encryption::encryptId($val["no_siri"]);
       $rowOutput["noAcct"] = Encryption::encryptId($val["no_akaun"]);
       $rowOutput["no_siri"] = $val["no_siri"];
       $rowOutput["no_akaun"] = $val["no_akaun"];
       $rowOutput["tkhpl"] = $val["tkhpl"];
       $rowOutput["tkhtk"] = $val["tkhtk"];
-      $rowOutput["tnama"] = $val["tnama"];
-      $rowOutput["hnama"] = $val["hnama"];
-      $rowOutput["bnama"] = $val["bnama"];
-      $rowOutput["snama"] = $val["snama"];
-      $rowOutput["nilth_asal"] = $val["nilth_asal"];
-      $rowOutput["kadar_asal"] = $val["kadar_asal"];
-      $rowOutput["cukai_asal"] = $val["cukai_asal"];
-      $rowOutput["nilth_baru"] = $val["nilth_baru"];
-      $rowOutput["kadar_baru"] = $val["kadar_baru"];
-      $rowOutput["cukai_baru"] = $val["cukai_baru"];
-      $rowOutput["sebab"] = $val["sebab"];
+      $rowOutput["tnama"] = $tnama;
+      $rowOutput["hnama"] = $hnama;
+      $rowOutput["bnama"] = $bnama;
+      $rowOutput["snama"] = $snama;
+      $rowOutput["nilth_asal"] = number_format($nilth_asal, "2");
+      $rowOutput["kadar_asal"] = $kadar_asal;
+      $rowOutput["cukai_asal"] = number_format($cukai_asal, "2");
+      $rowOutput["nilth_baru"] = number_format($val["new_nilth"], "2");
+      $rowOutput["kadar_baru"] = $val["new_rate"];
+      $rowOutput["cukai_baru"] = number_format($val["new_tax"], "2");
+      $rowOutput["nilth_beza"] = number_format($val["new_nilth"] - $nilth_asal, "2");
+      $rowOutput["kadar_beza"] = $val["new_rate"] - $kadar_asal;
+      $rowOutput["cukai_beza"] = number_format($val["new_tax"] - $cukai_asal, "2");
+      if ($val["sebab"] != null) {
+        $rowOutput["sebab"] = $dbOracle->getElementById("SPMC.V_ACMRSN", "acm_sbktr", "acm_sbkod", $val["sebab"]);
+      } else {
+        $rowOutput["sebab"] = $this->checkNull($val["sebab"]);
+      }
       $rowOutput["mesej"] = $val["mesej"];
-      $rowOutput["status"] = $val["status"];
+      $rowOutput["status"] = $val["vstatus"];
       $rowOutput["entry"] = $val["entry"];
       $rowOutput["verifier"] = $val["verifier"];
       $rowOutput["form"] = $val["form"];
@@ -624,6 +660,9 @@ class Amendment extends Model
 
     ## Total number of record with filtering
     $sql = "SELECT count(*) AS allcount FROM data.v_submitioninfops v ";
+    $sql .= "LEFT JOIN data.calculator c ON v.no_akaun = c.acct_no ";
+    $sql .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON v.no_akaun = cf.no_akaun ";
+    $sql .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON v.no_akaun = cd.no_akaun ";
     if ($searchValue != "") {
       $sql .= "WHERE " . $searchQuery;
     }
@@ -634,7 +673,10 @@ class Amendment extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT v.* FROM data.v_submitioninfops v ";
+    $query = "SELECT v.*, cf.file, cd.doc FROM data.v_submitioninfops v ";
+    $query .= "LEFT JOIN data.calculator c ON v.no_akaun = c.acct_no ";
+    $query .= "LEFT JOIN (select count(*) as file, no_akaun from data.files group by no_akaun) cf ON v.no_akaun = cf.no_akaun ";
+    $query .= "LEFT JOIN (select count(*) as doc, no_akaun from data.fdocs group by no_akaun) cd ON v.no_akaun = cd.no_akaun ";
     if ($searchValue != "") {
       $query .= "WHERE " . $searchQuery;
     }
@@ -656,7 +698,7 @@ class Amendment extends Model
       $qry  .= "LEFT JOIN SPMC.V_HHARTA vc ON vh.peg_htkod = vc.hrt_htkod ";
       $qry  .= "LEFT JOIN SPMC.V_HTANAH vd ON vh.peg_thkod = vd.tnh_thkod ";
       $qry  .= "LEFT JOIN SPMC.V_HSTBGN ve ON vh.peg_bgkod = ve.stb_stkod ";
-      $qry  .= "WHERE vh.peg_akaun = " . $val['acctno'];
+      $qry  .= "WHERE vh.peg_akaun = " . $val['no_akaun'];
       $dbOracle->prepare($qry);
       $dbOracle->execute();
       $res = $dbOracle->fetchAssociative();
@@ -679,10 +721,10 @@ class Amendment extends Model
         $snama = "-";
       }
 
-      $rowOutput["noSiri"] = Encryption::encryptId($val["sirino"]);
-      $rowOutput["noAcct"] = Encryption::encryptId($val["acctno"]);
-      $rowOutput["no_siri"] = $val["sirino"];
-      $rowOutput["no_akaun"] = $val["acctno"];
+      $rowOutput["noSiri"] = empty($val["no_siri"]) ? null : Encryption::encryptId($val["no_siri"]);
+      $rowOutput["noAcct"] = Encryption::encryptId($val["no_akaun"]);
+      $rowOutput["no_siri"] = $val["no_siri"];
+      $rowOutput["no_akaun"] = $val["no_akaun"];
       $rowOutput["tkhpl"] = $val["tkhpl"];
       $rowOutput["tkhtk"] = $val["tkhtk"];
       $rowOutput["tnama"] = $tnama;
@@ -703,13 +745,17 @@ class Amendment extends Model
       } else {
         $rowOutput["sebab"] = $this->checkNull($val["sebab"]);
       }
-      $rowOutput["sebab"] = "=";
       $rowOutput["mesej"] = $val["mesej"];
-      $rowOutput["status"] = $val["status"];
+      $rowOutput["status"] = $val["vstatus"];
       $rowOutput["entry"] = $val["entry"];
       $rowOutput["verifier"] = $val["verifier"];
       $rowOutput["form"] = $val["form"];
       $rowOutput["calctype"] = $val["calctype"];
+      $rowOutput["file"] = $val["file"];
+      $rowOutput["doc"] = $val["doc"];
+
+      $rowOutput["files"] = $this->getAllImgs($val["no_akaun"]);
+      $rowOutput["docs"] = $this->getAllDocs($val["no_akaun"]);
       array_push($output, $rowOutput);
     }
 
@@ -736,5 +782,102 @@ class Amendment extends Model
     $database->execute();
 
     return ["success" => true];
+  }
+
+  public function createJadualBPS($userId, $workerId, $mjbNsiri, $mjbAkaun, $mjbDigit, $mjbStcbk, $kawKwkod, $mjbThkod, $mjbBgkod, $mjbHtkod, $mjbStkod, $mjbJpkod, $mjbSbkod, $mjbMesej, $mjbCalty)
+  {
+
+    $mjbAkaun = empty($mjbAkaun) ? "0" : $mjbAkaun;
+    $mjbDigit = empty($mjbDigit) ? "0" : $mjbDigit;
+    $mjbThkod = empty($mjbThkod) ? "0" : $mjbThkod;
+    $mjbBgkod = empty($mjbBgkod) ? "0" : $mjbBgkod;
+    $mjbHtkod = empty($mjbHtkod) ? "0" : $mjbHtkod;
+    $mjbStkod = empty($mjbStkod) ? "0" : $mjbStkod;
+    $mjbJpkod = empty($mjbJpkod) ? "0" : $mjbJpkod;
+    $mjbSbkod = empty($mjbSbkod) ? null : $mjbSbkod;
+    $mjbMesej = empty($mjbMesej) ? null : $mjbMesej;
+    $mjbStcbk = empty($mjbStcbk) ? "T" : $mjbStcbk;
+    $mjbStatf = null;
+    $mjbHsiri = "0";
+    $mjbTkpos = null;
+    $mjbEtdate = date("Y-m-d");
+
+    $database = Database::openConnection();
+    $dboracle = new Oracle();
+
+    $dboracle->getByNoAcct("V_HVNDUK", "peg_akaun", $mjbAkaun);
+    $info = $dboracle->fetchAssociative();
+
+    $database->getByNoAcct("v_submitioninfops", "no_siri", $mjbNsiri);
+    $row = $database->fetchAssociative();
+
+    $mjbBnilt = empty($row['new_nilth']) ? "0" : $row['new_nilth'];
+
+    $query = "INSERT INTO data.v_hacmjb(mjb_nsiri, mjb_akaun, mjb_digit, mjb_thkod, mjb_htkod, mjb_jpkod, mjb_bgkod, mjb_stkod, ";
+    $query .= "mjb_nilth, mjb_bnilt, mjb_sbkod, mjb_mesej, mjb_statf, mjb_hsiri, mjb_stcbk, mjb_tkpos, mjb_onama, mjb_etdate, mjb_calcty) ";
+    $query .= "VALUES(:mjb_nsiri, :mjb_akaun, :mjb_digit, :mjb_thkod, :mjb_htkod, :mjb_jpkod, :mjb_bgkod, :mjb_stkod, :mjb_nilth, :mjb_bnilt, ";
+    $query .= ":mjb_sbkod, :mjb_mesej, :mjb_statf, :mjb_hsiri, :mjb_stcbk, :mjb_tkpos, :mjb_onama, :mjb_etdate, :mjb_calcty)";
+
+    $database->prepare($query);
+    $database->bindValue(":mjb_nsiri", $mjbNsiri);
+    $database->bindValue(":mjb_akaun", $mjbAkaun);
+    $database->bindValue(":mjb_digit", $info['peg_digit']);
+    $database->bindValue(":mjb_thkod", $mjbThkod);
+    $database->bindValue(":mjb_htkod", $mjbHtkod);
+    $database->bindValue(":mjb_jpkod", $mjbJpkod);
+    $database->bindValue(":mjb_bgkod", $mjbBgkod);
+    $database->bindValue(":mjb_stkod", $mjbStkod);
+    $database->bindValue(":mjb_nilth", $info['peg_nilth']);
+    $database->bindValue(":mjb_bnilt", $mjbBnilt);
+    $database->bindValue(":mjb_sbkod", $mjbSbkod);
+    $database->bindValue(":mjb_mesej", $mjbMesej);
+    $database->bindValue(":mjb_statf", $mjbStatf);
+    $database->bindValue(":mjb_hsiri", $mjbHsiri);
+    $database->bindValue(":mjb_stcbk", $mjbStcbk);
+    $database->bindValue(":mjb_tkpos", $mjbTkpos);
+    $database->bindValue(":mjb_onama", $workerId);
+    $database->bindValue(":mjb_etdate", $mjbEtdate);
+    $database->bindValue(":mjb_calcty", $mjbCalty);
+    $result = $database->execute();
+
+    if ($database->countRows() !== 1) {
+      throw new Exception("Gagal untuk masukkan data pindaan.");
+    }
+
+    if ($result) {
+      $activity = "Pindaan : No akaun - " . $mjbAkaun . " No Siri - " . $mjbNsiri;
+      $database->logActivity($userId, $activity);
+    }
+    return ["success" => true];
+  }
+
+  public function getAllImgs($fileId)
+  {
+    $database = Database::openConnection();
+    $query = "SELECT * FROM data.files ";
+    $query .= "WHERE no_akaun = :no_akaun ";
+    $query .= "ORDER BY files.date DESC ";
+
+    $database->prepare($query);
+    $database->bindValue(":no_akaun", $fileId);
+    $database->execute();
+    $files = $database->fetchAllAssociative();
+
+    return $files;
+  }
+
+  public function getAllDocs($fileId)
+  {
+    $database = Database::openConnection();
+    $query = "SELECT f.*, d.document as doc_name FROM data.fdocs f ";
+    $query .= "LEFT JOIN data.doctype d ON f.file_type = d.id ";
+    $query .= "WHERE f.no_akaun = :no_akaun";
+
+    $database->prepare($query);
+    $database->bindValue(":no_akaun", $fileId);
+    $database->execute();
+    $files = $database->fetchAllAssociative();
+
+    return $files;
   }
 }

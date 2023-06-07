@@ -289,7 +289,7 @@ class Database
 
   public function countByNoAcct($table, $columnName, $noAcct)
   {
-    $this->statement = $this->connection->prepare("SELECT COUNT(*) AS count FROM data." . $table . " WHERE " . $columnName . " = " . $noAcct);
+    $this->statement = $this->connection->prepare("SELECT COUNT(*) AS count FROM data." . $table . " WHERE " . $columnName . " = '" . $noAcct . "'");
     $this->execute();
     return (int) $this->fetchAssociative()["count"];
   }
@@ -334,7 +334,7 @@ class Database
   public function getByNoAcct($table, $columnName, $id)
   {
     if ($this->countByNoAcct($table, $columnName, $id) > 0) {
-      $this->statement = $this->connection->prepare("SELECT * FROM data." . $table . " WHERE " . $columnName . " = " . $id . " LIMIT 1");
+      $this->statement = $this->connection->prepare("SELECT * FROM data." . $table . " WHERE " . $columnName . " = '" . $id . "' LIMIT 1");
       $this->execute();
     }
   }

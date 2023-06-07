@@ -97,10 +97,12 @@ function format_handleinfo(d) {
 }
 
 var handleinfo = $("#handleinfo").DataTable({
-  pageLength: 5,
+  scrollY: "50vh",
+  scrollCollapse: true,
+  pageLength: 50,
   lengthMenu: [
-    [5, 15, 25, 50],
-    [5, 15, 25, 50]
+    [10, 50, 100, 200],
+    [10, 50, 100, 200]
   ],
   processing: true,
   serverSide: true,

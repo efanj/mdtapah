@@ -24,24 +24,38 @@
                   <table id="evaluationlist" class="print-table display" style="width:100%;">
                     <thead>
                       <tr>
-                        <th rowspan="2"></th>
-                        <th rowspan="2">No Akaun</br> No Siri</th>
-                        <th rowspan="2">Nama Pemilik & Alamat Harta</th>
-                        <th rowspan="2">No Lot</br>No PT</br>Hakmilik</th>
-                        <th rowspan="2">Luas Bangunan (mp)</th>
-                        <th rowspan="2">Luas Tanah (mp)</th>
-                        <th colspan="2" style="text-align:center;">Nilai Tahunan (RM)</th>
-                        <th colspan="2" style="text-align:center;">Cukai Taksiran (RM)</th>
-                        <th colspan="2" style="text-align:center;">Kadar (%)</th>
+                        <th rowspan="2">Jadual</th>
+                        <th rowspan="2">
+                          No. Akaun<br />
+                          No. Siri
+                        </th>
+                        <th rowspan="2">
+                          Tarikh Mesyuarat<br />
+                          Tarikh Kuatkuasa
+                        </th>
+                        <th rowspan="2">
+                          Kegunaan Tanah<br />
+                          Jenis Bangunan<br />
+                          Kegunaan Hartanah<br />
+                          Struktur Bangunan
+                        </th>
+                        <th rowspan="2">
+                          Nilai Tahunan Asal<br />
+                          Kadar Tahunan Asal<br />
+                          Cukai Taksiran Asal
+                        </th>
+                        <th rowspan="2">
+                          Nilai Tahunan Baru<br />
+                          Kadar Tahunan Baru<br />
+                          Cukai Taksiran Baru
+                        </th>
+                        <th rowspan="2">Perbezaan</th>
+                        <th colspan="2" style="text-align:center;">Berkaitan</th>
                         <th rowspan="2"></th>
                       </tr>
                       <tr>
-                        <th>Asal</th>
-                        <th>Baru</th>
-                        <th>Asal</th>
-                        <th>Baru</th>
-                        <th>Asal</th>
-                        <th>Baru</th>
+                        <th>Gambar</th>
+                        <th>Dokumen</th>
                       </tr>
                     </thead>
                     <tbody>

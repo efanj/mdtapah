@@ -3,11 +3,25 @@ $(document).ready(function () {
     var url = config.root + "Printing/dataserahannilaiansemula/"
     window.open(url, "_blank")
   })
+
+  $(".view-pdf").on("click", function () {
+    var pdf_link = $(this).attr("href")
+    var iframe = '<object type="application/pdf" data="' + pdf_link + '" width="100%" height="500">No Support</object>'
+    $.createModal({
+      title: "Dokumen",
+      message: iframe,
+      closeButton: true,
+      scrollable: false
+    })
+    return false
+  })
   var table = $("#reviewlists").DataTable({
-    pageLength: 5,
+    scrollY: "60vh",
+    scrollCollapse: true,
+    pageLength: 50,
     lengthMenu: [
-      [5, 15, 25, 50],
-      [5, 15, 25, 50]
+      [50, 100, 200, 500],
+      [50, 100, 200, 500]
     ],
     select: "single",
     processing: true,
@@ -102,11 +116,19 @@ $(document).ready(function () {
       {
         targets: 7,
         orderable: false,
+        className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
+          // console.log(row.files)
           if (type === "display") {
-            data = row.sebab + "<br/>"
-            data += row.mesej
+            if (row.file > "0") {
+              data = "Ada (" + row.file + ")</br>"
+              for (let i = 0; i < row.files.length; i++) {
+                data += '<a href="../img/big-lightgallry/' + row.files[i]["hashed_filename"] + '" data-toggle="lightbox" data-gallery="gallerymode" data-title="' + row.files[i]["filename"] + '" data-parrent>' + row.files[i]["filename"] + "</a></br>"
+              }
+            } else if (row.file < "1") {
+              data = "Tiada"
+            }
           }
           return data
         }
@@ -114,10 +136,20 @@ $(document).ready(function () {
       {
         targets: 8,
         orderable: false,
+        className: "dt-body-center",
         data: null,
         render: function (data, type, row, meta) {
+          // console.log(row.docs)
           if (type === "display") {
-            data = row.status
+            if (row.doc > "0") {
+              data = "Ada (" + row.doc + ")</br>"
+              for (let i = 0; i < row.docs.length; i++) {
+                data += "<a href=" + config.root + '"img/documents/' + row.docs[i]["hashed_filename"] + '"  class="view-pdf">' + row.docs[i]["extension"] + "</a></br>"
+              }
+              data += ""
+            } else if (row.doc < "1") {
+              data = "Tiada"
+            }
           }
           return data
         }
@@ -128,24 +160,7 @@ $(document).ready(function () {
         data: null,
         render: function (data, type, row, meta) {
           if (type === "display") {
-            data = row.entry + "<br/>"
-            data += row.verifier
-          }
-          return data
-        }
-      },
-      {
-        targets: 10,
-        orderable: false,
-        data: null,
-        render: function (data, type, row, meta) {
-          if (type === "display") {
-            data = '<div class="btn-group btn-group-sm" role="group">'
-            data += '<a href="viewamendPSdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
-            data += '<a href="' + row.calctype + "/" + row.noSiri + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
-            data += '<a href="viewimages/' + row.noAcct + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o color-dark"></i></a>'
-            data += '<a href="viewdocuments/' + row.noAcct + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o color-dark"></i></a>'
-            data += "</div>"
+            data = '<a href="../Amendment/viewamendPSdetail/' + row.noSiri + '" class="btn btn-primary btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
           }
           return data
         }

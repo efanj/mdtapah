@@ -3,6 +3,8 @@ function format(d) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;width:100%;">' + "<tr><td><b>Sebab-sebab : </b></td></tr>" + "<tr><td><b>Sebab-sebab : </b></td></tr></table >"
 }
 var evaluation = $("#evaluationlist").DataTable({
+  scrollY: "60vh",
+  scrollCollapse: true,
   pageLength: 50,
   lengthMenu: [
     [50, 100, 200, 500],
@@ -15,12 +17,9 @@ var evaluation = $("#evaluationlist").DataTable({
   ajax: "evaluationtable",
   columnDefs: [
     {
-      width: "3%",
       targets: 0,
-      className: "details-control",
       orderable: false,
-      data: null,
-      defaultContent: ""
+      data: "form"
     },
     {
       targets: 1,
@@ -28,7 +27,8 @@ var evaluation = $("#evaluationlist").DataTable({
       data: null,
       render: function (data, type, row, meta) {
         if (type === "display") {
-          data = row.no_akaun + "</br>" + row.no_siri
+          data = row.no_akaun + "<br/>"
+          data += row.no_siri
         }
         return data
       }
@@ -39,19 +39,9 @@ var evaluation = $("#evaluationlist").DataTable({
       data: null,
       render: function (data, type, row, meta) {
         if (type === "display") {
-          data = row.pmk_nmbil + "<br/>"
-          data += row.adpg1 + "<br/>"
-          if (row.adpg2 != null) {
-            data += row.adpg2 + "<br/>"
-          }
-          if (row.adpg3 != null) {
-            data += row.adpg3 + "<br/>"
-          }
-          if (row.adpg4 != null) {
-            data += row.adpg4 + "<br/>"
-          }
+          data = row.tkhpl + "<br/>"
+          data += row.tkhtk
         }
-
         return data
       }
     },
@@ -61,7 +51,10 @@ var evaluation = $("#evaluationlist").DataTable({
       data: null,
       render: function (data, type, row, meta) {
         if (type === "display") {
-          data = row.peg_nolot + "</br>" + row.peg_nompt + "</br>" + row.pmk_hkmlk
+          data = row.tnama + "<br/>"
+          data += row.bnama + "<br/>"
+          data += row.hnama + "<br/>"
+          data += row.snama
         }
         return data
       }
@@ -69,60 +62,96 @@ var evaluation = $("#evaluationlist").DataTable({
     {
       targets: 4,
       orderable: false,
-      data: "peg_lsbgn"
+      data: null,
+      render: function (data, type, row, meta) {
+        if (type === "display") {
+          data = "RM " + row.nilth_asal + "<br/>"
+          data += row.kadar_asal + " % <br/>"
+          data += "RM " + row.cukai_asal
+        }
+        return data
+      }
     },
     {
       targets: 5,
       orderable: false,
-      data: "peg_lstnh"
+      data: null,
+      render: function (data, type, row, meta) {
+        if (type === "display") {
+          data = "RM " + row.nilth_baru + "<br/>"
+          data += row.kadar_baru + " % <br/>"
+          data += "RM " + row.cukai_baru
+        }
+        return data
+      }
     },
     {
       targets: 6,
       orderable: false,
-      data: "peg_nilth"
+      data: null,
+      render: function (data, type, row, meta) {
+        if (type === "display") {
+          data = "RM " + row.nilth_beza + "<br/>"
+          data += row.kadar_beza + " % <br/>"
+          data += "RM " + row.cukai_beza
+        }
+        return data
+      }
     },
     {
       targets: 7,
       orderable: false,
-      data: "nilth_baru"
+      className: "dt-body-center",
+      data: null,
+      render: function (data, type, row, meta) {
+        // console.log(row.files)
+        if (type === "display") {
+          if (row.file > "0") {
+            data = "Ada (" + row.file + ")</br>"
+            for (let i = 0; i < row.files.length; i++) {
+              data += '<a href="../img/big-lightgallry/' + row.files[i]["hashed_filename"] + '" data-toggle="lightbox" data-gallery="gallerymode" data-title="' + row.files[i]["filename"] + '" data-parrent>' + row.files[i]["filename"] + "</a></br>"
+            }
+          } else if (row.file < "1") {
+            data = "Tiada"
+          }
+        }
+        return data
+      }
     },
     {
       targets: 8,
       orderable: false,
-      data: "peg_tksir"
+      className: "dt-body-center",
+      data: null,
+      render: function (data, type, row, meta) {
+        // console.log(row.docs)
+        if (type === "display") {
+          if (row.doc > "0") {
+            data = "Ada (" + row.doc + ")</br>"
+            for (let i = 0; i < row.docs.length; i++) {
+              data += "<a href=" + config.root + '"img/documents/' + row.docs[i]["hashed_filename"] + '"  class="view-pdf">' + row.docs[i]["extension"] + "</a></br>"
+            }
+            data += ""
+          } else if (row.doc < "1") {
+            data = "Tiada"
+          }
+        }
+        return data
+      }
     },
     {
       targets: 9,
       orderable: false,
-      data: "cukai_baru"
-    },
-    {
-      targets: 10,
-      orderable: false,
-      data: "kaw_kadar"
-    },
-    {
-      targets: 11,
-      orderable: false,
-      data: "kadar_baru"
-    },
-    {
-      targets: 12,
-      orderable: false,
       data: null,
       render: function (data, type, row, meta) {
-        // console.log(data);
         if (type === "display") {
-          data = '<div class="btn-group btn-group-xs" role="group">'
-          data += '<a href="../Amendment/viewpsdetails/' + row.encryp_nosiri + '" class="btn btn-primary btn-alt btn-xs"><i class="fa fa-eye"></i> Lihat</a>'
-          data += "</div>"
+          data = '<a href="viewamendPSdetail/' + row.noSiri + '" class="btn btn-primary btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
         }
-
         return data
       }
     }
   ],
-  order: [[2, "asc"]],
+  order: [[1, "asc"]],
   language: {
     search: "Saring : ",
     lengthMenu: "Paparkan _MENU_ rekod",
@@ -137,6 +166,18 @@ var evaluation = $("#evaluationlist").DataTable({
       previous: "Sebelum"
     }
   }
+})
+
+$(".view-pdf").on("click", function () {
+  var pdf_link = $(this).attr("href")
+  var iframe = '<object type="application/pdf" data="' + pdf_link + '" width="100%" height="500">No Support</object>'
+  $.createModal({
+    title: "Dokumen",
+    message: iframe,
+    closeButton: true,
+    scrollable: false
+  })
+  return false
 })
 
 // Add event listener for opening and closing details
