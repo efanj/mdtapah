@@ -33,7 +33,7 @@
 <!-- Bootbox fast bootstrap modals -->
 <script src="<?= PUBLIC_ROOT ?>plugins/ui/bootbox/bootbox.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/main.js"></script>
-<script src="<?= PUBLIC_ROOT; ?>js/jquery.dynamic.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/jquery.Dynamic.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
@@ -42,11 +42,11 @@
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->
 <script>
-config = <?= json_encode(Config::getJsConfig()) ?>;
+  config = <?= json_encode(Config::getJsConfig()) ?>;
 </script>
 <!-- Run the application -->
 <script>
-$(document).ready(app.init());
+  $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>

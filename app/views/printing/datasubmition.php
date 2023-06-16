@@ -2,15 +2,17 @@
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', '300');
 
-use Dompdf\Dompdf;
-use Dompdf\Options;
+// use Dompdf\Dompdf;
+// use Dompdf\Options;
 
-$options = new Options();
-$options->set('isPhpEnabled', true);
-$dompdf = new Dompdf($options);
+// $options = new Options();
+// $options->set('isPhpEnabled', true);
+// $dompdf = new Dompdf($options);
 
 $rows = $this->controller->printing->datasubmition($id);
 $date = $this->controller->printing->datesubmition($id);
+
+print_r($rows);
 
 $str = strtolower($date['rujukan']);
 $str = str_replace(" ", "-", $str);
@@ -140,29 +142,29 @@ $html .= '</body>
 
 </html>';
 
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'landscape');
-$dompdf->render();
-// Parametersx
-$x = 782;
-$y = 564;
-$text = "{PAGE_NUM} of {PAGE_COUNT}";
-$font = $dompdf->getFontMetrics()->get_font('Helvetica', 'normal');
-$size = 9;
-$color = array(0, 0, 0);
-$word_space = 0.0;
-$char_space = 0.0;
-$angle = 0.0;
+// $dompdf->loadHtml($html);
+// $dompdf->setPaper('A4', 'landscape');
+// $dompdf->render();
+// // Parametersx
+// $x = 782;
+// $y = 564;
+// $text = "{PAGE_NUM} of {PAGE_COUNT}";
+// $font = $dompdf->getFontMetrics()->get_font('Helvetica', 'normal');
+// $size = 9;
+// $color = array(0, 0, 0);
+// $word_space = 0.0;
+// $char_space = 0.0;
+// $angle = 0.0;
 
-$dompdf->getCanvas()->page_text(
-  $x,
-  $y,
-  $text,
-  $font,
-  $size,
-  $color,
-  $word_space,
-  $char_space,
-  $angle
-);
-$dompdf->stream($str . '.pdf', ['Attachment' => 0]);
+// $dompdf->getCanvas()->page_text(
+//   $x,
+//   $y,
+//   $text,
+//   $font,
+//   $size,
+//   $color,
+//   $word_space,
+//   $char_space,
+//   $angle
+// );
+// $dompdf->stream($str . '.pdf', ['Attachment' => 0]);
